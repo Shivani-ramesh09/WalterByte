@@ -9,7 +9,7 @@ export default function HomeTab() {
         <h1>The campus<br />network for<br /><em>ideas and people.</em></h1>
         <p className="network-intro">Hire student freelancers, find collaborators, and pre-order from the canteen without the queue.</p>
         <div className="hero-bubbles" aria-label="Campus destinations">
-          <button type="button" disabled title="The campus map is coming soon">Campus Map · soon</button>
+          <button type="button" onClick={() => go('explore')}>Explore</button>
           <button type="button" onClick={() => go('eat', { name: 'list' })}>Canteen</button>
           <button type="button" onClick={() => go('connect', { name: 'home' })}>Connect</button>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Briefcase, Search } from 'lucide-react'
+import { Briefcase, MapPin, Printer, Search } from 'lucide-react'
 import { inr, useApi } from '../../lib/api'
 import { useNav } from '../../lib/nav'
 import { Chips, Empty, ErrorBox, Loading, ScreenHeader } from '../../components/ui'
@@ -26,8 +26,9 @@ function ConnectHome() {
         subtitle="Hire student talent, find teammates"
         action={<button className="btn small primary" onClick={() => go('me', { name: 'freelancer' })}><Briefcase size={14} /> Sell your skills</button>}
       />
-      <Chips label="Connect section" options={[{ value: 'gigs', label: 'Hire talent' }, { value: 'people', label: 'People' }, { value: 'requests', label: 'Requests board' }]} value={section} onChange={(v) => v && setSection(v)} />
+      <Chips label="Connect section" options={[{ value: 'gigs', label: 'Hire talent' }, { value: 'labs', label: 'Labs & facilities' }, { value: 'people', label: 'People' }, { value: 'requests', label: 'Requests board' }]} value={section} onChange={(v) => v && setSection(v)} />
       {section === 'gigs' && <GigList />}
+      {section === 'labs' && <LabList />}
       {section === 'people' && <PeopleSearch />}
       {section === 'requests' && <RequestsBoard />}
     </div>
@@ -63,6 +64,40 @@ function GigList() {
       <ErrorBox error={error} onRetry={reload} />
       {data && !data.gigs.length && <Empty title="No gigs here yet" text="Be the first: tap Sell your skills." />}
       {data?.gigs.map((g) => <GigCard key={g.id} gig={g} />)}
+    </div>
+  )
+}
+
+// shortcut: hardcoded until labs are a backend collection; exact location pins come with the campus map
+const LABS = [
+  {
+    id: '3d-printing',
+    facility: '3D printing',
+    lab: 'Combustion Research Lab',
+    description: 'Print prototypes and parts for projects. Ask the lab in charge about booking a slot.',
+    location: 'Combustion Research Lab (exact location coming soon)',
+  },
+]
+
+function LabList() {
+  return (
+    <div className="stack">
+      {LABS.map((l) => (
+        <article key={l.id} className="card stack-sm facility-card">
+          <div className="card-row">
+            <div className="stack-xs">
+              <small className="eyebrow-text">{l.facility}</small>
+              <strong>{l.facility} in {l.lab}</strong>
+            </div>
+            <Printer size={22} className="accent" />
+          </div>
+          <p className="prose small">{l.description}</p>
+          <span className="wait small muted"><MapPin size={13} /> {l.location}</span>
+          <button className="btn ghost small" disabled title="Exact location pins come with the campus map">
+            <MapPin size={14} /> Show exact location · coming soon
+          </button>
+        </article>
+      ))}
     </div>
   )
 }

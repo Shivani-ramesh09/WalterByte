@@ -6,6 +6,7 @@ import TopSearchBar from './components/TopSearchBar'
 import BottomTabBar from './components/BottomTabBar'
 import LoginPage from './features/auth/LoginPage'
 import HomeTab from './features/home/HomeTab'
+import ExploreTab from './features/explore/ExploreTab'
 import EatTab from './features/eat/EatTab'
 import ConnectTab from './features/connect/ConnectTab'
 import MeTab from './features/me/MeTab'
@@ -13,7 +14,7 @@ import ProfileForm from './features/me/ProfileForm'
 import StaffDashboard from './features/staff/StaffDashboard'
 import SearchResults from './features/search/SearchResults'
 
-const TABS = { home: HomeTab, eat: EatTab, connect: ConnectTab, me: MeTab }
+const TABS = { home: HomeTab, explore: ExploreTab, eat: EatTab, connect: ConnectTab, me: MeTab }
 
 function Brand() {
   return (

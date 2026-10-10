@@ -154,3 +154,9 @@ hr{border:0;border-top:1px solid #f1e8ea;margin:4px 0;width:100%}
 .stats div:last-child{border-right:0}
 .stats strong{font-size:22px;color:var(--maroon)}
 .stats span{font-size:10px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;text-align:center}
+.qr-frame{padding:10px;border:1px solid #f0e6e8;border-radius:12px;background:#fff}
+.chips.wrap{flex-wrap:wrap;overflow:visible}
+fieldset.field{border:0;padding:0;margin:0}
+.map-placeholder{align-items:center;text-align:center;border-style:dashed;background:#fbf8f9}
+.screen h3:has(svg){display:flex;align-items:center;gap:6px}
+.facility-card .card-row{align-items:flex-start}

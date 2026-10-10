@@ -122,7 +122,7 @@ Demo logins (emulator only, password `campus123`):
 |---|---|---|
 | Student / freelancer | `meera.pillai@campus.edu` | Student app + Freelancer studio (photography gig) |
 | Student | `rohan.sharma@campus.edu` | Student app |
-| Canteen staff | `staff-central@campus.edu` | Counter dashboard for Central Canteen |
+| Canteen staff | `staff-sopanam@campus.edu` | Counter dashboard for Sopanam Canteen |
 
 New accounts can be created from the login screen; they set up a profile on first sign-in.
 
@@ -196,7 +196,7 @@ All endpoints below are prefixed with `/api/v1` unless noted:
 ### Eat: roles
 
 - **Students** order and track their own orders.
-- **Canteen staff** are listed in the server-only `staff/{uid}` collection (`{ canteenId, name }`). Staff only see and change their own canteen's orders and menu. The seed script creates `staff-central`, `staff-foodcourt` and `staff-library`; with `DEV_BYPASS_AUTH=true`, send `x-dev-uid: staff-central` to act as Central Canteen's counter.
+- **Canteen staff** are listed in the server-only `staff/{uid}` collection (`{ canteenId, name }`). Staff only see and change their own canteen's orders and menu. The seed script creates `staff-sopanam`, `staff-prasada` and `staff-samudra`; with `DEV_BYPASS_AUTH=true`, send `x-dev-uid: staff-sopanam` to act as Sopanam's counter.
 - Payment is a **demo mock** (`paymentMethod: "upi_mock"`). No money moves.
 
 ### Connect: freelance gigs
