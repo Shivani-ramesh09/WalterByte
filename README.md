@@ -84,7 +84,7 @@ Also seeded: `staff-prasada@campus.edu`, `staff-samudra@campus.edu`, and 8 more 
 
 1. **Rohan** → Explore: "For you" shows the Hackathon with *Matches your interest in Coding & Hackathons*; open it and RSVP.
 2. Eat → Sopanam Canteen → add a bread omelette → Checkout → pick a slot → simulated UPI payment → order tracker.
-3. Search "photographer" → Meera's gig → view work samples → send a hire request.
+3. Connect → Hire talent → Meera's photography gig → view work samples → send a hire request.
 4. **Sopanam staff** → the order appears in the queue → Start preparing → Mark ready. Rohan's tracker updates by itself.
 5. **Meera** → Me → Freelancer studio → accept the request → Rohan's contact appears (and Meera's appears for Rohan).
 
