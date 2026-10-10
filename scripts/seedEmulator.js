@@ -402,13 +402,26 @@ const requests = [
 // Eat: canteens and menus only. Orders and slot bookings are never seeded,
 // so every queue estimate and slot count comes from real orders.
 // Prices are whole INR.
+const veg = (id, name, category, price) => ({ id, name, category, price, isVeg: true, isAvailable: true });
+const nonVeg = (id, name, category, price) => ({ id, name, category, price, isVeg: false, isAvailable: true });
+
+// Non-veg at Sopanam and Samudra is eggs and chicken only.
+const eggAndChicken = [
+  nonVeg('boiled-eggs', 'Boiled Eggs (2 pc)', 'Egg', 20),
+  nonVeg('omelette', 'Omelette', 'Egg', 25),
+  nonVeg('bread-omelette', 'Bread Omelette', 'Egg', 40),
+  nonVeg('chicken-biriyani', 'Chicken Biriyani', 'Chicken', 120),
+  nonVeg('chicken-curry', 'Chicken Curry', 'Chicken', 90),
+  nonVeg('chicken-sandwich', 'Chicken Sandwich', 'Chicken', 70),
+];
+
 const canteens = [
   {
-    id: 'central-canteen',
-    name: 'Central Canteen',
-    description: 'Main canteen near the admin block. Full meals and South Indian.',
-    placeId: 'place-central-canteen',
-    openTime: '07:30',
+    id: 'sopanam',
+    name: 'Sopanam Canteen',
+    description: 'South Indian, meals, eggs and chicken.',
+    placeId: 'place-sopanam-canteen',
+    openTime: '08:00',
     closeTime: '21:00',
     isActive: true,
     slotMinutes: 5,
@@ -416,67 +429,66 @@ const canteens = [
     baseWaitMinutes: 6,
     perOrderMinutes: 1.5,
     menu: [
-      { id: 'idli-vada', name: 'Idli Vada (2+1)', category: 'Breakfast', price: 40, isVeg: true, isAvailable: true },
-      { id: 'masala-dosa', name: 'Masala Dosa', category: 'Breakfast', price: 55, isVeg: true, isAvailable: true },
-      { id: 'poha', name: 'Poha', category: 'Breakfast', price: 30, isVeg: true, isAvailable: false },
-      { id: 'veg-thali', name: 'Veg Thali', category: 'Meals', price: 90, isVeg: true, isAvailable: true },
-      { id: 'chicken-biryani', name: 'Chicken Biryani', category: 'Meals', price: 130, isVeg: false, isAvailable: true },
-      { id: 'egg-fried-rice', name: 'Egg Fried Rice', category: 'Meals', price: 85, isVeg: false, isAvailable: true },
-      { id: 'samosa', name: 'Samosa (2 pc)', category: 'Snacks', price: 25, isVeg: true, isAvailable: true },
-      { id: 'filter-coffee', name: 'Filter Coffee', category: 'Beverages', price: 20, isVeg: true, isAvailable: true },
-      { id: 'masala-chai', name: 'Masala Chai', category: 'Beverages', price: 15, isVeg: true, isAvailable: true },
+      veg('idli-vada', 'Idli Vada (2+1)', 'Breakfast', 40),
+      veg('masala-dosa', 'Masala Dosa', 'Breakfast', 55),
+      veg('veg-meals', 'Veg Meals', 'Meals', 80),
+      ...eggAndChicken,
+      veg('filter-coffee', 'Filter Coffee', 'Beverages', 20),
+      veg('tea', 'Tea', 'Beverages', 15),
     ],
   },
   {
-    id: 'food-court-c',
-    name: 'Food Court (Block C)',
-    description: 'Quick bites, rolls and Chinese near the hostels.',
-    placeId: 'place-food-court-c',
-    openTime: '10:00',
-    closeTime: '22:30',
+    id: 'prasada',
+    name: 'Prasada Canteen (Pure Veg)',
+    description: 'Pure vegetarian. Meals, dosas and snacks.',
+    placeId: 'place-prasada-canteen',
+    openTime: '08:00',
+    closeTime: '20:00',
+    isActive: true,
+    slotMinutes: 5,
+    slotCapacity: 8,
+    baseWaitMinutes: 5,
+    perOrderMinutes: 1.5,
+    menu: [
+      veg('pongal', 'Pongal', 'Breakfast', 40),
+      veg('masala-dosa', 'Masala Dosa', 'Breakfast', 55),
+      veg('veg-meals', 'Veg Meals', 'Meals', 80),
+      veg('curd-rice', 'Curd Rice', 'Meals', 45),
+      veg('veg-sandwich', 'Veg Sandwich', 'Snacks', 45),
+      veg('samosa', 'Samosa (2 pc)', 'Snacks', 25),
+      veg('filter-coffee', 'Filter Coffee', 'Beverages', 20),
+      veg('tea', 'Tea', 'Beverages', 15),
+    ],
+  },
+  {
+    id: 'samudra',
+    name: 'Samudra Canteen',
+    description: 'Quick bites, eggs and chicken.',
+    placeId: 'place-samudra-canteen',
+    openTime: '08:00',
+    closeTime: '20:00',
     isActive: true,
     slotMinutes: 5,
     slotCapacity: 6,
-    baseWaitMinutes: 8,
+    baseWaitMinutes: 7,
     perOrderMinutes: 2,
     menu: [
-      { id: 'paneer-roll', name: 'Paneer Tikka Roll', category: 'Rolls', price: 80, isVeg: true, isAvailable: true },
-      { id: 'chicken-roll', name: 'Chicken Kathi Roll', category: 'Rolls', price: 95, isVeg: false, isAvailable: true },
-      { id: 'veg-hakka-noodles', name: 'Veg Hakka Noodles', category: 'Chinese', price: 75, isVeg: true, isAvailable: true },
-      { id: 'chilli-chicken', name: 'Chilli Chicken', category: 'Chinese', price: 120, isVeg: false, isAvailable: true },
-      { id: 'veg-maggi', name: 'Veg Maggi', category: 'Snacks', price: 40, isVeg: true, isAvailable: true },
-      { id: 'cold-coffee', name: 'Cold Coffee', category: 'Beverages', price: 50, isVeg: true, isAvailable: true },
-    ],
-  },
-  {
-    id: 'library-cafe',
-    name: 'Library Café',
-    description: 'Coffee, juices and sandwiches next to the central library.',
-    placeId: 'place-library-cafe',
-    openTime: '08:00',
-    closeTime: '19:00',
-    isActive: true,
-    slotMinutes: 5,
-    slotCapacity: 4,
-    baseWaitMinutes: 3,
-    perOrderMinutes: 1,
-    menu: [
-      { id: 'cappuccino', name: 'Cappuccino', category: 'Coffee', price: 60, isVeg: true, isAvailable: true },
-      { id: 'americano', name: 'Americano', category: 'Coffee', price: 50, isVeg: true, isAvailable: true },
-      { id: 'veg-sandwich', name: 'Grilled Veg Sandwich', category: 'Sandwiches', price: 55, isVeg: true, isAvailable: true },
-      { id: 'chicken-sandwich', name: 'Chicken Club Sandwich', category: 'Sandwiches', price: 85, isVeg: false, isAvailable: true },
-      { id: 'watermelon-juice', name: 'Watermelon Juice', category: 'Juices', price: 45, isVeg: true, isAvailable: true },
+      veg('veg-puffs', 'Veg Puffs', 'Snacks', 25),
+      veg('veg-noodles', 'Veg Noodles', 'Snacks', 60),
+      ...eggAndChicken,
+      veg('cold-coffee', 'Cold Coffee', 'Beverages', 45),
+      veg('lime-juice', 'Lime Juice', 'Beverages', 25),
     ],
   },
 ];
 
 // Counter staff, one per canteen. staff/{uid} is server-only (rules deny
 // client access), so this script is how staff accounts are granted.
-// With DEV_BYPASS_AUTH, send `x-dev-uid: staff-central` to act as one.
+// With DEV_BYPASS_AUTH, send `x-dev-uid: staff-sopanam` to act as one.
 const staff = [
-  { uid: 'staff-central', name: 'Ravi (Central counter)', canteenId: 'central-canteen' },
-  { uid: 'staff-foodcourt', name: 'Sunita (Food Court counter)', canteenId: 'food-court-c' },
-  { uid: 'staff-library', name: 'Joseph (Library Café counter)', canteenId: 'library-cafe' },
+  { uid: 'staff-sopanam', name: 'Sopanam counter', canteenId: 'sopanam' },
+  { uid: 'staff-prasada', name: 'Prasada counter', canteenId: 'prasada' },
+  { uid: 'staff-samudra', name: 'Samudra counter', canteenId: 'samudra' },
 ];
 
 // Freelance gigs. Every gig carries at least one work sample.

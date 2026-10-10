@@ -1,9 +1,10 @@
-import { Home, UserRound, UsersRound, UtensilsCrossed } from 'lucide-react'
+import { Compass, Home, UserRound, UsersRound, UtensilsCrossed } from 'lucide-react'
 import { useNav } from '../lib/nav'
 import { cartTotals, useCart } from '../lib/cart'
 
 const TABS = [
   { id: 'home', label: 'Home', Icon: Home },
+  { id: 'explore', label: 'Explore', Icon: Compass },
   { id: 'eat', label: 'Eat', Icon: UtensilsCrossed },
   { id: 'connect', label: 'Connect', Icon: UsersRound },
   { id: 'me', label: 'Me', Icon: UserRound },

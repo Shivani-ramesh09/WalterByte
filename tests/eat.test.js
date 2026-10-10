@@ -56,7 +56,7 @@ describe('Pickup slot grid', () => {
 
 describe('Eat input validation', () => {
   const validOrder = {
-    canteenId: 'central-canteen',
+    canteenId: 'sopanam',
     slotId: '20991231_1200',
     items: [{ itemId: 'filter-coffee', quantity: 1 }],
     paymentMethod: 'upi_mock',
@@ -82,7 +82,7 @@ describe('Eat input validation', () => {
   });
 
   it('rejects an impossible slots date', async () => {
-    const res = await request(app).get('/api/v1/canteens/central-canteen/slots?date=2026-02-31').set(as('student-a'));
+    const res = await request(app).get('/api/v1/canteens/sopanam/slots?date=2026-02-31').set(as('student-a'));
     expect(res.status).toBe(422);
   });
 

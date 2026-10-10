@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { api } from '../../lib/api'
 import { useSession } from '../../lib/session'
 import { ErrorBox, Field } from '../../components/ui'
+import { INTERESTS, interestLabel } from '../explore/happenings'
 
 const splitList = (text) => text.split(',').map((s) => s.trim()).filter(Boolean)
 
@@ -11,6 +12,8 @@ export default function ProfileForm({ onDone, onCancel }) {
   const p = profile || {}
   const [error, setError] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [interests, setInterests] = useState(p.interests || [])
+  const toggleInterest = (i) => setInterests(interests.includes(i) ? interests.filter((x) => x !== i) : [...interests, i])
 
   const submit = async (event) => {
     event.preventDefault()
@@ -21,7 +24,7 @@ export default function ProfileForm({ onDone, onCancel }) {
       year: Number(f.get('year')),
       bio: f.get('bio').trim(),
       skills: splitList(f.get('skills')),
-      interests: splitList(f.get('interests')),
+      interests,
       availability: f.get('availability'),
       contactMethod: { type: f.get('contactType'), value: f.get('contactValue').trim() },
       privacy: {
@@ -30,6 +33,7 @@ export default function ProfileForm({ onDone, onCancel }) {
         showLocation: false,
       },
     }
+    if (!profile && !interests.length) return setError(new Error('Pick at least one interest so we can show happenings for you.'))
     setBusy(true)
     setError(null)
     try {
@@ -53,7 +57,17 @@ export default function ProfileForm({ onDone, onCancel }) {
       </Field>
       <Field label="Bio"><textarea name="bio" maxLength={500} rows={3} defaultValue={p.bio} placeholder="What do you do, what are you into?" /></Field>
       <Field label="Skills" hint="Comma separated, e.g. photography, video editing"><input name="skills" defaultValue={(p.skills || []).join(', ')} /></Field>
-      <Field label="Interests" hint="Comma separated"><input name="interests" defaultValue={(p.interests || []).join(', ')} /></Field>
+      <fieldset className="field interests">
+        <legend className="field-label">Your interests {profile ? '' : '(pick at least one)'}</legend>
+        <small className="field-hint">We use these to show campus happenings for you in Explore.</small>
+        <div className="chips wrap">
+          {INTERESTS.map((i) => (
+            <button key={i} type="button" className={interests.includes(i) ? 'chip selected' : 'chip'} aria-pressed={interests.includes(i)} onClick={() => toggleInterest(i)}>
+              {interestLabel(i)}
+            </button>
+          ))}
+        </div>
+      </fieldset>
       <Field label="Availability">
         <select name="availability" defaultValue={p.availability || 'available'}>
           <option value="available">Available</option>
