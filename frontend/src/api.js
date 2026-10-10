@@ -15,9 +15,14 @@ async function request(path, options = {}) {
     },
   });
   if (res.status === 204) return null;
-  const json = await res.json();
-  if (!res.ok) throw new Error(json?.error?.message || `Request failed (${res.status})`);
-  return json.data;
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const error = new Error(json?.error?.message || `Request failed (${res.status})`);
+    error.status = res.status;
+    throw error;
+  }
+  // The backend currently returns resources directly; accept the wrapped shape too.
+  return json.data ?? json;
 }
 
 // ── Search / Discovery ────────────────────────────────────────────────────────
@@ -69,6 +74,13 @@ export function getMyProfile() {
 export function upsertMyProfile(data) {
   return request('/users/me', {
     method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export function updateMyProfile(data) {
+  return request('/users/me', {
+    method: 'PATCH',
     body: JSON.stringify(data),
   });
 }
