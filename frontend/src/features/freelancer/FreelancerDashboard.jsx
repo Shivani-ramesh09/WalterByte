@@ -27,7 +27,7 @@ export default function FreelancerDashboard() {
     }
   }
 
-  const back = () => go('me', { name: 'home' })
+  const back = () => go('connect', { name: 'home' })
 
   if (!profile) {
     return (

@@ -6,12 +6,9 @@ import { useSession } from '../../lib/session'
 import { addItem, emptyCart, useCart } from '../../lib/cart'
 import { Chips, Empty, ErrorBox, Loading, ScreenHeader, StatusBadge } from '../../components/ui'
 import ProfileForm from './ProfileForm'
-import FreelancerDashboard from '../freelancer/FreelancerDashboard'
 import { ContactLine } from '../connect/PersonView'
 
 export default function MeTab() {
-  const { screen } = useNav()
-  if (screen.name === 'freelancer') return <FreelancerDashboard />
   return <MeHome />
 }
 
@@ -28,7 +25,7 @@ function MeHome() {
         subtitle={profile ? `${profile.department} · Year ${profile.year}` : user.email}
         action={<button className="icon-btn" onClick={signOut} aria-label="Sign out"><LogOut size={19} /></button>}
       />
-      <button className="card card-button freelancer-cta" onClick={() => go('me', { name: 'freelancer' })}>
+      <button className="card card-button freelancer-cta" onClick={() => go('connect', { name: 'freelancer' })}>
         <Briefcase size={20} />
         <div><strong>Freelancer studio</strong><small>Sell your skills with work samples, manage hire requests</small></div>
       </button>

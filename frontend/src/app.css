@@ -1,7 +1,32 @@
 /* App screens. Reuses the hero's tokens: --maroon, --ink, --muted, DM Sans. */
 
 .app-topbar{height:58px}
+.app-topbar .brand-avatar{position:relative;display:block;width:44px;height:44px;overflow:hidden;border:1px solid #ead9de;border-radius:50%;background:#fff}
+.app-topbar .brand-avatar img{position:absolute;top:0;left:50%;display:block;width:64px;height:64px;max-width:none;object-fit:cover;transform:translateX(-50%)}
+.theme-toggle{width:40px;height:40px;display:grid;place-items:center;border:1px solid #ead9de;border-radius:50%;background:#fff;color:var(--maroon);cursor:pointer}
+.theme-toggle:focus-visible{outline:2px solid var(--maroon);outline-offset:2px}
 .app-content{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column}
+.network-hero{padding-bottom:16px}
+.device[data-theme="dark"]{--ink:#f5edf0;--muted:#b8abb0;background:#191417;color:var(--ink)}
+.device[data-theme="dark"] .topbar,.device[data-theme="dark"] .app-content,.device[data-theme="dark"] .screen{background:#191417}
+.device[data-theme="dark"] .topbar,.device[data-theme="dark"] .tab-bar,.device[data-theme="dark"] .card,.device[data-theme="dark"] .theme-toggle,.device[data-theme="dark"] .input,.device[data-theme="dark"] input,.device[data-theme="dark"] select,.device[data-theme="dark"] textarea{border-color:#3a2d33}
+.device[data-theme="dark"] .tab-bar{background:#211a1e}
+.device[data-theme="dark"] .tab{color:#aa9ba1}
+.device[data-theme="dark"] .tab.active{color:#d66b88}
+.device[data-theme="dark"] .card,.device[data-theme="dark"] .theme-toggle,.device[data-theme="dark"] input,.device[data-theme="dark"] select,.device[data-theme="dark"] textarea,.device[data-theme="dark"] .modal{background:#241c20;color:var(--ink)}
+.device[data-theme="dark"] .btn:not(.primary),.device[data-theme="dark"] .chip:not(.selected){background:#2b2126;color:#f1dfe5}
+.device[data-theme="dark"] .network-hero h1{color:var(--ink)}
+.device[data-theme="dark"] .network-intro{color:#c2b7bb}
+.device[data-theme="dark"] .network-stats div,.device[data-theme="dark"] hr{border-color:#3a2d33}
+.device[data-theme="dark"] .theme-toggle{color:#f2c46d}
+.device[data-theme="dark"] .chips{scrollbar-color:#8c8c8c transparent;scrollbar-width:thin}
+.device[data-theme="dark"] .chips::-webkit-scrollbar{height:6px;background:transparent}
+.device[data-theme="dark"] .chips::-webkit-scrollbar-track,.device[data-theme="dark"] .chips::-webkit-scrollbar-track-piece,.device[data-theme="dark"] .chips::-webkit-scrollbar-button{background:transparent}
+.device[data-theme="dark"] .chips::-webkit-scrollbar-thumb{background:#8c8c8c;border-radius:999px}
+.device[data-theme="dark"] .app-content{scrollbar-color:#8c8c8c transparent;scrollbar-width:thin}
+.device[data-theme="dark"] .app-content::-webkit-scrollbar{width:6px;background:transparent}
+.device[data-theme="dark"] .app-content::-webkit-scrollbar-track,.device[data-theme="dark"] .app-content::-webkit-scrollbar-track-piece,.device[data-theme="dark"] .app-content::-webkit-scrollbar-button{background:transparent}
+.device[data-theme="dark"] .app-content::-webkit-scrollbar-thumb{background:#8c8c8c;border-radius:999px}
 .screen{padding:16px 18px 96px;display:flex;flex-direction:column;gap:14px}
 .screen h3{font-size:14px;margin:6px 0 0;color:var(--ink)}
 .stack{display:flex;flex-direction:column;gap:12px}

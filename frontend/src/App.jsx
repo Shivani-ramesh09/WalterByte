@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
 import { useSession } from './lib/session'
 import { NavProvider, useNav } from './lib/nav'
 import { CartProvider } from './lib/cart'
 import { ErrorBox, Loading, ScreenHeader } from './components/ui'
-import TopSearchBar from './components/TopSearchBar'
 import BottomTabBar from './components/BottomTabBar'
 import LoginPage from './features/auth/LoginPage'
 import HomeTab from './features/home/HomeTab'
@@ -18,19 +19,22 @@ const TABS = { home: HomeTab, eat: EatTab, connect: ConnectTab, me: MeTab }
 function Brand() {
   return (
     <a className="brand" href="#home" aria-label="Amrita campus home">
-      <span className="brand-mark">A</span>
-      <span className="brand-copy"><strong>AMRITA</strong><small>VISHWA VIDYAPEETHAM</small></span>
+      <span className="brand-avatar"><img src="/amma.jpeg" alt="Amma" /></span>
     </a>
   )
 }
 
-function StudentApp() {
+function StudentApp({ theme, onToggleTheme }) {
   const { tab, search } = useNav()
   const Tab = TABS[tab]
   return (
     <>
-      <header className="topbar app-topbar"><Brand /></header>
-      <TopSearchBar />
+      <header className="topbar app-topbar">
+        <Brand />
+        <button className="theme-toggle" type="button" onClick={onToggleTheme} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+          {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
+        </button>
+      </header>
       <main className="app-content">{search !== null ? <SearchResults query={search} /> : <Tab />}</main>
       <BottomTabBar />
     </>
@@ -39,10 +43,12 @@ function StudentApp() {
 
 export default function App() {
   const session = useSession()
+  const [theme, setTheme] = useState(() => window.localStorage.getItem('amrita-theme') === 'dark' ? 'dark' : 'light')
+  useEffect(() => { window.localStorage.setItem('amrita-theme', theme) }, [theme])
 
   let page
   if (session.status === 'loading') page = <Loading label="Signing you in…" />
-  else if (session.status === 'signedOut') page = <><header className="topbar"><Brand /></header><LoginPage /></>
+  else if (session.status === 'signedOut') page = <LoginPage />
   else if (session.status === 'error') {
     page = (
       <div className="screen">
@@ -65,11 +71,11 @@ export default function App() {
     page = (
       <NavProvider>
         <CartProvider>
-          <StudentApp />
+          <StudentApp theme={theme} onToggleTheme={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')} />
         </CartProvider>
       </NavProvider>
     )
   }
 
-  return <div className="device">{page}</div>
+  return <div className="device" data-theme={theme}>{page}</div>
 }

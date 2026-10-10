@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Briefcase, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { inr, useApi } from '../../lib/api'
 import { useNav } from '../../lib/nav'
 import { Chips, Empty, ErrorBox, Loading, ScreenHeader } from '../../components/ui'
 import GigDetail from './GigDetail'
 import PersonView from './PersonView'
 import RequestsBoard from './RequestsBoard'
+import FreelancerDashboard from '../freelancer/FreelancerDashboard'
 
 export const SKILLS = ['photography', 'video editing', 'ui design', 'graphic design', 'web development', 'content writing']
 
@@ -13,18 +14,17 @@ export default function ConnectTab() {
   const { screen } = useNav()
   if (screen.name === 'gig') return <GigDetail gigId={screen.gigId} />
   if (screen.name === 'person') return <PersonView uid={screen.uid} />
+  if (screen.name === 'freelancer') return <FreelancerDashboard />
   return <ConnectHome />
 }
 
 function ConnectHome() {
-  const { go } = useNav()
   const [section, setSection] = useState('gigs')
   return (
     <div className="screen">
       <ScreenHeader
         title="Connect"
         subtitle="Hire student talent, find teammates"
-        action={<button className="btn small primary" onClick={() => go('me', { name: 'freelancer' })}><Briefcase size={14} /> Sell your skills</button>}
       />
       <Chips label="Connect section" options={[{ value: 'gigs', label: 'Hire talent' }, { value: 'people', label: 'People' }, { value: 'requests', label: 'Requests board' }]} value={section} onChange={(v) => v && setSection(v)} />
       {section === 'gigs' && <GigList />}
