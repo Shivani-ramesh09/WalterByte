@@ -9,6 +9,9 @@ import userRoutes from './userRoutes.js';
 import searchRoutes from './searchRoutes.js';
 import requestRoutes from './requestRoutes.js';
 import connectionRoutes from './connectionRoutes.js';
+import canteenRoutes from './canteenRoutes.js';
+import orderRoutes from './orderRoutes.js';
+import staffRoutes from './staffRoutes.js';
 
 const router = Router();
 
@@ -21,5 +24,8 @@ router.use('/', searchRoutes);
 router.use('/', userRoutes);
 router.use('/', requestRoutes);
 router.use('/', connectionRoutes);
+router.use('/', canteenRoutes);
+router.use('/', orderRoutes);
+router.use('/', staffRoutes);
 
 export default router;

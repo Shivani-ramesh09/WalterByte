@@ -25,6 +25,8 @@ tags:
   - name: Search
   - name: Requests
   - name: Connections
+  - name: Eat
+  - name: Eat Staff
 
 # ─── Reusable components ──────────────────────────────────────────────────────
 components:
@@ -155,6 +157,52 @@ components:
       type: object
       properties:
         nextCursor: { type: string, nullable: true }
+
+    MenuItem:
+      type: object
+      properties:
+        id:          { type: string }
+        name:        { type: string }
+        category:    { type: string }
+        price:       { type: integer, description: Whole INR }
+        isVeg:       { type: boolean }
+        isAvailable: { type: boolean }
+
+    Order:
+      type: object
+      properties:
+        id:           { type: string }
+        userId:       { type: string }
+        customerName: { type: string, nullable: true }
+        canteenId:    { type: string }
+        canteenName:  { type: string }
+        placeId:      { type: string, nullable: true, description: Map pin id for "Show on map" }
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              itemId:    { type: string }
+              name:      { type: string }
+              price:     { type: integer }
+              quantity:  { type: integer }
+              lineTotal: { type: integer }
+        total: { type: integer, description: Whole INR, computed by the server }
+        pickupSlot:
+          type: object
+          properties:
+            id:    { type: string, example: '20261014_1230' }
+            start: { type: string, format: date-time }
+            end:   { type: string, format: date-time }
+        paymentMethod:    { type: string, enum: [upi_mock], description: Demo mock payment, no money moves }
+        paymentStatus:    { type: string, enum: [paid] }
+        paymentReference: { type: string, example: MOCK-AB12CD34 }
+        status:      { type: string, enum: [placed, preparing, ready, collected] }
+        createdAt:   { type: string, format: date-time }
+        updatedAt:   { type: string, format: date-time }
+        preparingAt: { type: string, format: date-time, nullable: true }
+        readyAt:     { type: string, format: date-time, nullable: true }
+        collectedAt: { type: string, format: date-time, nullable: true }
 
   responses:
     Unauthorized:
@@ -652,3 +700,289 @@ paths:
         '403': { description: Not the recipient }
         '404': { $ref: '#/components/responses/NotFound' }
         '409': { description: Already responded }
+
+  # ── Eat: canteens (students) ─────────────────────────────────────────────────
+  /canteens:
+    get:
+      tags: [Eat]
+      summary: Canteens with open status and estimated queue time
+      description: |
+        `queue` is null while a canteen is closed. `queue.estimatedWaitMinutes` is a
+        heuristic estimate: base wait x time/day multiplier + open orders due within 30 min.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  canteens:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:          { type: string }
+                        name:        { type: string }
+                        description: { type: string }
+                        placeId:     { type: string, nullable: true, description: Map pin id }
+                        openTime:    { type: string, example: '07:30' }
+                        closeTime:   { type: string, example: '21:00' }
+                        slotMinutes: { type: integer }
+                        isOpen:      { type: boolean }
+                        queue:
+                          type: object
+                          nullable: true
+                          properties:
+                            estimatedWaitMinutes: { type: integer }
+                            openOrders:           { type: integer }
+                            isEstimate:           { type: boolean }
+
+  /canteens/{id}/menu:
+    get:
+      tags: [Eat]
+      summary: Menu grouped by category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  canteen:
+                    type: object
+                    properties:
+                      id:     { type: string }
+                      name:   { type: string }
+                      isOpen: { type: boolean }
+                  categories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:  { type: string }
+                        items: { type: array, items: { $ref: '#/components/schemas/MenuItem' } }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /canteens/{id}/slots:
+    get:
+      tags: [Eat]
+      summary: Pickup slots and remaining capacity for a day (IST)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: date
+          in: query
+          description: YYYY-MM-DD, defaults to today (IST)
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  canteenId:   { type: string }
+                  date:        { type: string, format: date }
+                  slotMinutes: { type: integer }
+                  slots:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:        { type: string, example: '20261014_1230' }
+                        start:     { type: string, format: date-time }
+                        end:       { type: string, format: date-time }
+                        capacity:  { type: integer }
+                        booked:    { type: integer }
+                        remaining: { type: integer }
+                        available: { type: boolean }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  # ── Eat: orders (students) ───────────────────────────────────────────────────
+  /orders:
+    post:
+      tags: [Eat]
+      summary: Place an order with mock UPI payment (demo, no money moves)
+      description: |
+        Prices and total are computed on the server from the menu; any client-sent
+        price or total is ignored. Slot capacity is enforced in a transaction.
+        409 codes: SLOT_FULL, SLOT_UNAVAILABLE, ITEMS_UNAVAILABLE (details.itemIds), CANTEEN_CLOSED.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [canteenId, slotId, items, paymentMethod]
+              properties:
+                canteenId:     { type: string }
+                slotId:        { type: string, example: '20261014_1230' }
+                paymentMethod: { type: string, enum: [upi_mock] }
+                items:
+                  type: array
+                  minItems: 1
+                  maxItems: 20
+                  items:
+                    type: object
+                    required: [itemId, quantity]
+                    properties:
+                      itemId:   { type: string }
+                      quantity: { type: integer, minimum: 1, maximum: 10 }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Order' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { description: Slot full or unavailable, items unavailable, or canteen closed }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /orders/mine:
+    get:
+      tags: [Eat]
+      summary: My orders, newest first (max 50)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders: { type: array, items: { $ref: '#/components/schemas/Order' } }
+
+  /orders/{id}:
+    get:
+      tags: [Eat]
+      summary: One of my orders (404 if it is not mine)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Order' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ── Eat: canteen counter (staff only) ────────────────────────────────────────
+  /staff/me:
+    get:
+      tags: [Eat Staff]
+      summary: My staff record (canteen I serve)
+      description: Every /staff route returns 403 unless the caller has a staff/{uid} record.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uid:       { type: string }
+                  canteenId: { type: string }
+                  name:      { type: string }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  /staff/orders:
+    get:
+      tags: [Eat Staff]
+      summary: Order queue for my canteen, earliest pickup first
+      parameters:
+        - name: status
+          in: query
+          description: Comma-separated statuses (placed, preparing, ready, collected)
+          schema: { type: string, default: 'placed,preparing,ready' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  canteenId: { type: string }
+                  orders:    { type: array, items: { $ref: '#/components/schemas/Order' } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /staff/orders/{id}:
+    patch:
+      tags: [Eat Staff]
+      summary: Advance an order (placed, preparing, ready, collected)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { type: string, enum: [preparing, ready, collected] }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Order' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { description: Not found or belongs to another canteen }
+        '409': { description: INVALID_STATUS_TRANSITION }
+
+  /staff/menu:
+    post:
+      tags: [Eat Staff]
+      summary: Add a menu item to my canteen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, category, price, isVeg]
+              properties:
+                name:        { type: string }
+                category:    { type: string }
+                price:       { type: integer, minimum: 1, description: Whole INR }
+                isVeg:       { type: boolean }
+                isAvailable: { type: boolean, default: true }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/MenuItem' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /staff/menu/{itemId}:
+    patch:
+      tags: [Eat Staff]
+      summary: Edit a menu item; send isAvailable false to mark it sold out
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              minProperties: 1
+              properties:
+                name:        { type: string }
+                category:    { type: string }
+                price:       { type: integer, minimum: 1 }
+                isVeg:       { type: boolean }
+                isAvailable: { type: boolean }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/MenuItem' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { description: Not found in my canteen }
+        '422': { $ref: '#/components/responses/ValidationError' }
