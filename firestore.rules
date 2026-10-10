@@ -112,6 +112,20 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // ── Eat: canteens/**, orders/**, staff/** ───────────────────────────────
+    // Server-only. All reads and writes go through the API (Admin SDK), which
+    // enforces slot capacity, server-side prices, order ownership and staff
+    // scope. staff/{uid} must never be client-writable: it grants staff access.
+    match /canteens/{path=**} {
+      allow read, write: if false;
+    }
+    match /orders/{orderId} {
+      allow read, write: if false;
+    }
+    match /staff/{uid} {
+      allow read, write: if false;
+    }
+
     // ── _health/{doc} ───────────────────────────────────────────────────────
     // Internal health-check collection; only the server can read/write.
     match /_health/{doc} {
