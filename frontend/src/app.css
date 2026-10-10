@@ -185,3 +185,19 @@ fieldset.field{border:0;padding:0;margin:0}
 .map-placeholder{align-items:center;text-align:center;border-style:dashed;background:#fbf8f9}
 .screen h3:has(svg){display:flex;align-items:center;gap:6px}
 .facility-card .card-row{align-items:flex-start}
+.brand{gap:10px}
+.brand-amma{width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid var(--maroon);flex:none}
+.brand-logo{width:168px;height:46px;overflow:hidden;border-radius:6px;background:#a51642;flex:none}
+.brand-logo img{width:100%;height:100%;object-fit:cover;object-position:center 51%}
+.brand .badge-demo{margin-left:2px}
+.demo-accounts{display:flex;flex-direction:column;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid #f1e8ea}
+.demo-accounts h2{font:700 15px 'DM Sans',sans-serif;margin:0;display:flex;align-items:center;gap:8px}
+.demo-accounts p{margin:0}
+.demo-account{gap:2px}
+.login-page{overflow-y:auto}
+.reason{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#17663a;background:#ecf8f0;border-radius:999px;padding:4px 10px;align-self:flex-start}
+.link-btn.small{font-size:12px;padding:2px 0}
+.tracker small{font-size:10px;color:var(--muted);font-weight:400}
+.theme-toggle{flex:none}
+.topbar{gap:8px}
+@media (max-width:420px){.brand-logo{width:138px;height:38px}.brand-amma{width:38px;height:38px}.brand .badge-demo{font-size:9px;padding:3px 6px}}

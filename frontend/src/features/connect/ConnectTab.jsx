@@ -1,7 +1,9 @@
 import { useState } from 'react'
-import { MapPin, Printer, Search } from 'lucide-react'
+import { MapPin, Printer, Search, Sparkles } from 'lucide-react'
 import { inr, useApi } from '../../lib/api'
 import { useNav } from '../../lib/nav'
+import { useSession } from '../../lib/session'
+import { gigReason, personReason } from './reasons'
 import { Chips, Empty, ErrorBox, Loading, ScreenHeader } from '../../components/ui'
 import GigDetail from './GigDetail'
 import PersonView from './PersonView'
@@ -37,18 +39,21 @@ function ConnectHome() {
 
 export function GigCard({ gig }) {
   const { go } = useNav()
+  const reason = gigReason(gig, useSession().profile)
   const cover = gig.samples.find((s) => s.type === 'image')
   return (
     <button className="card card-button gig-card" onClick={() => go('connect', { name: 'gig', gigId: gig.id })}>
       {cover ? <img src={cover.url} alt={cover.caption || gig.title} loading="lazy" /> : <div className="gig-cover-fallback">{gig.skill}</div>}
       <div className="stack-xs">
         <small className="eyebrow-text">{gig.skill}</small>
+        {reason && <span className="reason"><Sparkles size={12} /> {reason}</span>}
         <strong>{gig.title}</strong>
         <small className="muted">{gig.sellerName} · {gig.sellerDepartment}</small>
         <div className="card-row small">
           <span>From <strong>{inr(gig.priceFrom)}</strong></span>
           <span className="muted">{gig.deliveryDays}-day delivery · {gig.samples.length} sample{gig.samples.length > 1 ? 's' : ''}</span>
         </div>
+        <span className="link-btn small">View work & request →</span>
       </div>
     </button>
   )
@@ -104,6 +109,7 @@ function LabList() {
 
 function PeopleSearch() {
   const { go } = useNav()
+  const { profile } = useSession()
   const [q, setQ] = useState('')
   const [query, setQuery] = useState('')
   const [skill, setSkill] = useState(null)
@@ -124,7 +130,9 @@ function PeopleSearch() {
         <button key={p.uid} className="card card-button" onClick={() => go('connect', { name: 'person', uid: p.uid })}>
           <div className="card-row"><strong>{p.name}</strong><span className="badge">{p.availability.replace(/_/g, ' ')}</span></div>
           <small className="muted">{p.department} · Year {p.year}</small>
+          {personReason(p, profile, skill) && <span className="reason"><Sparkles size={12} /> {personReason(p, profile, skill)}</span>}
           <div className="tag-row">{p.skills.map((s) => <span key={s} className="tag">{s}</span>)}</div>
+          <span className="link-btn small">View profile →</span>
         </button>
       ))}
     </div>

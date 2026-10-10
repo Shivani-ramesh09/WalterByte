@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { authMessage, useSession } from '../../lib/session'
+import { DEMO_MODE } from '../../config/firebase'
+
+// Seeded by scripts/seedEmulator.js (emulator only, password campus123)
+const DEMO_PASSWORD = 'campus123'
+const DEMO_ACCOUNTS = [
+  { role: 'Student', who: 'Rohan Sharma', shows: 'order food, explore events, hire a freelancer', email: 'rohan.sharma@campus.edu' },
+  { role: 'Student freelancer', who: 'Meera Pillai', shows: 'photography gigs and hire requests', email: 'meera.pillai@campus.edu' },
+  { role: 'Canteen staff', who: 'Sopanam counter', shows: 'live order queue and menu stock', email: 'staff-sopanam@campus.edu' },
+]
 
 export default function LoginPage() {
   const { signIn, signUp } = useSession()
@@ -17,6 +26,17 @@ export default function LoginPage() {
       await (mode === 'signin' ? signIn : signUp)(form.get('email'), form.get('password'))
     } catch (err) {
       setError(authMessage(err))
+      setBusy(false)
+    }
+  }
+
+  const demoSignIn = async (email) => {
+    setBusy(true)
+    setError(null)
+    try {
+      await signIn(email, DEMO_PASSWORD)
+    } catch (err) {
+      setError(`${authMessage(err)} Did you run the seed script?`)
       setBusy(false)
     }
   }
@@ -40,6 +60,18 @@ export default function LoginPage() {
       <button className="link-btn login-switch" type="button" onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError(null) }}>
         {mode === 'signin' ? 'New here? Create an account' : 'Already have an account? Sign in'}
       </button>
+      {DEMO_MODE && (
+        <section className="demo-accounts" aria-labelledby="demo-title">
+          <h2 id="demo-title">Start the demo <span className="badge badge-demo">Sample data</span></h2>
+          <p className="muted small">One tap signs you in to a seeded account. Each shows a different role.</p>
+          {DEMO_ACCOUNTS.map((a) => (
+            <button key={a.email} type="button" className="card card-button demo-account" disabled={busy} onClick={() => demoSignIn(a.email)}>
+              <strong>{a.role}</strong>
+              <small className="muted">{a.who} · {a.shows}</small>
+            </button>
+          ))}
+        </section>
+      )}
       <div className="login-note"><span className="footer-dot" /> FOR THE AMRITA COMMUNITY</div>
     </section>
   )

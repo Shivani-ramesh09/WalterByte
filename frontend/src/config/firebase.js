@@ -15,3 +15,6 @@ export const auth = getAuth(app)
 if (env.VITE_USE_AUTH_EMULATOR !== 'false') {
   connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true })
 }
+
+/** Demo mode = local emulators with seeded sample data and demo logins. */
+export const DEMO_MODE = env.VITE_USE_AUTH_EMULATOR !== 'false'

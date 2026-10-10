@@ -101,28 +101,28 @@ export default function CheckoutScreen() {
 
       <section className="card stack-sm">
         <h3>Pay with UPI <span className="badge badge-demo">Demo</span></h3>
-        <p className="muted small">UPI is the only online payment accepted. You'll get a QR code to scan. This is a demo QR: no real money moves.</p>
+        <p className="muted small">UPI is the only online payment the canteens accept. In this demo the UPI step is simulated: no QR to scan and no money moves.</p>
         <p className="muted small">Your order is prepared for your slot. Please collect it on time from the counter.</p>
       </section>
 
       <ErrorBox error={error} />
       <button className="btn primary block" disabled={!slotId || busy} onClick={() => setConfirming(true)}>
-        {!slotId ? 'Pick a pickup slot' : `Pay ${inr(total)} with UPI`}
+        {!slotId ? 'Pick a pickup slot' : `Pay ${inr(total)} with UPI (simulated)`}
       </button>
 
       {confirming && (
         <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="upi-title">
           <div className="modal">
-            <h3 id="upi-title">Scan to pay with UPI</h3>
+            <h3 id="upi-title">Simulated UPI payment</h3>
             <p><strong>{inr(total)}</strong> to {cart.canteenName}</p>
             <div className="qr-frame">
               <DemoQr seed={`${cart.canteenId}-${slotId}-${total}`} />
             </div>
-            <p className="muted small">Scan with GPay, PhonePe, Paytm or any UPI app.</p>
-            <p className="badge badge-demo">Demo QR · nothing is charged</p>
+            <p className="muted small">In the live app this is where the canteen's UPI QR appears. This sample code is not scannable.</p>
+            <p className="badge badge-demo">Sample QR · not a real payment code</p>
             <div className="row">
               <button className="btn ghost" onClick={() => setConfirming(false)} disabled={busy}>Cancel</button>
-              <button className="btn primary" onClick={pay} disabled={busy}>{busy ? 'Placing order…' : "I've paid"}</button>
+              <button className="btn primary" onClick={pay} disabled={busy}>{busy ? 'Placing order…' : 'Simulate successful payment'}</button>
             </div>
           </div>
         </div>

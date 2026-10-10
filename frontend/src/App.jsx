@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { useSession } from './lib/session'
+import { DEMO_MODE } from './config/firebase'
 import { NavProvider, useNav } from './lib/nav'
 import { CartProvider } from './lib/cart'
 import { ErrorBox, Loading, ScreenHeader } from './components/ui'
@@ -17,10 +18,12 @@ import SearchResults from './features/search/SearchResults'
 
 const TABS = { home: HomeTab, explore: ExploreTab, eat: EatTab, connect: ConnectTab, me: MeTab }
 
-function Brand() {
+export function Brand() {
   return (
-    <a className="brand" href="#home" aria-label="Amrita campus home">
-      <span className="brand-avatar"><img src="/amma.jpeg" alt="Amma" /></span>
+    <a className="brand" href="#home" aria-label="Amrita Vishwa Vidyapeetham campus home">
+      <img className="brand-amma" src="/amma.png" alt="Amma, Sri Mata Amritanandamayi Devi" />
+      <span className="brand-logo"><img src="/amrita-logo-official.png" alt="Amrita Vishwa Vidyapeetham" /></span>
+      {DEMO_MODE && <span className="badge badge-demo">Demo mode</span>}
     </a>
   )
 }
@@ -49,7 +52,7 @@ export default function App() {
 
   let page
   if (session.status === 'loading') page = <Loading label="Signing you in…" />
-  else if (session.status === 'signedOut') page = <LoginPage />
+  else if (session.status === 'signedOut') page = <><header className="topbar"><Brand /></header><LoginPage /></>
   else if (session.status === 'error') {
     page = (
       <div className="screen">
@@ -59,7 +62,7 @@ export default function App() {
     )
   }
   // Canteen staff get their own counter app, not the student app
-  else if (session.staff) page = <StaffDashboard />
+  else if (session.staff) page = <><header className="topbar"><Brand /></header><div className="app-content"><StaffDashboard /></div></>
   else if (!session.profile) {
     page = (
       <div className="screen">

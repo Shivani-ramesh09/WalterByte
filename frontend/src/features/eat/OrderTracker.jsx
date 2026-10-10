@@ -29,6 +29,7 @@ export default function OrderTracker({ orderId, justPlaced }) {
               <li key={s} className={i <= current ? 'done' : ''} aria-current={i === current ? 'step' : undefined}>
                 <span className="tracker-dot" />
                 {LABELS[s]}
+                {order[s === 'placed' ? 'createdAt' : `${s}At`] && <small>{timeOf(order[s === 'placed' ? 'createdAt' : `${s}At`])}</small>}
               </li>
             ))}
           </ol>
