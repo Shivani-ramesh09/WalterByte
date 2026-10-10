@@ -23,18 +23,20 @@ export const authMessage = (err) => AUTH_MESSAGES[err?.code] || 'Could not sign 
 /**
  * Who is signed in and what they can do:
  *   staff   – a canteen counter account (from GET /staff/me), or null
+ *   admin   – administration access (GET /admin/me): { role: "central" | "org", orgId }, or null
  *   profile – the student's Connect profile (GET /users/me), or null before onboarding
  */
 export function SessionProvider({ children }) {
-  const [state, setState] = useState({ status: 'loading', user: null, staff: null, profile: null, error: null })
+  const [state, setState] = useState({ status: 'loading', user: null, staff: null, admin: null, profile: null, error: null })
 
   const loadRoles = useCallback(async (user) => {
-    const [staff, profile] = await Promise.allSettled([api('/staff/me'), api('/users/me')])
-    const failed = [staff, profile].find((r) => r.status === 'rejected' && ![403, 404].includes(r.reason.status))
+    const [staff, profile, admin] = await Promise.allSettled([api('/staff/me'), api('/users/me'), api('/admin/me')])
+    const failed = [staff, profile, admin].find((r) => r.status === 'rejected' && ![403, 404].includes(r.reason.status))
     setState({
       status: failed ? 'error' : 'ready',
       user,
       staff: staff.status === 'fulfilled' ? staff.value : null,
+      admin: admin.status === 'fulfilled' ? admin.value : null,
       profile: profile.status === 'fulfilled' ? profile.value : null,
       error: failed ? failed.reason : null,
     })
@@ -43,7 +45,7 @@ export function SessionProvider({ children }) {
   useEffect(
     () =>
       onAuthStateChanged(auth, (user) => {
-        if (!user) return setState({ status: 'signedOut', user: null, staff: null, profile: null, error: null })
+        if (!user) return setState({ status: 'signedOut', user: null, staff: null, admin: null, profile: null, error: null })
         setState((s) => ({ ...s, status: 'loading' }))
         loadRoles(user)
       }),

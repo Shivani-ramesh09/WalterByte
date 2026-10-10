@@ -28,3 +28,11 @@ export async function getOrder(req, res, next) {
     next(err);
   }
 }
+
+export async function cancelOrder(req, res, next) {
+  try {
+    ok(res, await orderService.cancelOrder(req.user.uid, req.params.id));
+  } catch (err) {
+    next(err);
+  }
+}

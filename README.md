@@ -19,13 +19,19 @@ Stack: React + Vite frontend (`frontend/`), Node.js + Express API (`src/`), Fire
 | Sign up / sign in (email + password, Firebase Auth) | **Real** (runs against the Auth emulator in demo mode) |
 | Canteen menus, carts, pickup slots with capacity limits, orders, live order tracker | **Real** — server-priced, slot capacity enforced in a transaction |
 | Canteen staff dashboard: order queue, status updates, sold out, add items | **Real** — staff only see their own canteen |
+| Daily menus uploaded as CSV by administration, versioned, with per-item stock | **Real.** The private digital-TV menu is **not** connected; menus come from authorised uploads. |
+| Inventory ledger: online reservations, collections, cancellations, counter sales, adjustments, wastage | **Real** — concurrency-safe; an online reservation is deducted once and moves to sold on collection |
+| Counter sales and "asked for a sold-out item" counts at the billing counter | **Real** — recorded by cashiers in the staff app, or imported from an authorised billing CSV. No billing-system integration exists. |
+| "I wanted this" on sold-out items, failed online attempts | **Real** — explicit unmet-demand signals, kept separate by type |
+| Administration dashboard: Explore, Connect and Eat analytics, proposals, recommendations, CSV reports | **Real** calculations; the history it shows in the demo is **synthetic** and labelled on every screen |
 | Freelance gigs with work samples, hire requests, contact sharing on accept | **Real** |
 | People search, connections, requests board | **Real** |
 | UPI payment | **Simulated.** The QR shown at checkout is a sample image, not scannable; "Simulate successful payment" marks the order paid. No money moves. |
-| Explore events (A-MUNSO Mock MUN, Hackathon) | **Sample data** hardcoded in the frontend; dates and the hackathon venue are placeholders. RSVP / Save are stored on the device only. |
+| Explore events (A-MUNSO Mock MUN, Hackathon) | **Sample data** seeded into Firestore; dates and the hackathon venue are placeholders. Registration, saves, attendance and feedback are real. |
 | 3D printing in Combustion Research Lab | Listed in Connect → Labs & facilities; **exact location coming soon** |
 | Campus map, "Show on map" | **Coming soon** |
 | Demo logins and seeded profiles, gigs, menus | **Sample data**, created by the seed script in the emulator only |
+| Analytics history (past events, skill requests, 28 days of canteen sales and demand signals) | **Synthetic**, emulator only, flagged `synthetic: true`. Not real Amrita statistics. |
 
 The app shows a **Demo mode** badge whenever it runs against the local emulators.
 
@@ -76,7 +82,9 @@ Open **http://localhost:5173**. The login page has **Start the demo** buttons th
 |---|---|---|
 | Student | `rohan.sharma@campus.edu` | Explore picks, order a bread omelette at Sopanam, hire Meera |
 | Student freelancer | `meera.pillai@campus.edu` | Me → Freelancer studio: accept Rohan's request, publish a gig |
-| Canteen staff | `staff-sopanam@campus.edu` | Move Rohan's order to Preparing → Ready → Collected |
+| Canteen staff | `staff-sopanam@campus.edu` | Move Rohan's order to Preparing → Ready → Collected; Counter tab: record walk-in sales and requests for sold-out items |
+| Campus administration | `admin@campus.edu` | Overview, Explore, Connect and Eat analytics, proposals, recommendations, menu uploads, reports |
+| Society representative | `munso.rep@campus.edu` | A-MUNSO's own event history, attendance marking and proposals only |
 
 Also seeded: `staff-prasada@campus.edu`, `staff-samudra@campus.edu`, and 8 more student profiles. New accounts can sign up from the login page; they pick interests and set up a profile on first sign-in.
 
@@ -87,6 +95,8 @@ Also seeded: `staff-prasada@campus.edu`, `staff-samudra@campus.edu`, and 8 more 
 3. Connect → Hire talent → Meera's photography gig → view work samples → send a hire request.
 4. **Sopanam staff** → the order appears in the queue → Start preparing → Mark ready. Rohan's tracker updates by itself.
 5. **Meera** → Me → Freelancer studio → accept the request → Rohan's contact appears (and Meera's appears for Rohan).
+6. **Administration** → Eat → Samudra → Chicken Biriyani: sales, sell-out times, each unmet-demand signal kept separate, data quality, a demand range (or "insufficient data") and a gross-sales scenario that is not profit.
+7. **Administration** → Proposals → A-MUNSO Annual Conference: past results and current readiness side by side; the decision stays with a person.
 
 ---
 
@@ -204,6 +214,24 @@ Canteen staff are listed in the server-only `staff/{uid}` collection (`{ canteen
 Any student with a profile becomes a freelancer by publishing a gig. Contact details are exchanged only when the freelancer accepts a request.
 
 ---
+
+### Administration (Explore, Connect, Eat)
+
+All under `/api/v1/admin/*` and require an `admins/{uid}` record (server-only). `central` admins see everything; `org` representatives only their own organisation's events, attendance and proposals.
+
+| Method | Path | Notes |
+|---|---|---|
+| GET | `/admin/overview?from&to` | KPIs across modules, against the previous equal period (IST days) |
+| GET | `/admin/explore` · `/admin/connect` · `/admin/eat` | Module analytics for the period |
+| GET | `/admin/eat/items/:canteenId/:itemId?portions&unitCost` | Item evidence: sales, stockouts, signals, data quality, demand range, scenario |
+| POST | `/admin/eat/menus/validate` · `/admin/eat/menus` · `/admin/eat/menus/:canteenId/:date/publish` | Daily menu CSV: preview with row errors, draft, versioned publish |
+| POST | `/admin/eat/counter-imports` | Billing CSV import, idempotent by transaction id |
+| GET/POST/PATCH | `/admin/proposals…` | Proposals, evidence pack, human decision, post-event outcome |
+| GET/PATCH | `/admin/recommendations…` | Rule-based recommendations and their review status |
+| GET | `/admin/reports/:kind` | CSV: `events`, `organisations`, `skills`, `eat-items` |
+
+Counter (staff): `GET /staff/counter`, `POST /staff/counter-sales`, `POST /staff/unavailable-requests`, `PATCH /staff/unavailable-requests/:id` (void with reason), `POST /staff/inventory/:itemId/adjust`, `POST /staff/day-close`.
+Students: `POST /orders/:id/cancel`, `POST|DELETE /canteens/:id/menu/:itemId/interest`, `GET /events`, `PATCH /events/:id/me`, `POST /events/:id/feedback`.
 
 ## Security rules & indexes
 

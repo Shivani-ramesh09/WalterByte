@@ -1,17 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { HAPPENINGS, interestLabel, recommendationReason, upcoming } from './happenings'
+import { interestLabel, recommendationReason } from './happenings'
 import { gigReason, personReason } from '../connect/reasons'
 
-const mun = HAPPENINGS.find((h) => h.id === 'a-munso')
-const hack = HAPPENINGS.find((h) => h.id === 'hackathon')
+const mun = { id: 'a-munso', interests: ['debate & mun'] }
+const hack = { id: 'hackathon', interests: ['coding & hackathons', 'design', 'entrepreneurship'] }
 
 describe('Explore happenings', () => {
-  it('hides events that have ended', () => {
-    expect(upcoming(new Date('2026-10-01T00:00:00+05:30')).map((h) => h.id)).toEqual(['a-munso', 'hackathon'])
-    expect(upcoming(new Date('2026-10-20T00:00:00+05:30')).map((h) => h.id)).toEqual(['hackathon'])
-    expect(upcoming(new Date('2026-12-01T00:00:00+05:30'))).toEqual([])
-  })
-
   it('explains why an event is recommended', () => {
     expect(recommendationReason(mun, ['debate & mun'])).toBe('Matches your interest in Debate & MUN')
     expect(recommendationReason(hack, ['design', 'entrepreneurship'])).toBe('Matches your interest in Design and Entrepreneurship')

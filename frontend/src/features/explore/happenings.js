@@ -1,5 +1,4 @@
-// Campus happenings shown in Explore.
-// shortcut: hardcoded sample list (dates to be confirmed with organisers), move to a backend collection so organisers can post events
+// Explore helpers. Events themselves come from the API (GET /events).
 
 /** Interests a student picks at sign-up. Stored lowercase on the profile. */
 export const INTERESTS = [
@@ -16,33 +15,6 @@ export const INTERESTS = [
 /** Display label: "debate & mun" → "Debate & MUN". */
 export const interestLabel = (i) =>
   i.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/\bMun\b/, 'MUN').replace(/\b3d\b/i, '3D')
-
-export const HAPPENINGS = [
-  {
-    id: 'a-munso',
-    title: 'A-MUNSO Mock MUN',
-    venue: 'Gokul Krishna Hall',
-    start: '2026-10-17T09:00:00+05:30',
-    end: '2026-10-17T17:00:00+05:30',
-    organiser: 'A-MUNSO',
-    description: 'A full-day Mock United Nations: committee sessions, position papers, resolutions and debate. Open to first-timers.',
-    interests: ['debate & mun'],
-  },
-  {
-    id: 'hackathon',
-    title: 'Hackathon',
-    venue: 'Venue to be confirmed by organisers',
-    start: '2026-10-24T09:00:00+05:30',
-    end: '2026-10-24T17:00:00+05:30',
-    organiser: 'Student tech clubs',
-    description: 'Build something in a day with a team of up to four. Developers, designers and pitchers welcome; teams demo at 4:30 PM.',
-    interests: ['coding & hackathons', 'design', 'entrepreneurship'],
-  },
-]
-
-/** Events that have not ended yet, soonest first. */
-export const upcoming = (now = new Date()) =>
-  HAPPENINGS.filter((h) => new Date(h.end) > now).sort((a, b) => a.start.localeCompare(b.start))
 
 /** Interests of the student that this event matches. */
 export const matchedInterests = (event, interests = []) => event.interests.filter((i) => interests.includes(i))

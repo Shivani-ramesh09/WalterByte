@@ -13,6 +13,8 @@
 import 'dotenv/config';
 import admin from 'firebase-admin';
 import { readFileSync } from 'fs';
+import { admins, buildAnalyticsSeed, organisations, sampleEvents } from './seedAnalytics.js';
+import { buildEatSeed } from './seedEat.js';
 
 // ── Firebase init ─────────────────────────────────────────────────────────────
 const isEmulator = process.env.SEED_TARGET !== 'prod';
@@ -561,6 +563,7 @@ async function seedAuthUsers() {
   const accounts = [
     ...users.map((u) => ({ uid: u.uid, email: u.email, displayName: u.name })),
     ...staff.map((s) => ({ uid: s.uid, email: `${s.uid}@campus.edu`, displayName: s.name })),
+    ...admins.map((a) => ({ uid: a.uid, email: a.email, displayName: a.name })),
   ];
   for (const account of accounts) {
     await admin.auth().deleteUser(account.uid).catch(() => {});
@@ -659,6 +662,147 @@ async function seedCanteens() {
   console.log(`[Seed] ✓ ${canteens.length} canteens, ${totalItems} menu items, ${staff.length} staff written.`);
 }
 
+async function seedExplore() {
+  console.log('[Seed] Seeding organisations and sample events...');
+  const batch = db.batch();
+  for (const { id, ...org } of organisations) {
+    batch.set(db.collection('organisations').doc(id), { ...org, createdAt: now });
+  }
+  // merge keeps registeredCount from RSVPs already made against these events
+  for (const { id, start, end, ...ev } of sampleEvents) {
+    batch.set(
+      db.collection('events').doc(id),
+      { ...ev, start: Timestamp.fromDate(new Date(start)), end: Timestamp.fromDate(new Date(end)), status: 'published' },
+      { merge: true }
+    );
+  }
+  await batch.commit();
+  console.log(`[Seed] ✓ ${organisations.length} organisations, ${sampleEvents.length} sample events written.`);
+}
+
+// Synthetic analytics history and admin roles: emulator only, never a real project
+async function seedSyntheticAnalytics() {
+  if (!isEmulator) {
+    console.log('[Seed] Skipping synthetic analytics and admin roles (real project).');
+    return;
+  }
+  console.log('[Seed] Seeding SYNTHETIC Explore/Connect analytics data...');
+  const data = buildAnalyticsSeed(new Date(), users.map((u) => u.uid));
+  const ts = (d) => Timestamp.fromDate(d);
+
+  // Reset: drop earlier synthetic events (with participants) and requests (with responses)
+  const old = await Promise.all(['events', 'requests', 'gigRequests', 'proposals', 'users'].map((c) => db.collection(c).where('synthetic', '==', true).get()));
+  for (const snap of old) for (const d of snap.docs) await db.recursiveDelete(d.ref);
+
+  const w = db.bulkWriter();
+  for (const { uid, ...s } of data.students) w.set(db.collection('users').doc(uid), { ...s, createdAt: now, updatedAt: now });
+  for (const e of data.events) {
+    const ref = db.collection('events').doc(e.id);
+    w.set(ref, { ...e.data, start: ts(e.data.start), end: ts(e.data.end) });
+    for (const { uid, viewedAt, feedback, ...p } of e.participants) {
+      w.set(ref.collection('participants').doc(uid), {
+        ...p,
+        viewedAt: ts(viewedAt),
+        ...(feedback && { feedback: { ...feedback, at: ts(feedback.at) } }),
+        synthetic: true,
+      });
+    }
+  }
+  for (const { id, proposedStart, proposedEnd, ...p } of data.proposals) {
+    w.set(db.collection('proposals').doc(id), {
+      ...p,
+      proposedStart: ts(proposedStart),
+      proposedEnd: ts(proposedEnd),
+      createdBy: 'seed',
+      createdAt: now,
+      updatedAt: now,
+      synthetic: true,
+    });
+  }
+  for (const { id, data: r, responses } of data.requests) {
+    const ref = db.collection('requests').doc(id);
+    w.set(ref, { ...r, createdAt: ts(r.createdAt), updatedAt: ts(r.updatedAt) });
+    responses.forEach((resp, i) => w.set(ref.collection('responses').doc(`syn-${i}`), { ...resp, createdAt: ts(resp.createdAt) }));
+  }
+  for (const { id, gigId, data: h } of data.gigRequests) {
+    const gig = gigs.find((g) => g.id === gigId);
+    const seller = users.find((u) => u.uid === gig.sellerId);
+    w.set(db.collection('gigRequests').doc(id), {
+      ...h,
+      gigId,
+      gigTitle: gig.title,
+      sellerId: gig.sellerId,
+      sellerName: seller.name,
+      createdAt: ts(h.createdAt),
+      updatedAt: ts(h.updatedAt),
+    });
+  }
+  for (const { uid, email, ...a } of admins) w.set(db.collection('admins').doc(uid), { ...a, createdAt: now });
+  await w.close();
+  console.log(
+    `[Seed] ✓ SYNTHETIC: ${data.students.length} students, ${data.events.length} events, ${data.proposals.length} proposals, ` +
+      `${data.requests.length} requests, ${data.gigRequests.length} hire requests; ${admins.length} admin roles.`
+  );
+}
+
+// Synthetic Eat history (emulator only): daily menus, inventory ledger, orders,
+// counter sales and demand signals for the last 28 days, plus today's menus.
+async function seedSyntheticEat() {
+  if (!isEmulator) {
+    console.log('[Seed] Skipping synthetic Eat history (real project).');
+    return;
+  }
+  console.log('[Seed] Seeding SYNTHETIC Eat history...');
+  const students = Array.from({ length: 90 }, (_, i) => `syn-student-${String(i + 1).padStart(3, '0')}`);
+  const data = buildEatSeed(new Date(), canteens, students);
+  const ts = (d) => (d ? Timestamp.fromDate(d) : null);
+
+  // Reset: earlier synthetic Eat records only; real orders and today's live ledger counts are kept
+  for (const c of ['dailyMenus', 'inventory', 'orders', 'counterSales', 'demandSignals', 'eatDataStatus']) {
+    const snap = await db.collection(c).where('synthetic', '==', true).get();
+    const w = db.bulkWriter();
+    for (const d of snap.docs) {
+      if (c === 'inventory' && d.get('isToday')) continue;
+      if (c === 'dailyMenus') await db.recursiveDelete(d.ref);
+      else w.delete(d.ref);
+    }
+    await w.close();
+  }
+
+  const w = db.bulkWriter();
+  for (const m of data.menus) {
+    const published = { version: 1, items: m.items, publishedBy: 'seed', publishedAt: now };
+    const ref = db.collection('dailyMenus').doc(`${m.canteenId}_${m.businessDate}`);
+    w.set(ref, { canteenId: m.canteenId, businessDate: m.businessDate, draft: null, published, synthetic: true });
+    w.set(ref.collection('versions').doc('1'), { ...published, fileName: 'synthetic-seed.csv' });
+  }
+  for (const { isToday, stockouts, ...inv } of data.inventory) {
+    const ref = db.collection('inventory').doc(`${inv.canteenId}_${inv.businessDate}_${inv.itemId}`);
+    // Today: plan fields only, so sales recorded during a demo are not wiped
+    if (isToday) w.set(ref, { ...inv, isToday: true, synthetic: true }, { merge: true });
+    else w.set(ref, { ...inv, stockouts: stockouts.map((s) => ({ at: ts(s.at), until: ts(s.until) })), synthetic: true });
+  }
+  for (const o of data.orders) {
+    w.set(db.collection('orders').doc(), {
+      ...o,
+      pickupSlot: { ...o.pickupSlot, start: ts(o.pickupSlot.start), end: ts(o.pickupSlot.end) },
+      createdAt: ts(o.createdAt),
+      updatedAt: ts(o.updatedAt),
+      synthetic: true,
+    });
+  }
+  for (const s of data.counterSales) w.set(db.collection('counterSales').doc(`${s.canteenId}_${s.txnId}`), { ...s, at: ts(s.at), synthetic: true });
+  for (const { id, ...s } of data.signals) w.set(id ? db.collection('demandSignals').doc(id) : db.collection('demandSignals').doc(), { ...s, at: ts(s.at), synthetic: true });
+  for (const s of data.statuses) {
+    w.set(db.collection('eatDataStatus').doc(`${s.canteenId}_${s.businessDate}`), { ...s, lastCounterAt: ts(s.lastCounterAt), synthetic: true });
+  }
+  await w.close();
+  console.log(
+    `[Seed] ✓ SYNTHETIC Eat: ${data.menus.length} daily menus, ${data.inventory.length} item-days, ${data.orders.length} orders, ` +
+      `${data.counterSales.length} counter transactions, ${data.signals.length} demand signals.`
+  );
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 (async () => {
@@ -672,6 +816,9 @@ async function seedCanteens() {
     await seedRequests();
     await seedCanteens();
     await seedGigs();
+    await seedExplore();
+    await seedSyntheticAnalytics();
+    await seedSyntheticEat();
     await seedAuthUsers();
     console.log('\n[Seed] ✅ All done!');
   } catch (err) {

@@ -9,6 +9,8 @@ const DEMO_ACCOUNTS = [
   { role: 'Student', who: 'Rohan Sharma', shows: 'order food, explore events, hire a freelancer', email: 'rohan.sharma@campus.edu' },
   { role: 'Student freelancer', who: 'Meera Pillai', shows: 'photography gigs and hire requests', email: 'meera.pillai@campus.edu' },
   { role: 'Canteen staff', who: 'Sopanam counter', shows: 'live order queue and menu stock', email: 'staff-sopanam@campus.edu' },
+  { role: 'Campus administration', who: 'Central admin', shows: 'Explore and Connect analytics, proposals, recommendations', email: 'admin@campus.edu' },
+  { role: 'Society representative', who: 'A-MUNSO', shows: 'own event history, attendance and proposals', email: 'munso.rep@campus.edu' },
 ]
 
 export default function LoginPage() {
@@ -45,7 +47,7 @@ export default function LoginPage() {
     <section className="login-page" aria-labelledby="login-title">
       <div className="eyebrow"><span className="eyebrow-line" /> COIMBATORE CAMPUS</div>
       <h1 id="login-title">{mode === 'signin' ? <>Welcome<br /><em>back.</em></> : <>Join<br /><em>campus.</em></>}</h1>
-      <p className="intro">{mode === 'signin' ? 'Sign in with your campus account.' : 'Create your campus account.'}<br />Students, freelancers and canteen staff all sign in here.</p>
+      <p className="intro">{mode === 'signin' ? 'Sign in with your campus account.' : 'Create your campus account.'}<br />Students, canteen staff and administrators all sign in here.</p>
       <div className="login-art"><img src="/campus-hero.jpg.jpeg" alt="Illustrated view of the Amrita Coimbatore campus" /></div>
       <form className="login-form" onSubmit={submit}>
         <label htmlFor="email">Email</label>

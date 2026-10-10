@@ -3,6 +3,7 @@ import { LogOut } from 'lucide-react'
 import { api, dateTimeOf, inr, timeOf, useApi } from '../../lib/api'
 import { useSession } from '../../lib/session'
 import { Chips, Empty, ErrorBox, Field, Loading, StatusBadge, VegMark } from '../../components/ui'
+import StaffCounter from './StaffCounter'
 
 const NEXT = { placed: 'preparing', preparing: 'ready', ready: 'collected' }
 const ACTION = { placed: 'Start preparing', preparing: 'Mark ready', ready: 'Mark collected' }
@@ -20,8 +21,8 @@ export default function StaffDashboard() {
         </div>
         <button className="icon-btn" onClick={signOut} aria-label="Sign out"><LogOut size={19} /></button>
       </header>
-      <Chips label="Dashboard section" options={[{ value: 'orders', label: 'Orders' }, { value: 'history', label: 'Collected' }, { value: 'menu', label: 'Menu & stock' }]} value={view} onChange={(v) => v && setView(v)} />
-      {view === 'menu' ? <StaffMenu canteenId={staff.canteenId} /> : <StaffOrders history={view === 'history'} />}
+      <Chips label="Dashboard section" options={[{ value: 'orders', label: 'Orders' }, { value: 'counter', label: 'Counter' }, { value: 'history', label: 'Collected' }, { value: 'menu', label: 'Menu & stock' }]} value={view} onChange={(v) => v && setView(v)} />
+      {view === 'menu' ? <StaffMenu canteenId={staff.canteenId} /> : view === 'counter' ? <StaffCounter /> : <StaffOrders history={view === 'history'} />}
     </div>
   )
 }
@@ -31,11 +32,12 @@ function StaffOrders({ history }) {
   const [busyId, setBusyId] = useState(null)
   const [actionError, setActionError] = useState(null)
 
-  const advance = async (order) => {
+  const advance = async (order, status = NEXT[order.status]) => {
+    if (status === 'cancelled' && !window.confirm('Cancel this order? Its portions go back on sale and the demo payment is marked refunded.')) return
     setBusyId(order.id)
     setActionError(null)
     try {
-      await api(`/staff/orders/${order.id}`, { method: 'PATCH', body: { status: NEXT[order.status] } })
+      await api(`/staff/orders/${order.id}`, { method: 'PATCH', body: { status } })
       await reload(true)
     } catch (err) {
       setActionError(err)
@@ -63,11 +65,16 @@ function StaffOrders({ history }) {
           </ul>
           <div className="card-row">
             <span className="badge badge-open">{o.paymentStatus === 'paid' ? `Paid ${inr(o.total)} (demo UPI)` : 'Unpaid'}</span>
-            {NEXT[o.status] && (
-              <button className="btn primary small" disabled={busyId === o.id} onClick={() => advance(o)}>
-                {busyId === o.id ? 'Updating…' : ACTION[o.status]}
-              </button>
-            )}
+            <div className="row">
+              {['placed', 'preparing'].includes(o.status) && (
+                <button className="btn ghost small" disabled={busyId === o.id} onClick={() => advance(o, 'cancelled')}>Cancel</button>
+              )}
+              {NEXT[o.status] && (
+                <button className="btn primary small" disabled={busyId === o.id} onClick={() => advance(o)}>
+                  {busyId === o.id ? 'Updating…' : ACTION[o.status]}
+                </button>
+              )}
+            </div>
           </div>
         </article>
       ))}

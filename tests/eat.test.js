@@ -123,6 +123,12 @@ describeDb('Eat API (Firestore emulator)', () => {
     await ref.collection('menu').doc('poha').set({ name: 'Poha', category: 'Breakfast', price: 30, isVeg: true, isAvailable: false });
   });
 
+  // The emulator may also hold demo data: leave no test canteen or orders behind
+  afterAll(async () => {
+    const orders = await db.collection('orders').where('canteenId', '==', canteenId).get();
+    await Promise.all([...orders.docs.map((d) => d.ref.delete()), db.recursiveDelete(db.collection('canteens').doc(canteenId))]);
+  });
+
   it('lists canteens with open status and a labelled estimate', async () => {
     const res = await request(app).get('/api/v1/canteens').set(as('student-a'));
     expect(res.status).toBe(200);

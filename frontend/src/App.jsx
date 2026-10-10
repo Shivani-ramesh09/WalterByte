@@ -14,6 +14,7 @@ import ConnectTab from './features/connect/ConnectTab'
 import MeTab from './features/me/MeTab'
 import ProfileForm from './features/me/ProfileForm'
 import StaffDashboard from './features/staff/StaffDashboard'
+import AdminApp from './features/admin/AdminApp'
 import SearchResults from './features/search/SearchResults'
 
 const TABS = { home: HomeTab, explore: ExploreTab, eat: EatTab, connect: ConnectTab, me: MeTab }
@@ -61,6 +62,8 @@ export default function App() {
       </div>
     )
   }
+  // Administration and organisation representatives get the dashboard
+  else if (session.admin) page = <><header className="topbar"><Brand /><button className="btn ghost small" onClick={session.signOut}>Sign out</button></header><AdminApp /></>
   // Canteen staff get their own counter app, not the student app
   else if (session.staff) page = <><header className="topbar"><Brand /></header><div className="app-content"><StaffDashboard /></div></>
   else if (!session.profile) {
@@ -81,5 +84,5 @@ export default function App() {
     )
   }
 
-  return <div className="device" data-theme={theme}>{page}</div>
+  return <div className={session.admin ? 'device device-wide' : 'device'} data-theme={theme}>{page}</div>
 }

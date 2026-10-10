@@ -14,6 +14,8 @@ import { db } from '../config/firebase.js';
 import { notFound } from '../utils/apiError.js';
 import { istParts, istDate, isRealDate, toMinutes, toHHmm } from '../utils/istTime.js';
 import { estimateWaitMinutes } from './queueEstimator.js';
+import { dayInventory } from './eat/dailyMenuService.js';
+import { myInterests } from './eat/demandService.js';
 
 const CANTEENS = 'canteens';
 export const OPEN_ORDER_STATUSES = ['placed', 'preparing'];
@@ -106,23 +108,31 @@ export async function listCanteens(now = new Date()) {
   );
 }
 
-export async function getMenu(canteenId, now = new Date()) {
+/**
+ * Today's menu. A published daily menu wins (with live stock, sold-out items
+ * kept visible and labelled); otherwise the static canteen menu is served.
+ */
+export async function getMenu(canteenId, now = new Date(), uid = null) {
   const canteen = await getCanteenData(canteenId);
-  const snap = await db.collection(CANTEENS).doc(canteenId).collection('menu').get();
+  const date = istParts(now).date;
+  const daily = await dayInventory(canteenId, date);
+  const wanted = daily && uid ? await myInterests(uid, canteenId, date) : new Set();
 
   const byCategory = new Map();
-  const items = snap.docs
-    .map((d) => {
-      const m = d.data();
-      return {
-        id: d.id,
-        name: m.name,
-        category: m.category,
-        price: m.price,
-        isVeg: m.isVeg,
-        isAvailable: m.isAvailable,
-      };
-    })
+  const items = (daily ? daily.items.filter((i) => i.onMenu).map((i) => ({
+    id: i.itemId,
+    name: i.name,
+    category: i.category,
+    price: i.price,
+    isVeg: i.isVeg,
+    isAvailable: !i.soldOut && i.preorder,
+    soldOut: i.soldOut,
+    remaining: i.available === null ? null : Math.max(0, i.available),
+    counterOnly: !i.preorder,
+    availableFrom: i.availableFrom,
+    availableTo: i.availableTo,
+    wanted: wanted.has(i.itemId),
+  })) : await staticMenu(canteenId))
     .sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
   for (const item of items) {
     if (!byCategory.has(item.category)) byCategory.set(item.category, []);
@@ -131,8 +141,19 @@ export async function getMenu(canteenId, now = new Date()) {
 
   return {
     canteen: { id: canteenId, name: canteen.name, isOpen: isOpenAt(canteen, now) },
+    source: daily ? 'daily' : 'static',
+    businessDate: date,
+    menuVersion: daily?.version || null,
     categories: [...byCategory].map(([name, categoryItems]) => ({ name, items: categoryItems })),
   };
+}
+
+async function staticMenu(canteenId) {
+  const snap = await db.collection(CANTEENS).doc(canteenId).collection('menu').get();
+  return snap.docs.map((d) => {
+    const m = d.data();
+    return { id: d.id, name: m.name, category: m.category, price: m.price, isVeg: m.isVeg, isAvailable: m.isAvailable };
+  });
 }
 
 export async function getSlots(canteenId, date, now = new Date()) {

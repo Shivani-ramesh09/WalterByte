@@ -35,4 +35,7 @@ router.get('/orders/mine', ctrl.listMyOrders);
 
 router.get('/orders/:id', validate({ params: idParamSchema }), ctrl.getOrder);
 
+// Student cancel, only while the order is still 'placed'
+router.post('/orders/:id/cancel', userWriteLimiter, validate({ params: idParamSchema }), ctrl.cancelOrder);
+
 export default router;
