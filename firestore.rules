@@ -126,6 +126,15 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // ── Connect gigs: gigs/**, gigRequests/** ───────────────────────────────
+    // Server-only. The API enforces work samples, ownership and contact sharing.
+    match /gigs/{gigId} {
+      allow read, write: if false;
+    }
+    match /gigRequests/{requestId} {
+      allow read, write: if false;
+    }
+
     // ── _health/{doc} ───────────────────────────────────────────────────────
     // Internal health-check collection; only the server can read/write.
     match /_health/{doc} {

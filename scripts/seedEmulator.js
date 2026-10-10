@@ -479,7 +479,102 @@ const staff = [
   { uid: 'staff-library', name: 'Joseph (Library Café counter)', canteenId: 'library-cafe' },
 ];
 
+// Freelance gigs. Every gig carries at least one work sample.
+// shortcut: sample images are placeholder photos from picsum.photos; replace with real student work before launch
+const gigs = [
+  {
+    id: 'seed-gig-001',
+    sellerId: 'seed-uid-006',
+    title: 'Event & portrait photography with edited photos in 48h',
+    skill: 'photography',
+    description: 'Fests, club events, portraits and product shots. Includes colour-graded, edited photos delivered as a shared folder within two days.',
+    priceFrom: 800,
+    deliveryDays: 2,
+    samples: [
+      { type: 'image', url: 'https://picsum.photos/seed/meera-portrait/800/600', caption: 'Portrait series, Faces of Campus' },
+      { type: 'image', url: 'https://picsum.photos/seed/meera-event/800/600', caption: 'Techfest 2025 main stage' },
+      { type: 'link', url: 'https://meeraphoto.co', caption: 'Full portfolio' },
+    ],
+  },
+  {
+    id: 'seed-gig-002',
+    sellerId: 'seed-uid-004',
+    title: 'Reels and event recap videos edited in Premiere Pro',
+    skill: 'video editing',
+    description: 'Short-form reels and 2-5 minute recaps with music, captions and colour correction. Send raw footage, get a ready-to-post video.',
+    priceFrom: 600,
+    deliveryDays: 3,
+    samples: [
+      { type: 'video', url: 'https://youtube.com/@campusvoices', caption: 'Campus Voices documentary series' },
+      { type: 'image', url: 'https://picsum.photos/seed/ananya-edit/800/600', caption: 'Reel thumbnail set' },
+    ],
+  },
+  {
+    id: 'seed-gig-003',
+    sellerId: 'seed-uid-002',
+    title: 'Posters, logos and UI screens designed in Figma',
+    skill: 'ui design',
+    description: 'Event posters, club logos, social media kits and app UI mockups. Two revision rounds included, source Figma file shared.',
+    priceFrom: 500,
+    deliveryDays: 4,
+    samples: [
+      { type: 'image', url: 'https://picsum.photos/seed/priya-poster/800/600', caption: 'Techfest motion poster' },
+      { type: 'link', url: 'https://priya.design', caption: 'Design portfolio' },
+    ],
+  },
+  {
+    id: 'seed-gig-004',
+    sellerId: 'seed-uid-010',
+    title: 'Fest highlight reels and gaming montages',
+    skill: 'video editing',
+    description: 'Fast-paced highlight reels with motion text and sound design. I edited the Culturals 2025 highlight video.',
+    priceFrom: 700,
+    deliveryDays: 5,
+    samples: [{ type: 'image', url: 'https://picsum.photos/seed/ishaan-reel/800/600', caption: 'Culturals 2025 highlight frame' }],
+  },
+];
+
+// Login accounts, created in the Auth EMULATOR only (password: campus123).
+// Never created for a real project: known passwords must not exist there.
+const DEMO_PASSWORD = 'campus123';
+
 // ── Seed functions ─────────────────────────────────────────────────────────────
+
+async function seedAuthUsers() {
+  if (!isEmulator) {
+    console.log('[Seed] Skipping login accounts (real project).');
+    return;
+  }
+  console.log('[Seed] Seeding emulator login accounts...');
+  const accounts = [
+    ...users.map((u) => ({ uid: u.uid, email: u.email, displayName: u.name })),
+    ...staff.map((s) => ({ uid: s.uid, email: `${s.uid}@campus.edu`, displayName: s.name })),
+  ];
+  for (const account of accounts) {
+    await admin.auth().deleteUser(account.uid).catch(() => {});
+    await admin.auth().createUser({ ...account, password: DEMO_PASSWORD });
+  }
+  console.log(`[Seed] ✓ ${accounts.length} logins written (password: ${DEMO_PASSWORD}).`);
+}
+
+async function seedGigs() {
+  console.log('[Seed] Seeding gigs...');
+  const batch = db.batch();
+  for (const { id, sellerId, ...gig } of gigs) {
+    const seller = users.find((u) => u.uid === sellerId);
+    batch.set(db.collection('gigs').doc(id), {
+      ...gig,
+      sellerId,
+      sellerName: seller.name,
+      sellerDepartment: seller.department,
+      status: 'active',
+      createdAt: now,
+      updatedAt: now,
+    });
+  }
+  await batch.commit();
+  console.log(`[Seed] ✓ ${gigs.length} gigs written.`);
+}
 
 async function seedUsers() {
   console.log('[Seed] Seeding users...');
@@ -564,6 +659,8 @@ async function seedCanteens() {
     await seedProjects();
     await seedRequests();
     await seedCanteens();
+    await seedGigs();
+    await seedAuthUsers();
     console.log('\n[Seed] ✅ All done!');
   } catch (err) {
     console.error('[Seed] ❌ Failed:', err.message);

@@ -12,6 +12,7 @@ import connectionRoutes from './connectionRoutes.js';
 import canteenRoutes from './canteenRoutes.js';
 import orderRoutes from './orderRoutes.js';
 import staffRoutes from './staffRoutes.js';
+import gigRoutes from './gigRoutes.js';
 
 const router = Router();
 
@@ -27,5 +28,6 @@ router.use('/', connectionRoutes);
 router.use('/', canteenRoutes);
 router.use('/', orderRoutes);
 router.use('/', staffRoutes);
+router.use('/', gigRoutes);
 
 export default router;

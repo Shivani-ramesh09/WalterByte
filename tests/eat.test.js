@@ -199,20 +199,20 @@ describeDb('Eat API (Firestore emulator)', () => {
   }, 30_000); // contended transactions retry with backoff in the emulator (2-8 s measured)
 
   it('shows orders only to their owner', async () => {
-    const placed = await request(app).post('/api/v1/orders').set(as('owner-1')).send(order());
+    const placed = await request(app).post('/api/v1/orders').set(as(`owner-${canteenId}`)).send(order());
     const id = placed.body.id;
 
-    const mine = await request(app).get(`/api/v1/orders/${id}`).set(as('owner-1'));
+    const mine = await request(app).get(`/api/v1/orders/${id}`).set(as(`owner-${canteenId}`));
     expect(mine.status).toBe(200);
     expect(mine.body.total).toBe(110);
 
-    const theirs = await request(app).get(`/api/v1/orders/${id}`).set(as('intruder'));
+    const theirs = await request(app).get(`/api/v1/orders/${id}`).set(as(`intruder-${canteenId}`));
     expect(theirs.status).toBe(404);
 
-    const list = await request(app).get('/api/v1/orders/mine').set(as('owner-1'));
+    const list = await request(app).get('/api/v1/orders/mine').set(as(`owner-${canteenId}`));
     expect(list.status).toBe(200);
     expect(list.body.orders.map((o) => o.id)).toEqual([id]);
-    const intruderList = await request(app).get('/api/v1/orders/mine').set(as('intruder'));
+    const intruderList = await request(app).get('/api/v1/orders/mine').set(as(`intruder-${canteenId}`));
     expect(intruderList.body.orders).toEqual([]);
   });
 

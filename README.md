@@ -98,6 +98,36 @@ The server will synthesize `{ uid: "student_aarav", email: "dev@campus.edu" }`. 
 
 ---
 
+## 📱 Running the full app (backend + frontend)
+
+Needs the Firebase CLI and Java 21 for the emulators.
+
+```bash
+# 1. Emulators (Firestore + Auth)
+npm run emulator
+
+# 2. Seed canteens, menus, staff, gigs, profiles and demo logins (emulator only)
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 npm run seed
+
+# 3. API on :3000, verifying real Firebase ID tokens from the Auth emulator
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 DEV_BYPASS_AUTH=false npm run dev
+
+# 4. Frontend on :5173 (proxies /api to :3000)
+cd frontend && npm install && npm run dev
+```
+
+Demo logins (emulator only, password `campus123`):
+
+| Who | Email | Sees |
+|---|---|---|
+| Student / freelancer | `meera.pillai@campus.edu` | Student app + Freelancer studio (photography gig) |
+| Student | `rohan.sharma@campus.edu` | Student app |
+| Canteen staff | `staff-central@campus.edu` | Counter dashboard for Central Canteen |
+
+New accounts can be created from the login screen; they set up a profile on first sign-in.
+
+---
+
 ## 🧪 Testing
 
 Run the automated test suite (Jest with native ESM and Supertest):
@@ -168,6 +198,22 @@ All endpoints below are prefixed with `/api/v1` unless noted:
 - **Students** order and track their own orders.
 - **Canteen staff** are listed in the server-only `staff/{uid}` collection (`{ canteenId, name }`). Staff only see and change their own canteen's orders and menu. The seed script creates `staff-central`, `staff-foodcourt` and `staff-library`; with `DEV_BYPASS_AUTH=true`, send `x-dev-uid: staff-central` to act as Central Canteen's counter.
 - Payment is a **demo mock** (`paymentMethod: "upi_mock"`). No money moves.
+
+### Connect: freelance gigs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/gigs?skill=&q=` | Active gigs, newest first |
+| `GET` | `/gigs/:id` | One gig with its work samples |
+| `POST` | `/gigs/:id/requests` | Send a hire request (`{ message }`) |
+| `GET` | `/gig-requests/mine` | My sent hire requests (seller contact once accepted) |
+| `GET` | `/freelancer/dashboard` | My gigs, incoming requests and stats |
+| `POST` | `/freelancer/gigs` | Publish a gig; **at least one https work sample required** |
+| `PATCH` | `/freelancer/gigs/:id` | Edit, pause (`status: "paused"`) or resume a gig |
+| `DELETE` | `/freelancer/gigs/:id` | Delete a gig |
+| `PATCH` | `/freelancer/requests/:id` | `pending → accepted/declined`, `accepted → completed` |
+
+Any student with a profile can become a freelancer by publishing a gig. Contact details are exchanged only when the freelancer accepts a request.
 
 The complete OpenAPI 3.0 specification is available in [`openapi.yaml`](./openapi.yaml).
 
