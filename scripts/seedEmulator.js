@@ -399,6 +399,86 @@ const requests = [
   },
 ];
 
+// Eat: canteens and menus only. Orders and slot bookings are never seeded,
+// so every queue estimate and slot count comes from real orders.
+// Prices are whole INR.
+const canteens = [
+  {
+    id: 'central-canteen',
+    name: 'Central Canteen',
+    description: 'Main canteen near the admin block. Full meals and South Indian.',
+    placeId: 'place-central-canteen',
+    openTime: '07:30',
+    closeTime: '21:00',
+    isActive: true,
+    slotMinutes: 5,
+    slotCapacity: 8,
+    baseWaitMinutes: 6,
+    perOrderMinutes: 1.5,
+    menu: [
+      { id: 'idli-vada', name: 'Idli Vada (2+1)', category: 'Breakfast', price: 40, isVeg: true, isAvailable: true },
+      { id: 'masala-dosa', name: 'Masala Dosa', category: 'Breakfast', price: 55, isVeg: true, isAvailable: true },
+      { id: 'poha', name: 'Poha', category: 'Breakfast', price: 30, isVeg: true, isAvailable: false },
+      { id: 'veg-thali', name: 'Veg Thali', category: 'Meals', price: 90, isVeg: true, isAvailable: true },
+      { id: 'chicken-biryani', name: 'Chicken Biryani', category: 'Meals', price: 130, isVeg: false, isAvailable: true },
+      { id: 'egg-fried-rice', name: 'Egg Fried Rice', category: 'Meals', price: 85, isVeg: false, isAvailable: true },
+      { id: 'samosa', name: 'Samosa (2 pc)', category: 'Snacks', price: 25, isVeg: true, isAvailable: true },
+      { id: 'filter-coffee', name: 'Filter Coffee', category: 'Beverages', price: 20, isVeg: true, isAvailable: true },
+      { id: 'masala-chai', name: 'Masala Chai', category: 'Beverages', price: 15, isVeg: true, isAvailable: true },
+    ],
+  },
+  {
+    id: 'food-court-c',
+    name: 'Food Court (Block C)',
+    description: 'Quick bites, rolls and Chinese near the hostels.',
+    placeId: 'place-food-court-c',
+    openTime: '10:00',
+    closeTime: '22:30',
+    isActive: true,
+    slotMinutes: 5,
+    slotCapacity: 6,
+    baseWaitMinutes: 8,
+    perOrderMinutes: 2,
+    menu: [
+      { id: 'paneer-roll', name: 'Paneer Tikka Roll', category: 'Rolls', price: 80, isVeg: true, isAvailable: true },
+      { id: 'chicken-roll', name: 'Chicken Kathi Roll', category: 'Rolls', price: 95, isVeg: false, isAvailable: true },
+      { id: 'veg-hakka-noodles', name: 'Veg Hakka Noodles', category: 'Chinese', price: 75, isVeg: true, isAvailable: true },
+      { id: 'chilli-chicken', name: 'Chilli Chicken', category: 'Chinese', price: 120, isVeg: false, isAvailable: true },
+      { id: 'veg-maggi', name: 'Veg Maggi', category: 'Snacks', price: 40, isVeg: true, isAvailable: true },
+      { id: 'cold-coffee', name: 'Cold Coffee', category: 'Beverages', price: 50, isVeg: true, isAvailable: true },
+    ],
+  },
+  {
+    id: 'library-cafe',
+    name: 'Library Café',
+    description: 'Coffee, juices and sandwiches next to the central library.',
+    placeId: 'place-library-cafe',
+    openTime: '08:00',
+    closeTime: '19:00',
+    isActive: true,
+    slotMinutes: 5,
+    slotCapacity: 4,
+    baseWaitMinutes: 3,
+    perOrderMinutes: 1,
+    menu: [
+      { id: 'cappuccino', name: 'Cappuccino', category: 'Coffee', price: 60, isVeg: true, isAvailable: true },
+      { id: 'americano', name: 'Americano', category: 'Coffee', price: 50, isVeg: true, isAvailable: true },
+      { id: 'veg-sandwich', name: 'Grilled Veg Sandwich', category: 'Sandwiches', price: 55, isVeg: true, isAvailable: true },
+      { id: 'chicken-sandwich', name: 'Chicken Club Sandwich', category: 'Sandwiches', price: 85, isVeg: false, isAvailable: true },
+      { id: 'watermelon-juice', name: 'Watermelon Juice', category: 'Juices', price: 45, isVeg: true, isAvailable: true },
+    ],
+  },
+];
+
+// Counter staff, one per canteen. staff/{uid} is server-only (rules deny
+// client access), so this script is how staff accounts are granted.
+// With DEV_BYPASS_AUTH, send `x-dev-uid: staff-central` to act as one.
+const staff = [
+  { uid: 'staff-central', name: 'Ravi (Central counter)', canteenId: 'central-canteen' },
+  { uid: 'staff-foodcourt', name: 'Sunita (Food Court counter)', canteenId: 'food-court-c' },
+  { uid: 'staff-library', name: 'Joseph (Library Café counter)', canteenId: 'library-cafe' },
+];
+
 // ── Seed functions ─────────────────────────────────────────────────────────────
 
 async function seedUsers() {
@@ -449,6 +529,29 @@ async function seedRequests() {
   console.log(`[Seed] ✓ ${requests.length} requests written.`);
 }
 
+async function seedCanteens() {
+  console.log('[Seed] Seeding canteens...');
+  const batch = db.batch();
+  let totalItems = 0;
+
+  for (const canteen of canteens) {
+    const { id, menu, ...data } = canteen;
+    const ref = db.collection('canteens').doc(id);
+    batch.set(ref, { ...data, createdAt: now, updatedAt: now });
+    for (const { id: itemId, ...item } of menu) {
+      batch.set(ref.collection('menu').doc(itemId), item);
+      totalItems++;
+    }
+  }
+
+  for (const { uid, ...data } of staff) {
+    batch.set(db.collection('staff').doc(uid), { ...data, createdAt: now });
+  }
+
+  await batch.commit();
+  console.log(`[Seed] ✓ ${canteens.length} canteens, ${totalItems} menu items, ${staff.length} staff written.`);
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 (async () => {
@@ -460,6 +563,7 @@ async function seedRequests() {
     await seedUsers();
     await seedProjects();
     await seedRequests();
+    await seedCanteens();
     console.log('\n[Seed] ✅ All done!');
   } catch (err) {
     console.error('[Seed] ❌ Failed:', err.message);

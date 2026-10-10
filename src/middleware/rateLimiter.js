@@ -29,6 +29,20 @@ export const writeLimiter = rateLimit({
 });
 
 /**
+ * Per-user write limiter: 30 req / 60 s per signed-in uid. Used by Eat,
+ * where a lunch rush on campus Wi-Fi puts many students behind one NAT IP.
+ * Must run after requireAuth.
+ */
+export const userWriteLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  keyGenerator: (req) => req.user.uid,
+  handler,
+});
+
+/**
  * Strict rate limiter for sensitive endpoints: 10 req / 60 s per IP.
  */
 export const strictLimiter = rateLimit({

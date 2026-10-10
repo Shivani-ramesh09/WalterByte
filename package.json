@@ -9,7 +9,8 @@
     "start": "node src/server.js",
     "seed": "node scripts/seedEmulator.js",
     "seed:prod": "SEED_TARGET=prod node scripts/seedEmulator.js",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --forceExit --detectOpenHandles",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles",
+    "test:emulator": "firebase emulators:exec --only firestore --project demo-genesis \"npm test\"",
     "emulator": "firebase emulators:start --only firestore,auth"
   },
   "dependencies": {

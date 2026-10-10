@@ -113,6 +113,13 @@ Tests cover:
 - Zod schema validation (422 structured errors)
 - Route ordering (`/users/search` precedence over `/users/:uid`)
 - 404 handler
+- Eat: queue estimate, slot grid, validation, server-side totals, slot capacity under concurrent orders, order ownership, staff queue/status/inventory
+
+Firestore-backed Eat tests are skipped unless the emulator is running. To run everything (needs the Firebase CLI and Java 21, plus `DEV_BYPASS_AUTH=true` in `.env`):
+
+```bash
+npm run test:emulator
+```
 
 ---
 
@@ -144,6 +151,23 @@ All endpoints below are prefixed with `/api/v1` unless noted:
 | `POST` | `/connections` | Send connection request |
 | `GET` | `/connections` | List incoming & outgoing connections |
 | `PATCH` | `/connections/:id` | Accept or decline connection request |
+| `GET` | `/canteens` | **Eat:** canteens with open status and estimated queue time |
+| `GET` | `/canteens/:id/menu` | **Eat:** menu grouped by category (price, veg, availability) |
+| `GET` | `/canteens/:id/slots?date=YYYY-MM-DD` | **Eat:** pickup slots with remaining capacity |
+| `POST` | `/orders` | **Eat:** place an order (mock UPI, server-priced, capacity-checked) |
+| `GET` | `/orders/mine` | **Eat:** my orders, newest first |
+| `GET` | `/orders/:id` | **Eat:** one of my orders (tracker) |
+| `GET` | `/staff/me` | **Eat staff:** my canteen |
+| `GET` | `/staff/orders?status=` | **Eat staff:** my canteen's order queue |
+| `PATCH` | `/staff/orders/:id` | **Eat staff:** placed → preparing → ready → collected |
+| `POST` | `/staff/menu` | **Eat staff:** add a menu item |
+| `PATCH` | `/staff/menu/:itemId` | **Eat staff:** edit an item / mark sold out (`isAvailable: false`) |
+
+### Eat: roles
+
+- **Students** order and track their own orders.
+- **Canteen staff** are listed in the server-only `staff/{uid}` collection (`{ canteenId, name }`). Staff only see and change their own canteen's orders and menu. The seed script creates `staff-central`, `staff-foodcourt` and `staff-library`; with `DEV_BYPASS_AUTH=true`, send `x-dev-uid: staff-central` to act as Central Canteen's counter.
+- Payment is a **demo mock** (`paymentMethod: "upi_mock"`). No money moves.
 
 The complete OpenAPI 3.0 specification is available in [`openapi.yaml`](./openapi.yaml).
 
