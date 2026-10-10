@@ -1,0 +1,654 @@
+openapi: 3.0.3
+info:
+  title: WalterByte — Connect & Profile API
+  description: |
+    Backend API for the Genesis campus app's Connect and Student Profile modules.
+    
+    **Auth**: All endpoints (except GET /health) require a Firebase ID token:
+    `Authorization: Bearer <firebase-id-token>`
+    
+    **Dev bypass**: When `DEV_BYPASS_AUTH=true`, pass `x-dev-uid: <any-uid>` instead.
+    
+    **Errors**: All errors return `{ error: { code, message, details? } }`.
+  version: 1.0.0
+  contact:
+    name: WalterByte Team
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local dev
+
+tags:
+  - name: Health
+  - name: Profiles
+  - name: Projects
+  - name: Search
+  - name: Requests
+  - name: Connections
+
+# ─── Reusable components ──────────────────────────────────────────────────────
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Firebase ID Token
+    DevBypass:
+      type: apiKey
+      in: header
+      name: x-dev-uid
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:    { type: string, example: NOT_FOUND }
+            message: { type: string, example: "Resource not found." }
+            details: { type: array, items: { type: object } }
+
+    ContactMethod:
+      type: object
+      properties:
+        type:  { type: string, enum: [whatsapp, email, instagram, none] }
+        value: { type: string, nullable: true }
+
+    Privacy:
+      type: object
+      properties:
+        profileVisible: { type: boolean }
+        showLocation:   { type: boolean }
+        showContact:    { type: boolean }
+
+    Links:
+      type: object
+      properties:
+        github:    { type: string, nullable: true }
+        portfolio: { type: string, nullable: true }
+        instagram: { type: string, nullable: true }
+        linkedin:  { type: string, nullable: true }
+
+    Profile:
+      type: object
+      properties:
+        uid:          { type: string }
+        name:         { type: string }
+        email:        { type: string }
+        department:   { type: string }
+        year:         { type: integer, minimum: 1, maximum: 5 }
+        bio:          { type: string }
+        skills:       { type: array, items: { type: string } }
+        interests:    { type: array, items: { type: string } }
+        availability: { type: string, enum: [available, busy, open_to_projects] }
+        contactMethod: { $ref: '#/components/schemas/ContactMethod' }
+        usuallyFoundAtPlaceId: { type: string, nullable: true }
+        privacy:      { $ref: '#/components/schemas/Privacy' }
+        links:        { $ref: '#/components/schemas/Links' }
+        createdAt:    { type: object }
+        updatedAt:    { type: object }
+
+    ProfileCard:
+      type: object
+      description: Lightweight card used in search results
+      properties:
+        uid:          { type: string }
+        name:         { type: string }
+        department:   { type: string }
+        year:         { type: integer }
+        skills:       { type: array, items: { type: string }, maxItems: 5 }
+        interests:    { type: array, items: { type: string } }
+        availability: { type: string, enum: [available, busy, open_to_projects] }
+        bio:          { type: string }
+
+    Project:
+      type: object
+      properties:
+        id:          { type: string }
+        title:       { type: string }
+        description: { type: string }
+        link:        { type: string, nullable: true }
+        tags:        { type: array, items: { type: string } }
+        createdAt:   { type: object }
+
+    Request:
+      type: object
+      properties:
+        id:           { type: string }
+        authorId:     { type: string }
+        title:        { type: string }
+        description:  { type: string }
+        type:         { type: string, enum: [task, teammate] }
+        skillsNeeded: { type: array, items: { type: string } }
+        deadline:     { type: object, nullable: true }
+        status:       { type: string, enum: [open, filled, closed] }
+        createdAt:    { type: object }
+        updatedAt:    { type: object }
+
+    Response:
+      type: object
+      properties:
+        id:          { type: string }
+        responderId: { type: string }
+        message:     { type: string }
+        createdAt:   { type: object }
+
+    Connection:
+      type: object
+      properties:
+        id:        { type: string }
+        fromUid:   { type: string }
+        toUid:     { type: string }
+        status:    { type: string, enum: [pending, accepted, declined] }
+        direction: { type: string, enum: [sent, received] }
+        createdAt: { type: object }
+        peer:
+          type: object
+          properties:
+            uid:        { type: string }
+            name:       { type: string }
+            department: { type: string }
+
+    Cursor:
+      type: object
+      properties:
+        nextCursor: { type: string, nullable: true }
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid Firebase ID token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Forbidden:
+      description: Authenticated but not authorized
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: Request body or query validation failed
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+security:
+  - BearerAuth: []
+
+# ─── Paths ────────────────────────────────────────────────────────────────────
+paths:
+
+  # ── Health ───────────────────────────────────────────────────────────────────
+  /health:
+    get:
+      tags: [Health]
+      summary: Server health check (public)
+      security: []
+      responses:
+        '200':
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:    { type: string }
+                  timestamp: { type: string }
+                  env:       { type: string }
+                  firestore: { type: string }
+        '503':
+          description: Degraded (Firestore unavailable)
+
+  # ── Profiles ─────────────────────────────────────────────────────────────────
+  /users/me:
+    post:
+      tags: [Profiles]
+      summary: Create or upsert my profile (call on first login)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, department, year]
+              properties:
+                name:         { type: string }
+                email:        { type: string }
+                department:   { type: string }
+                year:         { type: integer, minimum: 1, maximum: 5 }
+                bio:          { type: string }
+                skills:       { type: array, items: { type: string } }
+                interests:    { type: array, items: { type: string } }
+                availability: { type: string, enum: [available, busy, open_to_projects] }
+                contactMethod: { $ref: '#/components/schemas/ContactMethod' }
+                usuallyFoundAtPlaceId: { type: string, nullable: true }
+                privacy:      { $ref: '#/components/schemas/Privacy' }
+                links:        { $ref: '#/components/schemas/Links' }
+            example:
+              name: "Aarav Mehta"
+              department: "Computer Science"
+              year: 3
+              bio: "Full-stack dev."
+              skills: ["react", "nodejs"]
+              availability: "open_to_projects"
+      responses:
+        '201': { description: Profile created/updated, content: { application/json: { schema: { $ref: '#/components/schemas/Profile' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+    get:
+      tags: [Profiles]
+      summary: Get my full profile (all fields including private)
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Profile' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+    patch:
+      tags: [Profiles]
+      summary: Partially update my profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bio:          { type: string }
+                skills:       { type: array, items: { type: string } }
+                availability: { type: string, enum: [available, busy, open_to_projects] }
+      responses:
+        '200': { description: Updated, content: { application/json: { schema: { $ref: '#/components/schemas/Profile' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /users/{uid}:
+    get:
+      tags: [Profiles]
+      summary: Get public view of another user's profile
+      description: |
+        Respects privacy flags:
+        - Returns 404 if `profileVisible=false`
+        - Hides `contactMethod.value` if `showContact=false` and not connected
+        - Hides `usuallyFoundAtPlaceId` if `showLocation=false`
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Profile' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ── Projects ─────────────────────────────────────────────────────────────────
+  /users/me/projects:
+    post:
+      tags: [Projects]
+      summary: Add a project to my profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title]
+              properties:
+                title:       { type: string }
+                description: { type: string }
+                link:        { type: string, nullable: true }
+                tags:        { type: array, items: { type: string } }
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Project' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /users/me/projects/{id}:
+    patch:
+      tags: [Projects]
+      summary: Update one of my projects
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:       { type: string }
+                description: { type: string }
+                link:        { type: string, nullable: true }
+                tags:        { type: array, items: { type: string } }
+      responses:
+        '200': { description: Updated }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+    delete:
+      tags: [Projects]
+      summary: Delete one of my projects
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: Deleted }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  # ── Search ───────────────────────────────────────────────────────────────────
+  /users/search:
+    get:
+      tags: [Search]
+      summary: Search and filter student profiles
+      description: |
+        Applies structured filters in Firestore, then matches `q` against
+        name, bio, skills, and interests in memory. Cursor-based pagination.
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+          description: Free-text search (name, bio, skills, interests)
+        - name: skills
+          in: query
+          schema: { type: string }
+          description: Comma-separated skills (any match), e.g. `react,nodejs`
+        - name: department
+          in: query
+          schema: { type: string }
+        - name: year
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 5 }
+        - name: availability
+          in: query
+          schema: { type: string, enum: [available, busy, open_to_projects] }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 50 }
+        - name: cursor
+          in: query
+          schema: { type: string }
+          description: Last uid from previous page
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results: { type: array, items: { $ref: '#/components/schemas/ProfileCard' } }
+                  - { $ref: '#/components/schemas/Cursor' }
+
+  /skills/suggest:
+    get:
+      tags: [Search]
+      summary: Autocomplete skills by prefix
+      parameters:
+        - name: prefix
+          in: query
+          schema: { type: string }
+          example: "vid"
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10, maximum: 20 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  suggestions: { type: array, items: { type: string } }
+
+  /search/people:
+    get:
+      tags: [Search]
+      summary: Global search bar endpoint (capped at 5 results)
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  people: { type: array, items: { $ref: '#/components/schemas/ProfileCard' }, maxItems: 5 }
+
+  # ── Requests board ────────────────────────────────────────────────────────────
+  /requests:
+    post:
+      tags: [Requests]
+      summary: Create a new request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, type]
+              properties:
+                title:        { type: string }
+                description:  { type: string }
+                type:         { type: string, enum: [task, teammate] }
+                skillsNeeded: { type: array, items: { type: string } }
+                deadline:     { type: string, format: date-time, nullable: true }
+            example:
+              title: "Need a video editor for Techfest recap"
+              type: "task"
+              skillsNeeded: ["video editing"]
+              deadline: "2026-10-15T23:59:00Z"
+      responses:
+        '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Request' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+    get:
+      tags: [Requests]
+      summary: List requests (newest first)
+      parameters:
+        - name: skill
+          in: query
+          schema: { type: string }
+        - name: type
+          in: query
+          schema: { type: string, enum: [task, teammate] }
+        - name: status
+          in: query
+          schema: { type: string, enum: [open, filled, closed] }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20, maximum: 50 }
+        - name: cursor
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      results: { type: array, items: { $ref: '#/components/schemas/Request' } }
+                  - { $ref: '#/components/schemas/Cursor' }
+
+  /requests/matching:
+    get:
+      tags: [Requests]
+      summary: Open requests that match my skills
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results: { type: array, items: { $ref: '#/components/schemas/Request' } }
+
+  /requests/{id}:
+    get:
+      tags: [Requests]
+      summary: Get a single request
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Request' } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+    patch:
+      tags: [Requests]
+      summary: Update a request (author only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:        { type: string }
+                description:  { type: string }
+                type:         { type: string, enum: [task, teammate] }
+                skillsNeeded: { type: array, items: { type: string } }
+                deadline:     { type: string, format: date-time, nullable: true }
+                status:       { type: string, enum: [open, filled, closed] }
+      responses:
+        '200': { description: Updated }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+    delete:
+      tags: [Requests]
+      summary: Delete a request (author only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: Deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /requests/{id}/respond:
+    post:
+      tags: [Requests]
+      summary: Respond to a request (cannot respond to your own)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message: { type: string }
+      responses:
+        '201': { description: Response created, content: { application/json: { schema: { $ref: '#/components/schemas/Response' } } } }
+        '400': { description: Self-response or request not open }
+        '409': { description: Already responded }
+
+  /requests/{id}/responses:
+    get:
+      tags: [Requests]
+      summary: List all responses to a request (author only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  responses: { type: array, items: { $ref: '#/components/schemas/Response' } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+
+  # ── Connections ───────────────────────────────────────────────────────────────
+  /connections:
+    post:
+      tags: [Connections]
+      summary: Send a connection request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [toUid]
+              properties:
+                toUid: { type: string }
+      responses:
+        '201': { description: Connection request sent, content: { application/json: { schema: { $ref: '#/components/schemas/Connection' } } } }
+        '400': { description: Self-connect }
+        '404': { description: Target user not found }
+        '409': { description: Already connected or pending }
+
+    get:
+      tags: [Connections]
+      summary: Get my connections and pending requests
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  connections: { type: array, items: { $ref: '#/components/schemas/Connection' } }
+
+  /connections/{id}:
+    patch:
+      tags: [Connections]
+      summary: Accept or decline a connection (recipient only)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { type: string, enum: [accepted, declined] }
+      responses:
+        '200': { description: Updated }
+        '403': { description: Not the recipient }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { description: Already responded }

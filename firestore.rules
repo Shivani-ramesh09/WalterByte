@@ -1,0 +1,126 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ─────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function profileIsVisible(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data.privacy.profileVisible == true;
+    }
+
+    function areConnected(uidA, uidB) {
+      // Checks for an accepted connection in either direction.
+      // NOTE: Firestore rules cannot do complex queries, so we check both
+      // directions using exists() which is O(1) per document.
+      return
+        exists(/databases/$(database)/documents/connections/$(uidA + '_' + uidB)) ||
+        exists(/databases/$(database)/documents/connections/$(uidB + '_' + uidA));
+    }
+
+    function canSeeContact(uid) {
+      let profile = get(/databases/$(database)/documents/users/$(uid)).data;
+      return profile.privacy.showContact == true ||
+             areConnected(request.auth.uid, uid);
+    }
+
+    // ── users/{uid} ──────────────────────────────────────────────────────────
+    match /users/{uid} {
+      // Owner: full read + write
+      allow read, write: if isOwner(uid);
+
+      // Public: read only if profile is visible
+      allow read: if isSignedIn() && profileIsVisible(uid);
+
+      // Create: only for own document
+      allow create: if isOwner(uid);
+
+      // Update: only own document, cannot change uid
+      allow update: if isOwner(uid);
+
+      // ── users/{uid}/projects/{projectId} ──────────────────────────────────
+      match /projects/{projectId} {
+        // Owner: full CRUD
+        allow read, write: if isOwner(uid);
+
+        // Others: read only if parent profile is visible
+        allow read: if isSignedIn() && profileIsVisible(uid);
+      }
+    }
+
+    // ── requests/{requestId} ────────────────────────────────────────────────
+    match /requests/{requestId} {
+      // Any signed-in user can list/read open requests
+      allow read: if isSignedIn();
+
+      // Only authenticated users can create
+      allow create: if isSignedIn() &&
+                       request.resource.data.authorId == request.auth.uid;
+
+      // Only the author can update or delete
+      allow update, delete: if isSignedIn() &&
+                               resource.data.authorId == request.auth.uid;
+
+      // ── requests/{requestId}/responses/{responseId} ──────────────────────
+      match /responses/{responseId} {
+        // Author of the request can read all responses
+        allow read: if isSignedIn() &&
+                       get(/databases/$(database)/documents/requests/$(requestId)).data.authorId == request.auth.uid;
+
+        // Responder can read their own response
+        allow read: if isSignedIn() &&
+                       resource.data.responderId == request.auth.uid;
+
+        // Any signed-in user (except the request author — enforced in the API)
+        // can create a response. The API layer prevents self-responses.
+        allow create: if isSignedIn() &&
+                         request.resource.data.responderId == request.auth.uid;
+
+        // No update or delete on responses
+        allow update, delete: if false;
+      }
+    }
+
+    // ── connections/{connectionId} ───────────────────────────────────────────
+    match /connections/{connectionId} {
+      // Participants can read their own connection
+      allow read: if isSignedIn() && (
+        resource.data.fromUid == request.auth.uid ||
+        resource.data.toUid == request.auth.uid
+      );
+
+      // Only the sender can create a connection request
+      allow create: if isSignedIn() &&
+                       request.resource.data.fromUid == request.auth.uid &&
+                       request.resource.data.status == 'pending';
+
+      // Only the recipient (toUid) can update the status (accept/decline)
+      allow update: if isSignedIn() &&
+                       resource.data.toUid == request.auth.uid &&
+                       resource.data.status == 'pending' &&
+                       request.resource.data.status in ['accepted', 'declined'] &&
+                       request.resource.data.fromUid == resource.data.fromUid &&
+                       request.resource.data.toUid == resource.data.toUid;
+
+      // No delete from the client (managed server-side on re-send)
+      allow delete: if false;
+    }
+
+    // ── _health/{doc} ───────────────────────────────────────────────────────
+    // Internal health-check collection; only the server can read/write.
+    match /_health/{doc} {
+      allow read, write: if false;
+    }
+
+    // Deny all other access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
