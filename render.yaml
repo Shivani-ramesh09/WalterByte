@@ -1,0 +1,22 @@
+# Render blueprint for the Express API (Dashboard > New > Blueprint).
+# Upload the Firebase service-account key as a Secret File named
+# service-account.json; Render mounts it at /etc/secrets/service-account.json.
+services:
+  - type: web
+    name: walterbyte-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node src/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DEV_BYPASS_AUTH
+        value: "false"
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        value: /etc/secrets/service-account.json
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: CORS_ORIGINS # e.g. https://walterbyte.netlify.app
+        sync: false

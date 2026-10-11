@@ -6,3 +6,5 @@ coverage/
 dist/
 .serena/
 .playwright-mcp/
+*firebase-adminsdk*.json
+service-account*.json
