@@ -1,0 +1,230 @@
+{
+  "demo_user_01": [
+    {
+      "title": "Campus Recommender System",
+      "description": "Built a collaborative filtering model to recommend study groups and clubs based on shared interests.",
+      "link": "https://github.com/example-aditi/campus-recommender",
+      "tags": ["machine learning", "python", "collaborative filtering"]
+    },
+    {
+      "title": "Hindi Sentiment Analyser",
+      "description": "Fine-tuned a multilingual BERT model to classify sentiment in student forum posts written in Hindi.",
+      "link": null,
+      "tags": ["nlp", "pytorch", "python"]
+    },
+    {
+      "title": "Student Attendance Dashboard",
+      "description": "Data visualisation dashboard that shows attendance trends across departments for faculty.",
+      "link": "https://github.com/example-aditi/attendance-dash",
+      "tags": ["data analysis", "python", "sql"]
+    }
+  ],
+  "demo_user_02": [
+    {
+      "title": "BeatDrop — Campus Music Sharing App",
+      "description": "A micro-SaaS for students to share short audio clips and get feedback from peers.",
+      "link": "https://github.com/example-rohan/beatdrop",
+      "tags": ["react", "nodejs", "music production", "web development"]
+    },
+    {
+      "title": "Hostel Room Swap Portal",
+      "description": "Full-stack web app for students to list and request hostel room swaps with real-time chat.",
+      "link": "https://github.com/example-rohan/room-swap",
+      "tags": ["javascript", "react", "web development"]
+    },
+    {
+      "title": "Lofi Study Playlist Generator",
+      "description": "Web tool that auto-generates a personalised lofi playlist using Spotify API based on study mood.",
+      "link": "https://rohanv.example.com/lofi",
+      "tags": ["javascript", "music production", "api"]
+    }
+  ],
+  "demo_user_03": [
+    {
+      "title": "Campus App Redesign — UX Case Study",
+      "description": "End-to-end redesign of the official college app, from user research and journey mapping to a Figma prototype.",
+      "link": "https://sneha.design.example.com/campus-app",
+      "tags": ["ui/ux", "figma", "user research"]
+    },
+    {
+      "title": "Accessibility Audit Toolkit",
+      "description": "Designed a checklist and Figma plugin to audit campus digital products for WCAG 2.1 AA compliance.",
+      "link": null,
+      "tags": ["ui/ux", "accessibility", "figma"]
+    },
+    {
+      "title": "Culturals 2025 Brand Identity",
+      "description": "Full brand identity system for the annual cultural fest — logo, palette, typography, motion guidelines.",
+      "link": "https://sneha.design.example.com/culturals",
+      "tags": ["graphic design", "branding", "figma"]
+    }
+  ],
+  "demo_user_04": [
+    {
+      "title": "Embedded Speech Keyword Spotter",
+      "description": "A TinyML wake-word detection model deployed on a Cortex-M4 microcontroller, running at under 50mW.",
+      "link": "https://github.com/example-karan/keyword-spotter",
+      "tags": ["machine learning", "c++", "embedded", "signal processing"]
+    },
+    {
+      "title": "Adaptive Noise Cancellation Module",
+      "description": "Real-time ANC implementation for earphones using an FPGA and Python-based DSP pipeline.",
+      "link": null,
+      "tags": ["signal processing", "c++", "raspberry pi"]
+    }
+  ],
+  "demo_user_05": [
+    {
+      "title": "Campus Photo Diary",
+      "description": "A 30-day photo challenge documenting daily campus life — from sunrise labs to midnight canteen runs.",
+      "link": "https://www.instagram.com/example-priyanka",
+      "tags": ["photography"]
+    },
+    {
+      "title": "Plant Disease Classifier",
+      "description": "CNN model trained on leaf images to detect common crop diseases. Built for an agriculture hackathon.",
+      "link": "https://github.com/example-priyanka/plant-disease",
+      "tags": ["machine learning", "python", "computer vision"]
+    }
+  ],
+  "demo_user_06": [
+    {
+      "title": "Campus API Gateway",
+      "description": "Production-ready API gateway with JWT auth, rate limiting, and request logging for the Genesis app.",
+      "link": "https://github.com/example-aditya/campus-gateway",
+      "tags": ["python", "web development", "docker", "system design"]
+    },
+    {
+      "title": "Zero-Downtime Deployment Pipeline",
+      "description": "GitHub Actions + Docker Compose pipeline for the campus portal with blue-green deployment.",
+      "link": "https://github.com/example-aditya/deploy-pipeline",
+      "tags": ["docker", "devops", "postgresql"]
+    },
+    {
+      "title": "GSoC 2025 Contribution — Moodle Analytics",
+      "description": "Added a predictive attendance heatmap module to Moodle as part of Google Summer of Code 2025.",
+      "link": "https://summerofcode.withgoogle.com/example",
+      "tags": ["python", "open source", "system design"]
+    }
+  ],
+  "demo_user_07": [
+    {
+      "title": "3D-Printed Assistive Grip",
+      "description": "Designed and printed a low-cost adaptive grip for students with limited hand mobility. Open-source hardware.",
+      "link": "https://github.com/example-meghna/adaptive-grip",
+      "tags": ["3d modelling", "solidworks", "autocad"]
+    },
+    {
+      "title": "Campus Architecture Walk — Photo Series",
+      "description": "Architectural photography series capturing the geometry of campus buildings at golden hour.",
+      "link": "https://meghna.example.co/campus-walk",
+      "tags": ["photography", "graphic design"]
+    },
+    {
+      "title": "Mini Wind Turbine Prototype",
+      "description": "Designed a vertical-axis wind turbine blade in SolidWorks and 3D-printed it for the wind energy workshop.",
+      "link": null,
+      "tags": ["3d modelling", "solidworks", "autocad"]
+    }
+  ],
+  "demo_user_08": [
+    {
+      "title": "Campus Marketing Playbook",
+      "description": "A free 20-page guide for campus clubs on how to grow their Instagram following from 0 to 1000.",
+      "link": "https://vikram.example.notion.site/marketing-playbook",
+      "tags": ["content writing", "social media", "market research"]
+    },
+    {
+      "title": "TED-Style Talk — The Attention Economy",
+      "description": "Delivered an 18-minute talk at the campus speaker series on how social media platforms monetise attention.",
+      "link": "https://youtube.com/example-vikram-talk",
+      "tags": ["public speaking", "content writing"]
+    },
+    {
+      "title": "Student Startup Survey 2025",
+      "description": "Surveyed 200+ students to map the campus startup ecosystem — funding, ideas, and barriers to entry.",
+      "link": null,
+      "tags": ["market research", "content writing", "canva"]
+    }
+  ],
+  "demo_user_09": [
+    {
+      "title": "Typeface in Motion",
+      "description": "A personal motion graphics project exploring kinetic typography using After Effects and original music.",
+      "link": "https://divya.example.design/typeface-motion",
+      "tags": ["video editing", "after effects", "graphic design"]
+    },
+    {
+      "title": "Culturals 2025 Opening Reel",
+      "description": "Edited and directed the 2-minute opening reel for Culturals 2025. Screened in front of 2000+ students.",
+      "link": "https://youtube.com/example-divya-reel",
+      "tags": ["video editing", "after effects"]
+    },
+    {
+      "title": "Zine — Faces & Feelings",
+      "description": "Self-published illustrated zine exploring emotions through mixed-media character portraits.",
+      "link": null,
+      "tags": ["illustration", "graphic design"]
+    }
+  ],
+  "demo_user_10": [
+    {
+      "title": "Sustainable Cities Blog",
+      "description": "Monthly long-form blog covering urban design, public transit, and green infrastructure in Indian cities.",
+      "link": "https://siddharthrao.example.in/blog",
+      "tags": ["content writing"]
+    },
+    {
+      "title": "Campus Rainwater Harvesting Audit",
+      "description": "Mapped and measured the existing rainwater harvesting infrastructure across campus using AutoCAD and GIS data.",
+      "link": null,
+      "tags": ["autocad", "data analysis"]
+    },
+    {
+      "title": "Campus TED Talk — Engineering for Equity",
+      "description": "Spoke at the campus TEDx event about designing infrastructure that serves all communities equally.",
+      "link": "https://youtube.com/example-siddharth-ted",
+      "tags": ["public speaking", "content writing"]
+    }
+  ],
+  "demo_user_11": [
+    {
+      "title": "Accessible Campus Map",
+      "description": "React app overlaying accessible route data on a campus map, with voice navigation support.",
+      "link": "https://github.com/example-lakshmi/accessible-map",
+      "tags": ["react", "web development", "javascript", "ui/ux"]
+    },
+    {
+      "title": "ARIA Auditor Chrome Extension",
+      "description": "Chrome extension that highlights missing ARIA labels and contrast issues on any webpage.",
+      "link": "https://github.com/example-lakshmi/aria-auditor",
+      "tags": ["javascript", "web development", "accessibility"]
+    },
+    {
+      "title": "Genesis Design System — Accessible Components",
+      "description": "Contributed accessible button, modal, and form components to the Genesis campus design system.",
+      "link": null,
+      "tags": ["figma", "ui/ux", "react"]
+    }
+  ],
+  "demo_user_12": [
+    {
+      "title": "Campus Media Club — Brand Video",
+      "description": "Directed and edited the 90-second brand film for the Campus Media Club's annual recruitment drive.",
+      "link": "https://aryan.example.media/brand-film",
+      "tags": ["video editing", "premiere pro", "content writing"]
+    },
+    {
+      "title": "Techfest 2025 Recap Reel",
+      "description": "Edited the 6-minute official recap reel for Techfest 2025, covering 3 days of events.",
+      "link": "https://youtube.com/example-aryan-techfest",
+      "tags": ["video editing", "premiere pro"]
+    },
+    {
+      "title": "Brand Strategy Deck — Student Startup",
+      "description": "Developed a go-to-market brand strategy and pitch deck for a student-founded campus food startup.",
+      "link": null,
+      "tags": ["graphic design", "content writing", "public speaking"]
+    }
+  ]
+}
