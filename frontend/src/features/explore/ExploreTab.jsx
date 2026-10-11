@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { Bookmark, CalendarDays, CheckCircle2, Clock, Map, MapPin, MessageSquare, Sparkles, Star, Users } from 'lucide-react'
 import { api, useApi } from '../../lib/api'
 import { useSession } from '../../lib/session'
@@ -6,11 +6,15 @@ import { useNav } from '../../lib/nav'
 import { Empty, ErrorBox, Loading, ScreenHeader } from '../../components/ui'
 import { interestLabel, matchedInterests, recommendationReason, whenLabel } from './happenings'
 
+// Loaded on demand: the map libraries are large and most visits never open the map
+const CampusMap = lazy(() => import('./map/CampusMap'))
+
 export default function ExploreTab() {
-  const { screen } = useNav()
+  const { screen, go } = useNav()
   const { profile } = useSession()
   const interests = profile?.interests || []
   if (screen.name === 'event') return <EventDetail id={screen.id} interests={interests} />
+  if (screen.name === 'map') return <Suspense fallback={<Loading label="Loading campus map…" />}><CampusMap onBack={() => go('explore', { name: 'home' })} /></Suspense>
   return <EventList interests={interests} />
 }
 
@@ -71,11 +75,11 @@ function EventList({ interests }) {
         </>
       )}
 
-      <div className="card map-placeholder">
+      <button className="card card-button map-placeholder" onClick={() => go('explore', { name: 'map' })}>
         <Map size={22} className="accent" />
         <strong>Campus map</strong>
-        <small className="muted">Coming soon</small>
-      </div>
+        <small className="muted">Find buildings, food and facilities, and get walking directions</small>
+      </button>
     </div>
   )
 }
