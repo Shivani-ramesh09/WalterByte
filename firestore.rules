@@ -125,6 +125,26 @@ service cloud.firestore {
     match /staff/{uid} {
       allow read, write: if false;
     }
+    // Daily menus, the inventory ledger, counter sales, imports and demand
+    // signals: server-only, so stock and sales cannot be edited from a client.
+    match /dailyMenus/{path=**} {
+      allow read, write: if false;
+    }
+    match /inventory/{id} {
+      allow read, write: if false;
+    }
+    match /counterSales/{id} {
+      allow read, write: if false;
+    }
+    match /demandSignals/{id} {
+      allow read, write: if false;
+    }
+    match /eatDataStatus/{id} {
+      allow read, write: if false;
+    }
+    match /eatImports/{id} {
+      allow read, write: if false;
+    }
 
     // ── Connect gigs: gigs/**, gigRequests/** ───────────────────────────────
     // Server-only. The API enforces work samples, ownership and contact sharing.
@@ -132,6 +152,26 @@ service cloud.firestore {
       allow read, write: if false;
     }
     match /gigRequests/{requestId} {
+      allow read, write: if false;
+    }
+
+    // ── Explore events and administration ───────────────────────────────────
+    // Server-only. The API enforces capacity, unique participation, organiser
+    // scope for attendance, and central-admin-only decisions. admins/{uid}
+    // grants dashboard access, so it must never be client-writable.
+    match /events/{path=**} {
+      allow read, write: if false;
+    }
+    match /organisations/{orgId} {
+      allow read, write: if false;
+    }
+    match /proposals/{proposalId} {
+      allow read, write: if false;
+    }
+    match /admins/{uid} {
+      allow read, write: if false;
+    }
+    match /recommendationReviews/{recId} {
       allow read, write: if false;
     }
 

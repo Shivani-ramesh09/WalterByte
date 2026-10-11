@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ShieldCheck } from 'lucide-react'
+import DemoQr from '../../components/DemoQr'
 import { api, inr, timeOf, useApi } from '../../lib/api'
 import { useNav } from '../../lib/nav'
 import { cartTotals, emptyCart, removeItems, setQty, useCart } from '../../lib/cart'
@@ -8,7 +8,6 @@ import { Chips, Empty, ErrorBox, Loading, ScreenHeader, Stepper } from '../../co
 const istDate = (offsetDays) =>
   new Date(Date.now() + offsetDays * 86_400_000).toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' })
 
-const UPI_APPS = ['GPay', 'PhonePe', 'Paytm', 'BHIM']
 
 export default function CheckoutScreen() {
   const { go } = useNav()
@@ -16,7 +15,6 @@ export default function CheckoutScreen() {
   const { count, total } = cartTotals(cart)
   const [day, setDay] = useState('today')
   const [slotId, setSlotId] = useState(null)
-  const [upiApp, setUpiApp] = useState(null)
   const [confirming, setConfirming] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
@@ -103,26 +101,28 @@ export default function CheckoutScreen() {
 
       <section className="card stack-sm">
         <h3>Pay with UPI <span className="badge badge-demo">Demo</span></h3>
-        <p className="muted small">This is a mock payment for the demo. No real money moves and no UPI app opens.</p>
-        <Chips label="UPI app" options={UPI_APPS} value={upiApp} onChange={setUpiApp} />
+        <p className="muted small">UPI is the only online payment the canteens accept. In this demo the UPI step is simulated: no QR to scan and no money moves.</p>
         <p className="muted small">Your order is prepared for your slot. Please collect it on time from the counter.</p>
       </section>
 
       <ErrorBox error={error} />
-      <button className="btn primary block" disabled={!slotId || !upiApp || busy} onClick={() => setConfirming(true)}>
-        {!slotId ? 'Pick a pickup slot' : !upiApp ? 'Pick a UPI app' : `Pay ${inr(total)} (demo)`}
+      <button className="btn primary block" disabled={!slotId || busy} onClick={() => setConfirming(true)}>
+        {!slotId ? 'Pick a pickup slot' : `Pay ${inr(total)} with UPI (simulated)`}
       </button>
 
       {confirming && (
         <div className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="upi-title">
           <div className="modal">
-            <ShieldCheck size={30} className="accent" />
-            <h3 id="upi-title">Demo UPI · {upiApp}</h3>
-            <p>Approve a mock payment of <strong>{inr(total)}</strong> to {cart.canteenName}?</p>
-            <p className="muted small">Demo only: nothing is charged.</p>
+            <h3 id="upi-title">Simulated UPI payment</h3>
+            <p><strong>{inr(total)}</strong> to {cart.canteenName}</p>
+            <div className="qr-frame">
+              <DemoQr seed={`${cart.canteenId}-${slotId}-${total}`} />
+            </div>
+            <p className="muted small">In the live app this is where the canteen's UPI QR appears. This sample code is not scannable.</p>
+            <p className="badge badge-demo">Sample QR · not a real payment code</p>
             <div className="row">
               <button className="btn ghost" onClick={() => setConfirming(false)} disabled={busy}>Cancel</button>
-              <button className="btn primary" onClick={pay} disabled={busy}>{busy ? 'Placing order…' : 'Approve'}</button>
+              <button className="btn primary" onClick={pay} disabled={busy}>{busy ? 'Placing order…' : 'Simulate successful payment'}</button>
             </div>
           </div>
         </div>

@@ -3,15 +3,16 @@
 // canteen (req.staff.canteenId); staff never see or edit another canteen.
 import { db } from '../config/firebase.js';
 import { ApiError, notFound } from '../utils/apiError.js';
-import { serializeOrder } from './orderService.js';
+import { cancelInTx, collectionUpdates, serializeOrder } from './orderService.js';
 import admin from 'firebase-admin';
 
 const { Timestamp } = admin.firestore;
 
 export const ACTIVE_STATUSES = ['placed', 'preparing', 'ready'];
+// Staff can cancel before the food is ready (e.g. an item ran out in the kitchen)
 const TRANSITIONS = {
-  placed: ['preparing'],
-  preparing: ['ready'],
+  placed: ['preparing', 'cancelled'],
+  preparing: ['ready', 'cancelled'],
   ready: ['collected'],
 };
 
@@ -26,6 +27,7 @@ export async function listCanteenOrders(canteenId, statuses = ACTIVE_STATUSES) {
     .limit(200)
     .get();
   return snap.docs
+    .filter((d) => !d.get('synthetic')) // demo history belongs on the dashboard, not the counter
     .map((d) => serializeOrder(d.id, d.data()))
     .sort((a, b) => a.pickupSlot.start.localeCompare(b.pickupSlot.start) || a.createdAt.localeCompare(b.createdAt));
 }
@@ -40,9 +42,12 @@ export async function updateOrderStatus(canteenId, orderId, status) {
     if (!TRANSITIONS[current]?.includes(status)) {
       throw new ApiError(409, 'INVALID_STATUS_TRANSITION', `Cannot move an order from ${current} to ${status}.`);
     }
+    if (status === 'cancelled') return serializeOrder(orderId, await cancelInTx(tx, ref, snap.data(), 'staff'));
     const update = { status, updatedAt: Timestamp.now() };
     update[`${status}At`] = update.updatedAt; // preparingAt / readyAt / collectedAt
     tx.update(ref, update);
+    // Collection moves reserved portions to sold; they were deducted once, at order time
+    if (status === 'collected') for (const u of collectionUpdates(snap.data())) tx.set(u.ref, u.data, { merge: true });
     return serializeOrder(orderId, { ...snap.data(), ...update });
   });
 }

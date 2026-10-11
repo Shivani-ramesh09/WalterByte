@@ -13,5 +13,9 @@ export const auth = getAuth(app)
 
 // Local dev signs in against the Auth emulator unless explicitly turned off
 if (env.VITE_USE_AUTH_EMULATOR !== 'false') {
-  connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true })
+  // Same origin, proxied to the emulator by vite.config.js, so forwarded/tunnelled URLs work from other devices
+  connectAuthEmulator(auth, globalThis.location?.origin ?? 'http://127.0.0.1:9099', { disableWarnings: true })
 }
+
+/** Demo mode = local emulators with seeded sample data and demo logins. */
+export const DEMO_MODE = env.VITE_USE_AUTH_EMULATOR !== 'false'

@@ -13,7 +13,7 @@ export async function listCanteens(req, res, next) {
 
 export async function getMenu(req, res, next) {
   try {
-    const menu = await canteenService.getMenu(req.params.id);
+    const menu = await canteenService.getMenu(req.params.id, new Date(), req.user.uid);
     ok(res, menu);
   } catch (err) {
     next(err);

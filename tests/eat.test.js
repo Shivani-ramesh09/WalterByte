@@ -56,7 +56,7 @@ describe('Pickup slot grid', () => {
 
 describe('Eat input validation', () => {
   const validOrder = {
-    canteenId: 'central-canteen',
+    canteenId: 'sopanam',
     slotId: '20991231_1200',
     items: [{ itemId: 'filter-coffee', quantity: 1 }],
     paymentMethod: 'upi_mock',
@@ -82,7 +82,7 @@ describe('Eat input validation', () => {
   });
 
   it('rejects an impossible slots date', async () => {
-    const res = await request(app).get('/api/v1/canteens/central-canteen/slots?date=2026-02-31').set(as('student-a'));
+    const res = await request(app).get('/api/v1/canteens/sopanam/slots?date=2026-02-31').set(as('student-a'));
     expect(res.status).toBe(422);
   });
 
@@ -121,6 +121,12 @@ describeDb('Eat API (Firestore emulator)', () => {
     await ref.collection('menu').doc('dosa').set({ name: 'Masala Dosa', category: 'Breakfast', price: 55, isVeg: true, isAvailable: true });
     await ref.collection('menu').doc('coffee').set({ name: 'Filter Coffee', category: 'Beverages', price: 20, isVeg: true, isAvailable: true });
     await ref.collection('menu').doc('poha').set({ name: 'Poha', category: 'Breakfast', price: 30, isVeg: true, isAvailable: false });
+  });
+
+  // The emulator may also hold demo data: leave no test canteen or orders behind
+  afterAll(async () => {
+    const orders = await db.collection('orders').where('canteenId', '==', canteenId).get();
+    await Promise.all([...orders.docs.map((d) => d.ref.delete()), db.recursiveDelete(db.collection('canteens').doc(canteenId))]);
   });
 
   it('lists canteens with open status and a labelled estimate', async () => {

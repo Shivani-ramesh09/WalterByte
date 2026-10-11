@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { Briefcase, Search } from 'lucide-react'
+import { MapPin, Printer, Search, Sparkles } from 'lucide-react'
 import { inr, useApi } from '../../lib/api'
 import { useNav } from '../../lib/nav'
+import { useSession } from '../../lib/session'
+import { gigReason, personReason } from './reasons'
 import { Chips, Empty, ErrorBox, Loading, ScreenHeader } from '../../components/ui'
 import GigDetail from './GigDetail'
 import PersonView from './PersonView'
 import RequestsBoard from './RequestsBoard'
+import FreelancerDashboard from '../freelancer/FreelancerDashboard'
 
 export const SKILLS = ['photography', 'video editing', 'ui design', 'graphic design', 'web development', 'content writing']
 
@@ -13,21 +16,21 @@ export default function ConnectTab() {
   const { screen } = useNav()
   if (screen.name === 'gig') return <GigDetail gigId={screen.gigId} />
   if (screen.name === 'person') return <PersonView uid={screen.uid} />
+  if (screen.name === 'freelancer') return <FreelancerDashboard />
   return <ConnectHome />
 }
 
 function ConnectHome() {
-  const { go } = useNav()
   const [section, setSection] = useState('gigs')
   return (
     <div className="screen">
       <ScreenHeader
         title="Connect"
         subtitle="Hire student talent, find teammates"
-        action={<button className="btn small primary" onClick={() => go('me', { name: 'freelancer' })}><Briefcase size={14} /> Sell your skills</button>}
       />
-      <Chips label="Connect section" options={[{ value: 'gigs', label: 'Hire talent' }, { value: 'people', label: 'People' }, { value: 'requests', label: 'Requests board' }]} value={section} onChange={(v) => v && setSection(v)} />
+      <Chips label="Connect section" options={[{ value: 'gigs', label: 'Hire talent' }, { value: 'labs', label: 'Labs & facilities' }, { value: 'people', label: 'People' }, { value: 'requests', label: 'Requests board' }]} value={section} onChange={(v) => v && setSection(v)} />
       {section === 'gigs' && <GigList />}
+      {section === 'labs' && <LabList />}
       {section === 'people' && <PeopleSearch />}
       {section === 'requests' && <RequestsBoard />}
     </div>
@@ -36,18 +39,21 @@ function ConnectHome() {
 
 export function GigCard({ gig }) {
   const { go } = useNav()
+  const reason = gigReason(gig, useSession().profile)
   const cover = gig.samples.find((s) => s.type === 'image')
   return (
     <button className="card card-button gig-card" onClick={() => go('connect', { name: 'gig', gigId: gig.id })}>
       {cover ? <img src={cover.url} alt={cover.caption || gig.title} loading="lazy" /> : <div className="gig-cover-fallback">{gig.skill}</div>}
       <div className="stack-xs">
         <small className="eyebrow-text">{gig.skill}</small>
+        {reason && <span className="reason"><Sparkles size={12} /> {reason}</span>}
         <strong>{gig.title}</strong>
         <small className="muted">{gig.sellerName} · {gig.sellerDepartment}</small>
         <div className="card-row small">
           <span>From <strong>{inr(gig.priceFrom)}</strong></span>
           <span className="muted">{gig.deliveryDays}-day delivery · {gig.samples.length} sample{gig.samples.length > 1 ? 's' : ''}</span>
         </div>
+        <span className="link-btn small">View work & request →</span>
       </div>
     </button>
   )
@@ -67,8 +73,43 @@ function GigList() {
   )
 }
 
+// shortcut: hardcoded until labs are a backend collection; exact location pins come with the campus map
+const LABS = [
+  {
+    id: '3d-printing',
+    facility: '3D printing',
+    lab: 'Combustion Research Lab',
+    description: 'Print prototypes and parts for projects. Ask the lab in charge about booking a slot.',
+    location: 'Combustion Research Lab (exact location coming soon)',
+  },
+]
+
+function LabList() {
+  return (
+    <div className="stack">
+      {LABS.map((l) => (
+        <article key={l.id} className="card stack-sm facility-card">
+          <div className="card-row">
+            <div className="stack-xs">
+              <small className="eyebrow-text">{l.facility}</small>
+              <strong>{l.facility} in {l.lab}</strong>
+            </div>
+            <Printer size={22} className="accent" />
+          </div>
+          <p className="prose small">{l.description}</p>
+          <span className="wait small muted"><MapPin size={13} /> {l.location}</span>
+          <button className="btn ghost small" disabled title="Exact location pins come with the campus map">
+            <MapPin size={14} /> Show exact location · coming soon
+          </button>
+        </article>
+      ))}
+    </div>
+  )
+}
+
 function PeopleSearch() {
   const { go } = useNav()
+  const { profile } = useSession()
   const [q, setQ] = useState('')
   const [query, setQuery] = useState('')
   const [skill, setSkill] = useState(null)
@@ -89,7 +130,9 @@ function PeopleSearch() {
         <button key={p.uid} className="card card-button" onClick={() => go('connect', { name: 'person', uid: p.uid })}>
           <div className="card-row"><strong>{p.name}</strong><span className="badge">{p.availability.replace(/_/g, ' ')}</span></div>
           <small className="muted">{p.department} · Year {p.year}</small>
+          {personReason(p, profile, skill) && <span className="reason"><Sparkles size={12} /> {personReason(p, profile, skill)}</span>}
           <div className="tag-row">{p.skills.map((s) => <span key={s} className="tag">{s}</span>)}</div>
+          <span className="link-btn small">View profile →</span>
         </button>
       ))}
     </div>

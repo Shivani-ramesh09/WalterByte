@@ -4,6 +4,7 @@ import { createContext, useContext, useState } from 'react'
 // coming back keeps your place (e.g. a half-finished checkout).
 const START = {
   home: { name: 'home' },
+  explore: { name: 'home' },
   eat: { name: 'list' },
   connect: { name: 'home' },
   me: { name: 'home' },

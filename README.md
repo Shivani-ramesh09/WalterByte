@@ -1,161 +1,158 @@
-# WalterByte — Connect & Student Profile Backend
+# WalterByte — Amrita Campus App
 
-Backend service for the **Connect** and **Student Profile** modules of the Genesis campus application. Built with Node.js, Express (ES modules), Firebase Admin SDK (Firestore & Auth), and Zod.
+A mobile-first campus app for Amrita Vishwa Vidyapeetham, Coimbatore. One app, three jobs:
+
+- **Eat** — pre-order from Sopanam, Prasada and Samudra canteens, pick a pickup slot, skip the queue.
+- **Connect** — hire student freelancers who show real work samples, find people and teammates, find lab facilities.
+- **Explore** — campus happenings picked for your interests.
+
+Canteen staff get their own counter dashboard; freelancers get their own studio.
+
+Stack: React + Vite frontend (`frontend/`), Node.js + Express API (`src/`), Firebase Auth + Firestore (local emulators for development), Zod validation.
 
 ---
 
-## ⚡ Quick Start
+## What is real, demo-only, and coming soon
 
-### 1. Install Dependencies
+| Area | Status |
+|---|---|
+| Sign up / sign in (email + password, Firebase Auth) | **Real** (runs against the Auth emulator in demo mode) |
+| Canteen menus, carts, pickup slots with capacity limits, orders, live order tracker | **Real** — server-priced, slot capacity enforced in a transaction |
+| Canteen staff dashboard: order queue, status updates, sold out, add items | **Real** — staff only see their own canteen |
+| Daily menus uploaded as CSV by administration, versioned, with per-item stock | **Real.** The private digital-TV menu is **not** connected; menus come from authorised uploads. |
+| Inventory ledger: online reservations, collections, cancellations, counter sales, adjustments, wastage | **Real** — concurrency-safe; an online reservation is deducted once and moves to sold on collection |
+| Counter sales and "asked for a sold-out item" counts at the billing counter | **Real** — recorded by cashiers in the staff app, or imported from an authorised billing CSV. No billing-system integration exists. |
+| "I wanted this" on sold-out items, failed online attempts | **Real** — explicit unmet-demand signals, kept separate by type |
+| Administration dashboard: Explore, Connect and Eat analytics, proposals, recommendations, CSV reports | **Real** calculations; the history it shows in the demo is **synthetic** and labelled on every screen |
+| Freelance gigs with work samples, hire requests, contact sharing on accept | **Real** |
+| People search, connections, requests board | **Real** |
+| UPI payment | **Simulated.** The QR shown at checkout is a sample image, not scannable; "Simulate successful payment" marks the order paid. No money moves. |
+| Explore events (A-MUNSO Mock MUN, Hackathon) | **Sample data** seeded into Firestore; dates and the hackathon venue are placeholders. Registration, saves, attendance and feedback are real. |
+| 3D printing in Combustion Research Lab | Listed in Connect → Labs & facilities; **exact location coming soon** |
+| Campus map, "Show on map" | **Coming soon** |
+| Demo logins and seeded profiles, gigs, menus | **Sample data**, created by the seed script in the emulator only |
+| Analytics history (past events, skill requests, 28 days of canteen sales and demand signals) | **Synthetic**, emulator only, flagged `synthetic: true`. Not real Amrita statistics. |
+
+The app shows a **Demo mode** badge whenever it runs against the local emulators.
+
+---
+
+## Run the demo
+
+You need **Node.js 20+**, **Java 21** (`java -version`) and the **Firebase CLI** (`npm install -g firebase-tools`).
+
+First time only:
 
 ```bash
 npm install
+cd frontend && npm install && cd ..
 ```
 
-### 2. Configure Environment
+Then four terminals from the repo root.
 
-Copy `.env.example` to `.env`:
+**macOS / Linux / Git Bash**
 
 ```bash
-cp .env.example .env
-```
-
-Review the environment options:
-
-```ini
-PORT=3000
-NODE_ENV=development
-CORS_ORIGINS=http://localhost:5173
-
-# --- Option A: Local Firebase Emulator (Default for dev) ---
-FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
-FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099
-FIREBASE_PROJECT_ID=demo-genesis
-
-# --- Option B: Real Firebase Project ---
-# GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-# FIREBASE_PROJECT_ID=your-actual-firebase-project-id
-
-# --- Dev Auth Bypass (Instant frontend integration) ---
-DEV_BYPASS_AUTH=true
-```
-
----
-
-## 🛠️ Running the Application
-
-### Option A: With Local Firebase Emulator Suite
-
-1. **Start Firebase Emulators** (Firestore on `8080`, Auth on `9099`, UI on `4000`):
-   ```bash
-   npm run emulator
-   ```
-   *(Requires Firebase CLI: `npm install -g firebase-tools`)*
-
-2. **Seed Emulator Test Data**:
-   ```bash
-   npm run seed
-   ```
-   This loads 5 diverse student profiles, projects, requests, and active connections.
-
-3. **Start the Express API Server**:
-   ```bash
-   npm run dev
-   ```
-
-### Option B: With a Real Firebase Project
-
-1. Download a service account private key JSON from Firebase Console → Project Settings → Service accounts.
-2. In `.env`:
-   - Comment out `FIRESTORE_EMULATOR_HOST` and `FIREBASE_AUTH_EMULATOR_HOST`.
-   - Set `GOOGLE_APPLICATION_CREDENTIALS` to the path of your JSON file.
-   - Set `FIREBASE_PROJECT_ID` to your project ID.
-3. Seed sample data to your real project (flag-gated):
-   ```bash
-   npm run seed:prod
-   ```
-4. Start the server:
-   ```bash
-   npm start
-   ```
-
----
-
-## 🔑 Authentication & Dev Bypass
-
-### In Production / Staging
-Endpoints require a valid Firebase ID token in the authorization header:
-```http
-Authorization: Bearer <firebase-id-token>
-```
-
-### In Development (`DEV_BYPASS_AUTH=true`)
-Frontend developers can immediately test and build UI without logging in to Firebase Auth. Simply provide the `x-dev-uid` header:
-```http
-x-dev-uid: student_aarav
-```
-The server will synthesize `{ uid: "student_aarav", email: "dev@campus.edu" }`. Real `Bearer` tokens are still accepted even when bypass is enabled.
-
----
-
-## 📱 Running the full app (backend + frontend)
-
-Needs the Firebase CLI and Java 21 for the emulators.
-
-```bash
-# 1. Emulators (Firestore + Auth)
+# 1. Emulators: Firestore :8080, Auth :9099, Emulator UI :4000
 npm run emulator
 
-# 2. Seed canteens, menus, staff, gigs, profiles and demo logins (emulator only)
+# 2. Seed sample data and demo logins (re-run after every emulator restart)
 FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 npm run seed
 
-# 3. API on :3000, verifying real Firebase ID tokens from the Auth emulator
+# 3. API on :3000
 FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 DEV_BYPASS_AUTH=false npm run dev
 
 # 4. Frontend on :5173 (proxies /api to :3000)
-cd frontend && npm install && npm run dev
+cd frontend && npm run dev
 ```
 
-Demo logins (emulator only, password `campus123`):
+**Windows PowerShell** (terminals 2 and 3)
 
-| Who | Email | Sees |
+```powershell
+$env:FIRESTORE_EMULATOR_HOST="127.0.0.1:8080"; $env:FIREBASE_AUTH_EMULATOR_HOST="127.0.0.1:9099"; $env:FIREBASE_PROJECT_ID="demo-genesis"
+npm run seed
+
+$env:FIRESTORE_EMULATOR_HOST="127.0.0.1:8080"; $env:FIREBASE_AUTH_EMULATOR_HOST="127.0.0.1:9099"; $env:FIREBASE_PROJECT_ID="demo-genesis"; $env:DEV_BYPASS_AUTH="false"
+npm run dev
+```
+
+Open **http://localhost:5173**. The login page has **Start the demo** buttons that sign you in with one tap:
+
+| Role | Email (password `campus123`) | Try this |
 |---|---|---|
-| Student / freelancer | `meera.pillai@campus.edu` | Student app + Freelancer studio (photography gig) |
-| Student | `rohan.sharma@campus.edu` | Student app |
-| Canteen staff | `staff-central@campus.edu` | Counter dashboard for Central Canteen |
+| Student | `rohan.sharma@campus.edu` | Explore picks, order a bread omelette at Sopanam, hire Meera |
+| Student freelancer | `meera.pillai@campus.edu` | Me → Freelancer studio: accept Rohan's request, publish a gig |
+| Canteen staff | `staff-sopanam@campus.edu` | Move Rohan's order to Preparing → Ready → Collected; Counter tab: record walk-in sales and requests for sold-out items |
+| Campus administration | `admin@campus.edu` | Overview, Explore, Connect and Eat analytics, proposals, recommendations, menu uploads, reports |
+| Society representative | `munso.rep@campus.edu` | A-MUNSO's own event history, attendance marking and proposals only |
 
-New accounts can be created from the login screen; they set up a profile on first sign-in.
+Also seeded: `staff-prasada@campus.edu`, `staff-samudra@campus.edu`, and 8 more student profiles. New accounts can sign up from the login page; they pick interests and set up a profile on first sign-in.
+
+### Suggested 2-minute demo path
+
+1. **Rohan** → Explore: "For you" shows the Hackathon with *Matches your interest in Coding & Hackathons*; open it and RSVP.
+2. Eat → Sopanam Canteen → add a bread omelette → Checkout → pick a slot → simulated UPI payment → order tracker.
+3. Connect → Hire talent → Meera's photography gig → view work samples → send a hire request.
+4. **Sopanam staff** → the order appears in the queue → Start preparing → Mark ready. Rohan's tracker updates by itself.
+5. **Meera** → Me → Freelancer studio → accept the request → Rohan's contact appears (and Meera's appears for Rohan).
+6. **Administration** → Eat → Samudra → Chicken Biriyani: sales, sell-out times, each unmet-demand signal kept separate, data quality, a demand range (or "insufficient data") and a gross-sales scenario that is not profit.
+7. **Administration** → Proposals → A-MUNSO Annual Conference: past results and current readiness side by side; the decision stays with a person.
 
 ---
 
-## 🧪 Testing
-
-Run the automated test suite (Jest with native ESM and Supertest):
+## Tests
 
 ```bash
+# Backend: Jest + Supertest (Firestore-backed tests are skipped without the emulator)
 npm test
-```
 
-Tests cover:
-- Health checks (`/health` and `/api/v1/health`)
-- Authentication verification & `DEV_BYPASS_AUTH`
-- Privacy masking rules (contact/email/location visibility and connection overrides)
-- Zod schema validation (422 structured errors)
-- Route ordering (`/users/search` precedence over `/users/:uid`)
-- 404 handler
-- Eat: queue estimate, slot grid, validation, server-side totals, slot capacity under concurrent orders, order ownership, staff queue/status/inventory
-
-Firestore-backed Eat tests are skipped unless the emulator is running. To run everything (needs the Firebase CLI and Java 21, plus `DEV_BYPASS_AUTH=true` in `.env`):
-
-```bash
+# Backend with a fresh Firestore emulator: runs everything (needs Java 21 + Firebase CLI,
+# and DEV_BYPASS_AUTH=true in .env)
 npm run test:emulator
+
+# Frontend: Vitest (cart maths, error messages, Explore recommendations, Connect reasons)
+cd frontend && npm test
 ```
+
+Backend tests cover health, auth and the dev bypass, privacy masking, validation, route ordering, Eat (queue estimate, slot grid, server-side totals, no overbooking under 6 concurrent orders, order ownership, staff queue/status/inventory) and gigs (work samples required, hire-request flow, contact sharing only on accept, owner-only edits).
 
 ---
 
-## 📡 API Endpoints Overview
+## Configuration
 
-All endpoints below are prefixed with `/api/v1` unless noted:
+### Backend (`.env`, copy from `.env.example`)
+
+| Variable | Purpose |
+|---|---|
+| `FIRESTORE_EMULATOR_HOST`, `FIREBASE_AUTH_EMULATOR_HOST` | Use the local emulators (demo mode) |
+| `FIREBASE_PROJECT_ID` | `demo-genesis` for the emulators, or your real project ID |
+| `GOOGLE_APPLICATION_CREDENTIALS` | Service-account key for a real Firebase project |
+| `DEV_BYPASS_AUTH` | `true` lets tests send `x-dev-uid: <uid>` instead of a token. Never in production (the server refuses to start) |
+| `CORS_ORIGINS` | Allowed frontend origins (default `http://localhost:5173`) |
+
+### Frontend (`frontend/.env.local`, copy from `frontend/.env.example`)
+
+| Variable | Purpose |
+|---|---|
+| `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID` | Firebase web config (defaults work with the emulators) |
+| `VITE_USE_AUTH_EMULATOR` | `false` to use a real Firebase project; also hides Demo mode and the demo logins |
+| `VITE_API_BASE` | API base URL (default `/api/v1`) |
+
+### Moving to a real Firebase project
+
+1. Create the project, enable **Authentication → Email/Password** and **Firestore**.
+2. Backend: set `GOOGLE_APPLICATION_CREDENTIALS` and `FIREBASE_PROJECT_ID`, remove the emulator hosts.
+3. Frontend: fill in the web config and set `VITE_USE_AUTH_EMULATOR=false`.
+4. `firebase deploy --only firestore:rules,firestore:indexes`
+5. `npm run seed:prod` seeds canteens, menus, staff records and gigs (no login accounts). Staff sign up in the app, then link their uid in `staff/{uid}`.
+
+---
+
+## API
+
+All endpoints are under `/api/v1` and need `Authorization: Bearer <Firebase ID token>`, except `GET /health`. Errors are `{ error: { code, message, details? } }`. Full spec: [`openapi.yaml`](./openapi.yaml).
+
+### Profiles, search, requests, connections
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -181,23 +178,24 @@ All endpoints below are prefixed with `/api/v1` unless noted:
 | `POST` | `/connections` | Send connection request |
 | `GET` | `/connections` | List incoming & outgoing connections |
 | `PATCH` | `/connections/:id` | Accept or decline connection request |
-| `GET` | `/canteens` | **Eat:** canteens with open status and estimated queue time |
-| `GET` | `/canteens/:id/menu` | **Eat:** menu grouped by category (price, veg, availability) |
-| `GET` | `/canteens/:id/slots?date=YYYY-MM-DD` | **Eat:** pickup slots with remaining capacity |
-| `POST` | `/orders` | **Eat:** place an order (mock UPI, server-priced, capacity-checked) |
-| `GET` | `/orders/mine` | **Eat:** my orders, newest first |
-| `GET` | `/orders/:id` | **Eat:** one of my orders (tracker) |
-| `GET` | `/staff/me` | **Eat staff:** my canteen |
-| `GET` | `/staff/orders?status=` | **Eat staff:** my canteen's order queue |
-| `PATCH` | `/staff/orders/:id` | **Eat staff:** placed → preparing → ready → collected |
-| `POST` | `/staff/menu` | **Eat staff:** add a menu item |
-| `PATCH` | `/staff/menu/:itemId` | **Eat staff:** edit an item / mark sold out (`isAvailable: false`) |
 
-### Eat: roles
+### Eat
 
-- **Students** order and track their own orders.
-- **Canteen staff** are listed in the server-only `staff/{uid}` collection (`{ canteenId, name }`). Staff only see and change their own canteen's orders and menu. The seed script creates `staff-central`, `staff-foodcourt` and `staff-library`; with `DEV_BYPASS_AUTH=true`, send `x-dev-uid: staff-central` to act as Central Canteen's counter.
-- Payment is a **demo mock** (`paymentMethod: "upi_mock"`). No money moves.
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/canteens` | Canteens with open status and estimated queue time |
+| `GET` | `/canteens/:id/menu` | Menu grouped by category (price, veg, availability) |
+| `GET` | `/canteens/:id/slots?date=YYYY-MM-DD` | Pickup slots with remaining capacity |
+| `POST` | `/orders` | Place an order (simulated UPI, server-priced, capacity-checked) |
+| `GET` | `/orders/mine` | My orders, newest first |
+| `GET` | `/orders/:id` | One of my orders (tracker) |
+| `GET` | `/staff/me` | **Staff:** my canteen |
+| `GET` | `/staff/orders?status=` | **Staff:** my canteen's order queue |
+| `PATCH` | `/staff/orders/:id` | **Staff:** placed → preparing → ready → collected |
+| `POST` | `/staff/menu` | **Staff:** add a menu item |
+| `PATCH` | `/staff/menu/:itemId` | **Staff:** edit an item / mark sold out (`isAvailable: false`) |
+
+Canteen staff are listed in the server-only `staff/{uid}` collection (`{ canteenId, name }`), which no client can write. The seed script creates `staff-sopanam`, `staff-prasada` and `staff-samudra`.
 
 ### Connect: freelance gigs
 
@@ -213,42 +211,50 @@ All endpoints below are prefixed with `/api/v1` unless noted:
 | `DELETE` | `/freelancer/gigs/:id` | Delete a gig |
 | `PATCH` | `/freelancer/requests/:id` | `pending → accepted/declined`, `accepted → completed` |
 
-Any student with a profile can become a freelancer by publishing a gig. Contact details are exchanged only when the freelancer accepts a request.
-
-The complete OpenAPI 3.0 specification is available in [`openapi.yaml`](./openapi.yaml).
+Any student with a profile becomes a freelancer by publishing a gig. Contact details are exchanged only when the freelancer accepts a request.
 
 ---
 
-## 🔒 Security Rules & Indexes
+### Administration (Explore, Connect, Eat)
 
-- **Security Rules**: Defined in [`firestore.rules`](./firestore.rules) covering `users`, `projects`, `requests`, `responses`, and `connections`.
-- **Composite Indexes**: Defined in [`firestore.indexes.json`](./firestore.indexes.json).
-- Deploy to Firebase:
-  ```bash
-  firebase deploy --only firestore:rules,firestore:indexes
-  ```
+All under `/api/v1/admin/*` and require an `admins/{uid}` record (server-only). `central` admins see everything; `org` representatives only their own organisation's events, attendance and proposals.
+
+| Method | Path | Notes |
+|---|---|---|
+| GET | `/admin/overview?from&to` | KPIs across modules, against the previous equal period (IST days) |
+| GET | `/admin/explore` · `/admin/connect` · `/admin/eat` | Module analytics for the period |
+| GET | `/admin/eat/items/:canteenId/:itemId?portions&unitCost` | Item evidence: sales, stockouts, signals, data quality, demand range, scenario |
+| POST | `/admin/eat/menus/validate` · `/admin/eat/menus` · `/admin/eat/menus/:canteenId/:date/publish` | Daily menu CSV: preview with row errors, draft, versioned publish |
+| POST | `/admin/eat/counter-imports` | Billing CSV import, idempotent by transaction id |
+| GET/POST/PATCH | `/admin/proposals…` | Proposals, evidence pack, human decision, post-event outcome |
+| GET/PATCH | `/admin/recommendations…` | Rule-based recommendations and their review status |
+| GET | `/admin/reports/:kind` | CSV: `events`, `organisations`, `skills`, `eat-items` |
+
+Counter (staff): `GET /staff/counter`, `POST /staff/counter-sales`, `POST /staff/unavailable-requests`, `PATCH /staff/unavailable-requests/:id` (void with reason), `POST /staff/inventory/:itemId/adjust`, `POST /staff/day-close`.
+Students: `POST /orders/:id/cancel`, `POST|DELETE /canteens/:id/menu/:itemId/interest`, `GET /events`, `PATCH /events/:id/me`, `POST /events/:id/feedback`.
+
+## Security rules & indexes
+
+- [`firestore.rules`](./firestore.rules): users, projects, requests, responses and connections; canteens, orders, staff, gigs and gig requests are server-only (all access goes through the API).
+- [`firestore.indexes.json`](./firestore.indexes.json): composite indexes.
+- Deploy: `firebase deploy --only firestore:rules,firestore:indexes`
 
 ---
 
-## 📁 Repository Structure
+## Repository structure
 
 ```
-├── firebase.json            # Emulators & Firestore deployment configuration
-├── firestore.rules          # Firestore security rules
-├── firestore.indexes.json   # Composite indexes for complex queries
-├── openapi.yaml             # Complete OpenAPI 3.0 specification
-├── package.json
-├── scripts/
-│   └── seedEmulator.js      # Seed utility (supports local emulator and prod target)
-├── tests/
-│   └── api.test.js          # Jest + Supertest test suite
-└── src/
-    ├── app.js               # Express app setup (middleware, CORS, routes)
-    ├── server.js            # HTTP server entrypoint
-    ├── config/              # env.js, firebase.js
-    ├── controllers/         # user, search, request, connection controllers
-    ├── middleware/          # auth, errorHandler, rateLimiter, validate
-    ├── routes/              # index.js, health, user, search, request, connection
-    ├── services/            # Firestore interaction & business logic
-    └── utils/               # apiError.js, normalize.js
+├── frontend/                 # React + Vite app
+│   ├── public/               # Amma photo, Amrita logo, campus images
+│   └── src/
+│       ├── App.jsx           # Sign-in, onboarding, staff vs student app, tabs
+│       ├── config/firebase.js
+│       ├── lib/              # api client, session, cart, navigation
+│       ├── components/       # shared UI, search bar, tab bar, sample QR
+│       └── features/         # auth, home, explore, eat, staff, connect, freelancer, me, search
+├── src/                      # Express API
+│   ├── config/  controllers/  middleware/  routes/  services/  utils/
+├── scripts/seedEmulator.js   # Sample data + emulator-only demo logins
+├── tests/                    # Jest + Supertest
+├── firebase.json  firestore.rules  firestore.indexes.json  openapi.yaml
 ```

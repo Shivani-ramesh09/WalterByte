@@ -1,36 +1,45 @@
+import { useEffect, useState } from 'react'
+import { Moon, Sun } from 'lucide-react'
 import { useSession } from './lib/session'
+import { DEMO_MODE } from './config/firebase'
 import { NavProvider, useNav } from './lib/nav'
 import { CartProvider } from './lib/cart'
 import { ErrorBox, Loading, ScreenHeader } from './components/ui'
-import TopSearchBar from './components/TopSearchBar'
 import BottomTabBar from './components/BottomTabBar'
 import LoginPage from './features/auth/LoginPage'
 import HomeTab from './features/home/HomeTab'
+import ExploreTab from './features/explore/ExploreTab'
 import EatTab from './features/eat/EatTab'
 import ConnectTab from './features/connect/ConnectTab'
 import MeTab from './features/me/MeTab'
 import ProfileForm from './features/me/ProfileForm'
 import StaffDashboard from './features/staff/StaffDashboard'
+import AdminApp from './features/admin/AdminApp'
 import SearchResults from './features/search/SearchResults'
 
-const TABS = { home: HomeTab, eat: EatTab, connect: ConnectTab, me: MeTab }
+const TABS = { home: HomeTab, explore: ExploreTab, eat: EatTab, connect: ConnectTab, me: MeTab }
 
-function Brand() {
+export function Brand() {
   return (
-    <a className="brand" href="#home" aria-label="Amrita campus home">
-      <span className="brand-mark">A</span>
-      <span className="brand-copy"><strong>AMRITA</strong><small>VISHWA VIDYAPEETHAM</small></span>
+    <a className="brand" href="#home" aria-label="Amrita Vishwa Vidyapeetham campus home">
+      <img className="brand-amma" src="/amma.png" alt="Amma, Sri Mata Amritanandamayi Devi" />
+      <span className="brand-logo"><img src="/amrita-logo-official.png" alt="Amrita Vishwa Vidyapeetham" /></span>
+      {DEMO_MODE && <span className="badge badge-demo">Demo mode</span>}
     </a>
   )
 }
 
-function StudentApp() {
+function StudentApp({ theme, onToggleTheme }) {
   const { tab, search } = useNav()
   const Tab = TABS[tab]
   return (
     <>
-      <header className="topbar app-topbar"><Brand /></header>
-      <TopSearchBar />
+      <header className="topbar app-topbar">
+        <Brand />
+        <button className="theme-toggle" type="button" onClick={onToggleTheme} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+          {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
+        </button>
+      </header>
       <main className="app-content">{search !== null ? <SearchResults query={search} /> : <Tab />}</main>
       <BottomTabBar />
     </>
@@ -39,6 +48,8 @@ function StudentApp() {
 
 export default function App() {
   const session = useSession()
+  const [theme, setTheme] = useState(() => window.localStorage.getItem('amrita-theme') === 'dark' ? 'dark' : 'light')
+  useEffect(() => { window.localStorage.setItem('amrita-theme', theme) }, [theme])
 
   let page
   if (session.status === 'loading') page = <Loading label="Signing you in…" />
@@ -51,8 +62,10 @@ export default function App() {
       </div>
     )
   }
+  // Administration and organisation representatives get the dashboard
+  else if (session.admin) page = <><header className="topbar"><Brand /><button className="btn ghost small" onClick={session.signOut}>Sign out</button></header><AdminApp /></>
   // Canteen staff get their own counter app, not the student app
-  else if (session.staff) page = <StaffDashboard />
+  else if (session.staff) page = <><header className="topbar"><Brand /></header><div className="app-content"><StaffDashboard /></div></>
   else if (!session.profile) {
     page = (
       <div className="screen">
@@ -65,11 +78,11 @@ export default function App() {
     page = (
       <NavProvider>
         <CartProvider>
-          <StudentApp />
+          <StudentApp theme={theme} onToggleTheme={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')} />
         </CartProvider>
       </NavProvider>
     )
   }
 
-  return <div className="device">{page}</div>
+  return <div className={session.admin ? 'device device-wide' : 'device'} data-theme={theme}>{page}</div>
 }

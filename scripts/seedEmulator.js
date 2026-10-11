@@ -13,6 +13,8 @@
 import 'dotenv/config';
 import admin from 'firebase-admin';
 import { readFileSync } from 'fs';
+import { admins, buildAnalyticsSeed, organisations, sampleEvents } from './seedAnalytics.js';
+import { buildEatSeed } from './seedEat.js';
 
 // ── Firebase init ─────────────────────────────────────────────────────────────
 const isEmulator = process.env.SEED_TARGET !== 'prod';
@@ -115,7 +117,7 @@ const users = [
     year: 4,
     bio: 'Embedded systems + ML at the edge. Working on a smart attendance system using face recognition.',
     skills: ['python', 'machine learning', 'opencv', 'raspberry pi', 'c++'],
-    interests: ['robotics', 'competitive programming', 'badminton'],
+    interests: ['robotics & 3d printing', 'coding & hackathons', 'sports'],
     availability: 'busy',
     contactMethod: { type: 'email', value: 'rohan.sharma@campus.edu' },
     usuallyFoundAtPlaceId: 'place-electronics-lab',
@@ -202,7 +204,7 @@ const users = [
     year: 3,
     bio: 'Photographer and graphic designer. I shoot portraits, events, and anything with interesting light.',
     skills: ['photography', 'lightroom', 'photoshop', 'graphic design', 'illustration'],
-    interests: ['street photography', 'exhibition design', 'zines'],
+    interests: ['photography & film', 'design'],
     availability: 'available',
     contactMethod: { type: 'instagram', value: '@meera.lens' },
     usuallyFoundAtPlaceId: 'place-arts-block',
@@ -402,13 +404,26 @@ const requests = [
 // Eat: canteens and menus only. Orders and slot bookings are never seeded,
 // so every queue estimate and slot count comes from real orders.
 // Prices are whole INR.
+const veg = (id, name, category, price) => ({ id, name, category, price, isVeg: true, isAvailable: true });
+const nonVeg = (id, name, category, price) => ({ id, name, category, price, isVeg: false, isAvailable: true });
+
+// Non-veg at Sopanam and Samudra is eggs and chicken only.
+const eggAndChicken = [
+  nonVeg('boiled-eggs', 'Boiled Eggs (2 pc)', 'Egg', 20),
+  nonVeg('omelette', 'Omelette', 'Egg', 25),
+  nonVeg('bread-omelette', 'Bread Omelette', 'Egg', 40),
+  nonVeg('chicken-biriyani', 'Chicken Biriyani', 'Chicken', 120),
+  nonVeg('chicken-curry', 'Chicken Curry', 'Chicken', 90),
+  nonVeg('chicken-sandwich', 'Chicken Sandwich', 'Chicken', 70),
+];
+
 const canteens = [
   {
-    id: 'central-canteen',
-    name: 'Central Canteen',
-    description: 'Main canteen near the admin block. Full meals and South Indian.',
-    placeId: 'place-central-canteen',
-    openTime: '07:30',
+    id: 'sopanam',
+    name: 'Sopanam Canteen',
+    description: 'South Indian, meals, eggs and chicken.',
+    placeId: 'place-sopanam-canteen',
+    openTime: '08:00',
     closeTime: '21:00',
     isActive: true,
     slotMinutes: 5,
@@ -416,67 +431,66 @@ const canteens = [
     baseWaitMinutes: 6,
     perOrderMinutes: 1.5,
     menu: [
-      { id: 'idli-vada', name: 'Idli Vada (2+1)', category: 'Breakfast', price: 40, isVeg: true, isAvailable: true },
-      { id: 'masala-dosa', name: 'Masala Dosa', category: 'Breakfast', price: 55, isVeg: true, isAvailable: true },
-      { id: 'poha', name: 'Poha', category: 'Breakfast', price: 30, isVeg: true, isAvailable: false },
-      { id: 'veg-thali', name: 'Veg Thali', category: 'Meals', price: 90, isVeg: true, isAvailable: true },
-      { id: 'chicken-biryani', name: 'Chicken Biryani', category: 'Meals', price: 130, isVeg: false, isAvailable: true },
-      { id: 'egg-fried-rice', name: 'Egg Fried Rice', category: 'Meals', price: 85, isVeg: false, isAvailable: true },
-      { id: 'samosa', name: 'Samosa (2 pc)', category: 'Snacks', price: 25, isVeg: true, isAvailable: true },
-      { id: 'filter-coffee', name: 'Filter Coffee', category: 'Beverages', price: 20, isVeg: true, isAvailable: true },
-      { id: 'masala-chai', name: 'Masala Chai', category: 'Beverages', price: 15, isVeg: true, isAvailable: true },
+      veg('idli-vada', 'Idli Vada (2+1)', 'Breakfast', 40),
+      veg('masala-dosa', 'Masala Dosa', 'Breakfast', 55),
+      veg('veg-meals', 'Veg Meals', 'Meals', 80),
+      ...eggAndChicken,
+      veg('filter-coffee', 'Filter Coffee', 'Beverages', 20),
+      veg('tea', 'Tea', 'Beverages', 15),
     ],
   },
   {
-    id: 'food-court-c',
-    name: 'Food Court (Block C)',
-    description: 'Quick bites, rolls and Chinese near the hostels.',
-    placeId: 'place-food-court-c',
-    openTime: '10:00',
-    closeTime: '22:30',
+    id: 'prasada',
+    name: 'Prasada Canteen (Pure Veg)',
+    description: 'Pure vegetarian. Meals, dosas and snacks.',
+    placeId: 'place-prasada-canteen',
+    openTime: '08:00',
+    closeTime: '20:00',
+    isActive: true,
+    slotMinutes: 5,
+    slotCapacity: 8,
+    baseWaitMinutes: 5,
+    perOrderMinutes: 1.5,
+    menu: [
+      veg('pongal', 'Pongal', 'Breakfast', 40),
+      veg('masala-dosa', 'Masala Dosa', 'Breakfast', 55),
+      veg('veg-meals', 'Veg Meals', 'Meals', 80),
+      veg('curd-rice', 'Curd Rice', 'Meals', 45),
+      veg('veg-sandwich', 'Veg Sandwich', 'Snacks', 45),
+      veg('samosa', 'Samosa (2 pc)', 'Snacks', 25),
+      veg('filter-coffee', 'Filter Coffee', 'Beverages', 20),
+      veg('tea', 'Tea', 'Beverages', 15),
+    ],
+  },
+  {
+    id: 'samudra',
+    name: 'Samudra Canteen',
+    description: 'Quick bites, eggs and chicken.',
+    placeId: 'place-samudra-canteen',
+    openTime: '08:00',
+    closeTime: '20:00',
     isActive: true,
     slotMinutes: 5,
     slotCapacity: 6,
-    baseWaitMinutes: 8,
+    baseWaitMinutes: 7,
     perOrderMinutes: 2,
     menu: [
-      { id: 'paneer-roll', name: 'Paneer Tikka Roll', category: 'Rolls', price: 80, isVeg: true, isAvailable: true },
-      { id: 'chicken-roll', name: 'Chicken Kathi Roll', category: 'Rolls', price: 95, isVeg: false, isAvailable: true },
-      { id: 'veg-hakka-noodles', name: 'Veg Hakka Noodles', category: 'Chinese', price: 75, isVeg: true, isAvailable: true },
-      { id: 'chilli-chicken', name: 'Chilli Chicken', category: 'Chinese', price: 120, isVeg: false, isAvailable: true },
-      { id: 'veg-maggi', name: 'Veg Maggi', category: 'Snacks', price: 40, isVeg: true, isAvailable: true },
-      { id: 'cold-coffee', name: 'Cold Coffee', category: 'Beverages', price: 50, isVeg: true, isAvailable: true },
-    ],
-  },
-  {
-    id: 'library-cafe',
-    name: 'Library Café',
-    description: 'Coffee, juices and sandwiches next to the central library.',
-    placeId: 'place-library-cafe',
-    openTime: '08:00',
-    closeTime: '19:00',
-    isActive: true,
-    slotMinutes: 5,
-    slotCapacity: 4,
-    baseWaitMinutes: 3,
-    perOrderMinutes: 1,
-    menu: [
-      { id: 'cappuccino', name: 'Cappuccino', category: 'Coffee', price: 60, isVeg: true, isAvailable: true },
-      { id: 'americano', name: 'Americano', category: 'Coffee', price: 50, isVeg: true, isAvailable: true },
-      { id: 'veg-sandwich', name: 'Grilled Veg Sandwich', category: 'Sandwiches', price: 55, isVeg: true, isAvailable: true },
-      { id: 'chicken-sandwich', name: 'Chicken Club Sandwich', category: 'Sandwiches', price: 85, isVeg: false, isAvailable: true },
-      { id: 'watermelon-juice', name: 'Watermelon Juice', category: 'Juices', price: 45, isVeg: true, isAvailable: true },
+      veg('veg-puffs', 'Veg Puffs', 'Snacks', 25),
+      veg('veg-noodles', 'Veg Noodles', 'Snacks', 60),
+      ...eggAndChicken,
+      veg('cold-coffee', 'Cold Coffee', 'Beverages', 45),
+      veg('lime-juice', 'Lime Juice', 'Beverages', 25),
     ],
   },
 ];
 
 // Counter staff, one per canteen. staff/{uid} is server-only (rules deny
 // client access), so this script is how staff accounts are granted.
-// With DEV_BYPASS_AUTH, send `x-dev-uid: staff-central` to act as one.
+// With DEV_BYPASS_AUTH, send `x-dev-uid: staff-sopanam` to act as one.
 const staff = [
-  { uid: 'staff-central', name: 'Ravi (Central counter)', canteenId: 'central-canteen' },
-  { uid: 'staff-foodcourt', name: 'Sunita (Food Court counter)', canteenId: 'food-court-c' },
-  { uid: 'staff-library', name: 'Joseph (Library Café counter)', canteenId: 'library-cafe' },
+  { uid: 'staff-sopanam', name: 'Sopanam counter', canteenId: 'sopanam' },
+  { uid: 'staff-prasada', name: 'Prasada counter', canteenId: 'prasada' },
+  { uid: 'staff-samudra', name: 'Samudra counter', canteenId: 'samudra' },
 ];
 
 // Freelance gigs. Every gig carries at least one work sample.
@@ -549,6 +563,7 @@ async function seedAuthUsers() {
   const accounts = [
     ...users.map((u) => ({ uid: u.uid, email: u.email, displayName: u.name })),
     ...staff.map((s) => ({ uid: s.uid, email: `${s.uid}@campus.edu`, displayName: s.name })),
+    ...admins.map((a) => ({ uid: a.uid, email: a.email, displayName: a.name })),
   ];
   for (const account of accounts) {
     await admin.auth().deleteUser(account.uid).catch(() => {});
@@ -647,6 +662,147 @@ async function seedCanteens() {
   console.log(`[Seed] ✓ ${canteens.length} canteens, ${totalItems} menu items, ${staff.length} staff written.`);
 }
 
+async function seedExplore() {
+  console.log('[Seed] Seeding organisations and sample events...');
+  const batch = db.batch();
+  for (const { id, ...org } of organisations) {
+    batch.set(db.collection('organisations').doc(id), { ...org, createdAt: now });
+  }
+  // merge keeps registeredCount from RSVPs already made against these events
+  for (const { id, start, end, ...ev } of sampleEvents) {
+    batch.set(
+      db.collection('events').doc(id),
+      { ...ev, start: Timestamp.fromDate(new Date(start)), end: Timestamp.fromDate(new Date(end)), status: 'published' },
+      { merge: true }
+    );
+  }
+  await batch.commit();
+  console.log(`[Seed] ✓ ${organisations.length} organisations, ${sampleEvents.length} sample events written.`);
+}
+
+// Synthetic analytics history and admin roles: emulator only, never a real project
+async function seedSyntheticAnalytics() {
+  if (!isEmulator) {
+    console.log('[Seed] Skipping synthetic analytics and admin roles (real project).');
+    return;
+  }
+  console.log('[Seed] Seeding SYNTHETIC Explore/Connect analytics data...');
+  const data = buildAnalyticsSeed(new Date(), users.map((u) => u.uid));
+  const ts = (d) => Timestamp.fromDate(d);
+
+  // Reset: drop earlier synthetic events (with participants) and requests (with responses)
+  const old = await Promise.all(['events', 'requests', 'gigRequests', 'proposals', 'users'].map((c) => db.collection(c).where('synthetic', '==', true).get()));
+  for (const snap of old) for (const d of snap.docs) await db.recursiveDelete(d.ref);
+
+  const w = db.bulkWriter();
+  for (const { uid, ...s } of data.students) w.set(db.collection('users').doc(uid), { ...s, createdAt: now, updatedAt: now });
+  for (const e of data.events) {
+    const ref = db.collection('events').doc(e.id);
+    w.set(ref, { ...e.data, start: ts(e.data.start), end: ts(e.data.end) });
+    for (const { uid, viewedAt, feedback, ...p } of e.participants) {
+      w.set(ref.collection('participants').doc(uid), {
+        ...p,
+        viewedAt: ts(viewedAt),
+        ...(feedback && { feedback: { ...feedback, at: ts(feedback.at) } }),
+        synthetic: true,
+      });
+    }
+  }
+  for (const { id, proposedStart, proposedEnd, ...p } of data.proposals) {
+    w.set(db.collection('proposals').doc(id), {
+      ...p,
+      proposedStart: ts(proposedStart),
+      proposedEnd: ts(proposedEnd),
+      createdBy: 'seed',
+      createdAt: now,
+      updatedAt: now,
+      synthetic: true,
+    });
+  }
+  for (const { id, data: r, responses } of data.requests) {
+    const ref = db.collection('requests').doc(id);
+    w.set(ref, { ...r, createdAt: ts(r.createdAt), updatedAt: ts(r.updatedAt) });
+    responses.forEach((resp, i) => w.set(ref.collection('responses').doc(`syn-${i}`), { ...resp, createdAt: ts(resp.createdAt) }));
+  }
+  for (const { id, gigId, data: h } of data.gigRequests) {
+    const gig = gigs.find((g) => g.id === gigId);
+    const seller = users.find((u) => u.uid === gig.sellerId);
+    w.set(db.collection('gigRequests').doc(id), {
+      ...h,
+      gigId,
+      gigTitle: gig.title,
+      sellerId: gig.sellerId,
+      sellerName: seller.name,
+      createdAt: ts(h.createdAt),
+      updatedAt: ts(h.updatedAt),
+    });
+  }
+  for (const { uid, email, ...a } of admins) w.set(db.collection('admins').doc(uid), { ...a, createdAt: now });
+  await w.close();
+  console.log(
+    `[Seed] ✓ SYNTHETIC: ${data.students.length} students, ${data.events.length} events, ${data.proposals.length} proposals, ` +
+      `${data.requests.length} requests, ${data.gigRequests.length} hire requests; ${admins.length} admin roles.`
+  );
+}
+
+// Synthetic Eat history (emulator only): daily menus, inventory ledger, orders,
+// counter sales and demand signals for the last 28 days, plus today's menus.
+async function seedSyntheticEat() {
+  if (!isEmulator) {
+    console.log('[Seed] Skipping synthetic Eat history (real project).');
+    return;
+  }
+  console.log('[Seed] Seeding SYNTHETIC Eat history...');
+  const students = Array.from({ length: 90 }, (_, i) => `syn-student-${String(i + 1).padStart(3, '0')}`);
+  const data = buildEatSeed(new Date(), canteens, students);
+  const ts = (d) => (d ? Timestamp.fromDate(d) : null);
+
+  // Reset: earlier synthetic Eat records only; real orders and today's live ledger counts are kept
+  for (const c of ['dailyMenus', 'inventory', 'orders', 'counterSales', 'demandSignals', 'eatDataStatus']) {
+    const snap = await db.collection(c).where('synthetic', '==', true).get();
+    const w = db.bulkWriter();
+    for (const d of snap.docs) {
+      if (c === 'inventory' && d.get('isToday')) continue;
+      if (c === 'dailyMenus') await db.recursiveDelete(d.ref);
+      else w.delete(d.ref);
+    }
+    await w.close();
+  }
+
+  const w = db.bulkWriter();
+  for (const m of data.menus) {
+    const published = { version: 1, items: m.items, publishedBy: 'seed', publishedAt: now };
+    const ref = db.collection('dailyMenus').doc(`${m.canteenId}_${m.businessDate}`);
+    w.set(ref, { canteenId: m.canteenId, businessDate: m.businessDate, draft: null, published, synthetic: true });
+    w.set(ref.collection('versions').doc('1'), { ...published, fileName: 'synthetic-seed.csv' });
+  }
+  for (const { isToday, stockouts, ...inv } of data.inventory) {
+    const ref = db.collection('inventory').doc(`${inv.canteenId}_${inv.businessDate}_${inv.itemId}`);
+    // Today: plan fields only, so sales recorded during a demo are not wiped
+    if (isToday) w.set(ref, { ...inv, isToday: true, synthetic: true }, { merge: true });
+    else w.set(ref, { ...inv, stockouts: stockouts.map((s) => ({ at: ts(s.at), until: ts(s.until) })), synthetic: true });
+  }
+  for (const o of data.orders) {
+    w.set(db.collection('orders').doc(), {
+      ...o,
+      pickupSlot: { ...o.pickupSlot, start: ts(o.pickupSlot.start), end: ts(o.pickupSlot.end) },
+      createdAt: ts(o.createdAt),
+      updatedAt: ts(o.updatedAt),
+      synthetic: true,
+    });
+  }
+  for (const s of data.counterSales) w.set(db.collection('counterSales').doc(`${s.canteenId}_${s.txnId}`), { ...s, at: ts(s.at), synthetic: true });
+  for (const { id, ...s } of data.signals) w.set(id ? db.collection('demandSignals').doc(id) : db.collection('demandSignals').doc(), { ...s, at: ts(s.at), synthetic: true });
+  for (const s of data.statuses) {
+    w.set(db.collection('eatDataStatus').doc(`${s.canteenId}_${s.businessDate}`), { ...s, lastCounterAt: ts(s.lastCounterAt), synthetic: true });
+  }
+  await w.close();
+  console.log(
+    `[Seed] ✓ SYNTHETIC Eat: ${data.menus.length} daily menus, ${data.inventory.length} item-days, ${data.orders.length} orders, ` +
+      `${data.counterSales.length} counter transactions, ${data.signals.length} demand signals.`
+  );
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 (async () => {
@@ -660,6 +816,9 @@ async function seedCanteens() {
     await seedRequests();
     await seedCanteens();
     await seedGigs();
+    await seedExplore();
+    await seedSyntheticAnalytics();
+    await seedSyntheticEat();
     await seedAuthUsers();
     console.log('\n[Seed] ✅ All done!');
   } catch (err) {

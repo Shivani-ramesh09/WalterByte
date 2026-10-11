@@ -1,0 +1,2111 @@
+[
+  {
+    "id": "amrita-campus",
+    "name": "Amrita Vishwa Vidyapeetham",
+    "shortName": "Amrita Campus",
+    "category": "Campus",
+    "coordinates": [
+      10.90361,
+      76.8997
+    ],
+    "zoom": 16,
+    "description": "Campus-level reference point for Amritanagar, Coimbatore. This is not a building-level location.",
+    "keywords": [
+      "amrita",
+      "amritanagar",
+      "coimbatore",
+      "campus",
+      "university",
+      "entrance"
+    ],
+    "verified": true,
+    "coordinateStatus": "campus-reference",
+    "coordinateSource": "OpenStreetMap university-area feature, surfaced via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/34821094"
+  },
+  {
+    "id": "academic-block-1",
+    "name": "Academic Block 1 — School of Engineering",
+    "shortName": "Academic Block 1 (AB-1)",
+    "category": "Buildings",
+    "coordinates": [
+      10.90052,
+      76.9028
+    ],
+    "zoom": 18,
+    "building": "Academic Block 1 (AB-1)",
+    "buildingKey": "AB-1",
+    "description": "Building-level map anchor for Academic Block 1. Room records linked to this anchor are not individually geolocated.",
+    "keywords": [
+      "AB1",
+      "AB-1",
+      "academic block 1",
+      "school of engineering",
+      "labs",
+      "restrooms",
+      "classrooms"
+    ],
+    "verified": true,
+    "coordinateStatus": "building-anchor-room-interior-unmapped",
+    "coordinateSource": "OpenStreetMap building feature, surfaced through Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380925364",
+    "details": {
+      "recordType": "Academic building",
+      "mapPrecision": "Building anchor; not an internal-room coordinate",
+      "openStreetMapId": "way 380925364"
+    }
+  },
+  {
+    "id": "academic-block-2",
+    "name": "Academic Block 2",
+    "shortName": "Academic Block 2 (AB-2)",
+    "category": "Buildings",
+    "coordinates": [
+      10.90431,
+      76.89862
+    ],
+    "zoom": 18,
+    "building": "Academic Block 2 (AB-2)",
+    "buildingKey": "AB-2",
+    "description": "Building-level map anchor for Academic Block 2. Labs and room records linked here still need indoor directions.",
+    "keywords": [
+      "AB2",
+      "AB-2",
+      "academic block 2",
+      "D-301",
+      "D-302",
+      "labs",
+      "restrooms",
+      "IT canteen"
+    ],
+    "verified": true,
+    "coordinateStatus": "building-anchor-room-interior-unmapped",
+    "coordinateSource": "OpenStreetMap building feature, surfaced through Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380702789",
+    "details": {
+      "recordType": "Academic building",
+      "mapPrecision": "Building anchor; not an internal-room coordinate",
+      "openStreetMapId": "way 380702789"
+    }
+  },
+  {
+    "id": "academic-block-3",
+    "name": "Academic Block 3 — International School of Law",
+    "shortName": "Academic Block 3 (AB-3)",
+    "category": "Buildings",
+    "coordinates": [
+      10.90623,
+      76.89752
+    ],
+    "zoom": 18,
+    "building": "Academic Block 3 (AB-3)",
+    "buildingKey": "AB-3",
+    "description": "Building-level map anchor for Academic Block 3. Room records linked here are not individually geolocated.",
+    "keywords": [
+      "AB3",
+      "AB-3",
+      "academic block 3",
+      "international school of law",
+      "restrooms",
+      "classrooms"
+    ],
+    "verified": true,
+    "coordinateStatus": "building-anchor-room-interior-unmapped",
+    "coordinateSource": "OpenStreetMap building feature, surfaced through Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380829415",
+    "details": {
+      "recordType": "Academic building",
+      "mapPrecision": "Building anchor; not an internal-room coordinate",
+      "openStreetMapId": "way 380829415"
+    }
+  },
+  {
+    "id": "guest-house-building",
+    "name": "Amrita Guest House",
+    "shortName": "Guest House",
+    "category": "Buildings",
+    "coordinates": [
+      10.90146,
+      76.89883
+    ],
+    "zoom": 18,
+    "building": "Guest House",
+    "buildingKey": "GUEST-HOUSE",
+    "description": "Building-level map anchor. The official campus page lists conference and dining facilities here; these are linked directory records, not separate room coordinates.",
+    "keywords": [
+      "guest house",
+      "conference",
+      "dining hall",
+      "meeting",
+      "seminar",
+      "accommodation",
+      "event venue"
+    ],
+    "verified": true,
+    "coordinateStatus": "building-anchor-room-interior-unmapped",
+    "coordinateSource": "OpenStreetMap guest-house feature, surfaced through Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380829427",
+    "details": {
+      "recordType": "Campus building",
+      "mapPrecision": "Building anchor; internal rooms are not geolocated",
+      "openStreetMapId": "way 380829427"
+    }
+  },
+  {
+    "id": "auditorium-building",
+    "name": "Pandal",
+    "shortName": "Pandal",
+    "category": "Events",
+    "coordinates": [
+      10.90449,
+      76.90259
+    ],
+    "zoom": 18,
+    "building": "Pandal",
+    "buildingKey": "PANDAL",
+    "description": "Pandal building-level map anchor. The listed auditorium-type room inventory is not individually geolocated; verify the exact event venue with the organiser.",
+    "keywords": [
+      "auditorium",
+      "event",
+      "venue",
+      "AUTI101",
+      "AUTI102",
+      "AUTI103",
+      "AUTI104",
+      "AUTI105",
+      "conference",
+      "stage",
+      "pandal",
+      "event hall",
+      "hall",
+      "function"
+    ],
+    "verified": true,
+    "coordinateStatus": "building-anchor-room-interior-unmapped",
+    "coordinateSource": "OpenStreetMap building feature, surfaced through Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380829758",
+    "details": {
+      "recordType": "Auditorium building",
+      "mapPrecision": "Building anchor; room mapping must be confirmed",
+      "openStreetMapId": "way 380829758"
+    }
+  },
+  {
+    "id": "amrita-dispensary",
+    "name": "Amrita Dispensary",
+    "shortName": "Dispensary",
+    "category": "Medical",
+    "coordinates": null,
+    "building": "Amenity Complex",
+    "description": "Clinic/dispensary information associated with the Amenity Complex. Confirm the exact entrance on site.",
+    "keywords": [
+      "medical",
+      "clinic",
+      "doctor",
+      "first aid",
+      "ambulance",
+      "pharmacy",
+      "emergency",
+      "health"
+    ],
+    "verified": true,
+    "coordinateStatus": "building-coordinate-needed",
+    "openingHours": "Official page describes round-the-clock service; current hours should be reconfirmed.",
+    "details": {
+      "recordType": "Campus medical facility",
+      "locationPrecision": "Building known; map point not yet verified"
+    },
+    "sourceUrl": "https://www.amrita.edu/campus/coimbatore/infrastructure/",
+    "buildingKey": "AMENITY-COMPLEX",
+    "mapAnchorId": "amenities-complex"
+  },
+  {
+    "id": "amenities-complex",
+    "name": "Amenity Complex",
+    "shortName": "Amenity Complex",
+    "category": "Facilities",
+    "coordinates": [
+      10.901701,
+      76.901898
+    ],
+    "building": "Amenity Complex",
+    "description": "Clinic, pharmacy, general store and salon. Coordinates supplied in the latest student list; verify entrance on site.",
+    "keywords": [
+      "stationery",
+      "general store",
+      "photocopy",
+      "tailoring",
+      "shop",
+      "amenity",
+      "amenities"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "amenities": [
+      "Clinic",
+      "Pharmacy",
+      "General store",
+      "Saloon"
+    ],
+    "details": {
+      "recordType": "Campus facility",
+      "locationPrecision": "Building known; map point not yet verified"
+    },
+    "sourceUrl": "https://www.amrita.edu/campus/coimbatore/infrastructure/",
+    "buildingKey": "AMENITIES-COMPLEX",
+    "zoom": 18,
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(1).txt)"
+  },
+  {
+    "id": "guest-house-conference-hall",
+    "name": "Guest House — Conference Hall",
+    "shortName": "Guest House Conference Hall",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Amrita Guest House",
+    "description": "The official infrastructure page says the Guest House has a conference hall used for meetings, conferences and seminars.",
+    "keywords": [
+      "event",
+      "venue",
+      "conference",
+      "seminar",
+      "meeting",
+      "guest house",
+      "hall"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Event venue",
+      "locationPrecision": "Venue described by official source; map point not yet verified"
+    },
+    "sourceUrl": "https://www.amrita.edu/campus/coimbatore/infrastructure/",
+    "mapAnchorId": "guest-house-building",
+    "buildingKey": "GUEST-HOUSE"
+  },
+  {
+    "id": "guest-house-dining-hall",
+    "name": "Guest House — Dining Hall",
+    "shortName": "Guest House Dining Hall",
+    "category": "Food",
+    "coordinates": null,
+    "building": "Amrita Guest House",
+    "description": "A dining hall is listed as part of the Guest House facilities.",
+    "keywords": [
+      "food",
+      "dining",
+      "guest house",
+      "meal",
+      "restaurant"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Dining facility",
+      "locationPrecision": "Building known; map point not yet verified"
+    },
+    "sourceUrl": "https://www.amrita.edu/campus/coimbatore/infrastructure/",
+    "mapAnchorId": "guest-house-building",
+    "buildingKey": "GUEST-HOUSE"
+  },
+  {
+    "id": "cp-lab-ii-w109",
+    "name": "CP Lab-II — W-109",
+    "shortName": "CP Lab-II W-109",
+    "category": "Labs",
+    "coordinates": null,
+    "building": "Academic Block 1 (AB-1)",
+    "floor": "Ground Floor",
+    "roomCode": "W-109",
+    "description": "The ICTS page identifies CP Lab-II in AB-1, Ground Floor, door W-109.",
+    "keywords": [
+      "CP lab",
+      "computer lab",
+      "programming lab",
+      "W109",
+      "W-109",
+      "AB1",
+      "AB-1",
+      "coding",
+      "lab"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Computer laboratory",
+      "doorNumber": "W-109",
+      "locationPrecision": "Building/floor/room documented; exact map point not verified"
+    },
+    "sourceUrl": "https://intranet.cb.amrita.edu/infrastructure/icts",
+    "mapAnchorId": "academic-block-1",
+    "buildingKey": "AB-1"
+  },
+  {
+    "id": "cad-cam-lab-c102",
+    "name": "CAD/CAM Lab — C-102",
+    "shortName": "CAD/CAM Lab C-102",
+    "category": "Labs",
+    "coordinates": null,
+    "building": "Academic Block 1 (AB-1)",
+    "floor": "Ground Floor",
+    "roomCode": "C-102",
+    "description": "The ICTS page identifies the CAD/CAM Lab in AB-1, Ground Floor, door C-102.",
+    "keywords": [
+      "CAD",
+      "CAM",
+      "CAD/CAM",
+      "C102",
+      "C-102",
+      "AB1",
+      "AB-1",
+      "robotics",
+      "lab"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Computer laboratory",
+      "doorNumber": "C-102",
+      "locationPrecision": "Building/floor/room documented; exact map point not verified"
+    },
+    "sourceUrl": "https://intranet.cb.amrita.edu/infrastructure/icts",
+    "mapAnchorId": "academic-block-1",
+    "buildingKey": "AB-1"
+  },
+  {
+    "id": "ab2-lab-d301",
+    "name": "AB-2 Lab — D-301",
+    "shortName": "AB-2 Lab D-301",
+    "category": "Labs",
+    "coordinates": null,
+    "building": "Academic Block 2 (AB-2)",
+    "floor": "Second Floor",
+    "roomCode": "D-301",
+    "description": "The ICTS page lists D-301 among the AB-2 Second Floor computer labs.",
+    "keywords": [
+      "D301",
+      "D-301",
+      "AB2",
+      "AB-2",
+      "second floor",
+      "computer lab",
+      "coding",
+      "lab"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Computer laboratory",
+      "doorNumber": "D-301",
+      "locationPrecision": "Building/floor/room documented; exact map point not verified"
+    },
+    "sourceUrl": "https://intranet.cb.amrita.edu/infrastructure/icts",
+    "mapAnchorId": "academic-block-2",
+    "buildingKey": "AB-2"
+  },
+  {
+    "id": "ab2-lab-d302",
+    "name": "AB-2 Lab — D-302",
+    "shortName": "AB-2 Lab D-302",
+    "category": "Labs",
+    "coordinates": null,
+    "building": "Academic Block 2 (AB-2)",
+    "floor": "Second Floor",
+    "roomCode": "D-302",
+    "description": "The ICTS page lists D-302 among the AB-2 Second Floor computer labs.",
+    "keywords": [
+      "D302",
+      "D-302",
+      "AB2",
+      "AB-2",
+      "second floor",
+      "computer lab",
+      "coding",
+      "lab"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Computer laboratory",
+      "doorNumber": "D-302",
+      "locationPrecision": "Building/floor/room documented; exact map point not verified"
+    },
+    "sourceUrl": "https://intranet.cb.amrita.edu/infrastructure/icts",
+    "mapAnchorId": "academic-block-2",
+    "buildingKey": "AB-2"
+  },
+  {
+    "id": "main-canteen",
+    "name": "Sopanam Canteen",
+    "shortName": "Sopanam Canteen",
+    "category": "Food",
+    "coordinates": null,
+    "building": "Main Canteen",
+    "roomCode": "CANTEEN 1",
+    "description": "Main canteen (Sopanam). Exact coordinate not supplied in the latest coordinate list; select its entrance with the map coordinate picker.",
+    "keywords": [
+      "food",
+      "sopanam",
+      "CANTEEN 1",
+      "canteen",
+      "main canteen",
+      "lunch",
+      "cafeteria",
+      "meal"
+    ],
+    "verified": false,
+    "coordinateStatus": "coordinate-needed",
+    "details": {
+      "recordType": "Cafeteria",
+      "areaSqM": 1110.04,
+      "locationPrecision": "Building known; map point not yet verified",
+      "submittedCoordinates": [
+        11.01689,
+        76.95589
+      ],
+      "coordinateReview": "Submitted point is outside current campus map extent; not plotted until confirmed."
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "buildingKey": "MAIN-CANTEEN",
+    "submittedCoordinates": [
+      11.01689,
+      76.95589
+    ]
+  },
+  {
+    "id": "convention-centre",
+    "name": "Convention Centre",
+    "shortName": "Convention Centre",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Convention Centre",
+    "description": "The official 2026 campus room inventory contains room records under the Convention Centre. Confirm the exact event room with the organiser before heading there.",
+    "keywords": [
+      "event",
+      "hackathon",
+      "venue",
+      "convention centre",
+      "hall",
+      "seminar",
+      "workshop",
+      "GCC"
+    ],
+    "verified": true,
+    "coordinateStatus": "building-coordinate-needed",
+    "details": {
+      "recordType": "Campus venue/building",
+      "locationPrecision": "Building known from room inventory; map point not yet verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "buildingKey": "CONVENTION-CENTRE"
+  },
+  {
+    "id": "auditorium-area",
+    "name": "Pandal — Event Area",
+    "shortName": "Pandal Event Area",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Pandal",
+    "description": "Pandal event area. The listed AUTI101–AUTI105 room inventory is not individually geolocated; confirm the specific venue with the event organiser.",
+    "keywords": [
+      "event",
+      "hackathon",
+      "auditorium",
+      "venue",
+      "hall",
+      "stage",
+      "AUTI101",
+      "AUTI102",
+      "AUTI103",
+      "AUTI104",
+      "AUTI105",
+      "pandal",
+      "event hall",
+      "function hall"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Event venue area",
+      "roomIds": "AUTI101, AUTI102, AUTI103, AUTI104, AUTI105",
+      "locationPrecision": "Venue area documented; map point not yet verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "auditorium-building",
+    "buildingKey": "PANDAL"
+  },
+  {
+    "id": "auditorium-auti101",
+    "name": "Auditorium Room — AUTI101",
+    "shortName": "Auditorium AUTI101",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Pandal",
+    "roomCode": "AUTI101",
+    "description": "Listed as an Auditorium room in the official 2026 campus room inventory.",
+    "keywords": [
+      "auditorium",
+      "event",
+      "venue",
+      "hall",
+      "AUTI101",
+      "hackathon",
+      "pandal",
+      "event hall"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Auditorium",
+      "areaSqM": 46.89,
+      "locationPrecision": "Room ID documented; exact map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "auditorium-building",
+    "buildingKey": "PANDAL"
+  },
+  {
+    "id": "auditorium-auti102",
+    "name": "Auditorium Room — AUTI102",
+    "shortName": "Auditorium AUTI102",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Pandal",
+    "roomCode": "AUTI102",
+    "description": "Listed as an Auditorium room in the official 2026 campus room inventory.",
+    "keywords": [
+      "auditorium",
+      "event",
+      "venue",
+      "hall",
+      "AUTI102",
+      "hackathon",
+      "pandal",
+      "event hall"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Auditorium",
+      "areaSqM": 46.89,
+      "locationPrecision": "Room ID documented; exact map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "auditorium-building",
+    "buildingKey": "PANDAL"
+  },
+  {
+    "id": "auditorium-auti103",
+    "name": "Auditorium Room — AUTI103",
+    "shortName": "Auditorium AUTI103",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Pandal",
+    "roomCode": "AUTI103",
+    "description": "Listed as an Auditorium room in the official 2026 campus room inventory.",
+    "keywords": [
+      "auditorium",
+      "event",
+      "venue",
+      "hall",
+      "AUTI103",
+      "hackathon",
+      "pandal",
+      "event hall"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Auditorium",
+      "areaSqM": 150.13,
+      "locationPrecision": "Room ID documented; exact map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "auditorium-building",
+    "buildingKey": "PANDAL"
+  },
+  {
+    "id": "auditorium-auti104",
+    "name": "Auditorium Room — AUTI104",
+    "shortName": "Auditorium AUTI104",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Pandal",
+    "roomCode": "AUTI104",
+    "description": "Listed as an Auditorium room in the official 2026 campus room inventory.",
+    "keywords": [
+      "auditorium",
+      "event",
+      "venue",
+      "hall",
+      "AUTI104",
+      "hackathon",
+      "pandal",
+      "event hall"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Auditorium",
+      "areaSqM": 12.52,
+      "locationPrecision": "Room ID documented; exact map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "auditorium-building",
+    "buildingKey": "PANDAL"
+  },
+  {
+    "id": "auditorium-auti105",
+    "name": "Auditorium Room — AUTI105",
+    "shortName": "Auditorium AUTI105",
+    "category": "Events",
+    "coordinates": null,
+    "building": "Pandal",
+    "roomCode": "AUTI105",
+    "description": "Listed as an Auditorium room in the official 2026 campus room inventory.",
+    "keywords": [
+      "auditorium",
+      "event",
+      "venue",
+      "hall",
+      "AUTI105",
+      "hackathon",
+      "pandal",
+      "event hall"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Auditorium",
+      "areaSqM": 12.52,
+      "locationPrecision": "Room ID documented; exact map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "auditorium-building",
+    "buildingKey": "PANDAL"
+  },
+  {
+    "id": "ab1-restroom-fe212",
+    "name": "Restroom — AB-1 FE212",
+    "shortName": "AB-1 Restroom FE212",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 1 (AB-1)",
+    "roomCode": "AB1FE212",
+    "description": "The official 2026 room inventory lists AB1FE212 as a toilet in Academic Block 1.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB1",
+      "AB-1",
+      "FE212"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 29.15,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-1",
+    "buildingKey": "AB-1"
+  },
+  {
+    "id": "ab1-restroom-ge108",
+    "name": "Restroom — AB-1 GE108",
+    "shortName": "AB-1 Restroom GE108",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 1 (AB-1)",
+    "roomCode": "AB1GE108",
+    "description": "The official 2026 room inventory lists AB1GE108 as a toilet in Academic Block 1.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB1",
+      "AB-1",
+      "GE108"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 29.15,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-1",
+    "buildingKey": "AB-1"
+  },
+  {
+    "id": "ab1-restroom-gw110",
+    "name": "Restroom — AB-1 GW110",
+    "shortName": "AB-1 Restroom GW110",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 1 (AB-1)",
+    "roomCode": "AB1GW110",
+    "description": "The official 2026 room inventory lists AB1GW110 as a toilet in Academic Block 1.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB1",
+      "AB-1",
+      "GW110"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 29.15,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-1",
+    "buildingKey": "AB-1"
+  },
+  {
+    "id": "ab2-restroom-fa209",
+    "name": "Restroom — AB-2 FA209",
+    "shortName": "AB-2 Restroom FA209",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 2 (AB-2)",
+    "roomCode": "AB2FA209",
+    "description": "The official 2026 room inventory lists AB2FA209 as a toilet in Academic Block 2.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB2",
+      "AB-2",
+      "FA209"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 44.67,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-2",
+    "buildingKey": "AB-2"
+  },
+  {
+    "id": "ab2-restroom-fd204",
+    "name": "Restroom — AB-2 FD204",
+    "shortName": "AB-2 Restroom FD204",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 2 (AB-2)",
+    "roomCode": "AB2FD204",
+    "description": "The official 2026 room inventory lists AB2FD204 as a toilet in Academic Block 2.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB2",
+      "AB-2",
+      "FD204"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 17.3,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-2",
+    "buildingKey": "AB-2"
+  },
+  {
+    "id": "ab2-restroom-se301",
+    "name": "Restroom — AB-2 SE301",
+    "shortName": "AB-2 Restroom SE301",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 2 (AB-2)",
+    "roomCode": "AB2SE301",
+    "description": "The official 2026 room inventory lists AB2SE301 as a toilet in Academic Block 2.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB2",
+      "AB-2",
+      "SE301"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 53.42,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-2",
+    "buildingKey": "AB-2"
+  },
+  {
+    "id": "ab3-restroom-fa202",
+    "name": "Restroom — AB-3 FA202",
+    "shortName": "AB-3 Restroom FA202",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 3 (AB-3)",
+    "roomCode": "AB3FA202",
+    "description": "The official 2026 room inventory lists AB3FA202 as a toilet in Academic Block 3.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB3",
+      "AB-3",
+      "FA202"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 64.21,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-3",
+    "buildingKey": "AB-3"
+  },
+  {
+    "id": "ab3-restroom-fd210",
+    "name": "Restroom — AB-3 FD210",
+    "shortName": "AB-3 Restroom FD210",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Academic Block 3 (AB-3)",
+    "roomCode": "AB3FD210",
+    "description": "The official 2026 room inventory lists AB3FD210 as a toilet in Academic Block 3.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "AB3",
+      "AB-3",
+      "FD210"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 64.45,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "mapAnchorId": "academic-block-3",
+    "buildingKey": "AB-3"
+  },
+  {
+    "id": "asb-restroom-f121",
+    "name": "Restroom — ASB Building F121",
+    "shortName": "ASB Restroom F121",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "ASB Building",
+    "roomCode": "ASBF121",
+    "description": "The official 2026 room inventory lists ASBF121 as a toilet in the ASB Building.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "ASB",
+      "F121"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-coordinate-needed",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 51.52,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "buildingKey": "ASB-BUILDING"
+  },
+  {
+    "id": "convention-centre-restroom-gccf202",
+    "name": "Restroom — Convention Centre GCCF202",
+    "shortName": "Convention Centre Restroom GCCF202",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Convention Centre",
+    "roomCode": "GCCF202",
+    "description": "The official 2026 room inventory lists GCCF202 as a toilet in the Convention Centre.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "convention centre",
+      "event",
+      "GCCF202"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-coordinate-needed",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 5.87,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "buildingKey": "CONVENTION-CENTRE"
+  },
+  {
+    "id": "convention-centre-restroom-gccs302",
+    "name": "Restroom — Convention Centre GCCS302",
+    "shortName": "Convention Centre Restroom GCCS302",
+    "category": "Restrooms",
+    "coordinates": null,
+    "building": "Convention Centre",
+    "roomCode": "GCCS302",
+    "description": "The official 2026 room inventory lists GCCS302 as a toilet in the Convention Centre.",
+    "keywords": [
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "convention centre",
+      "event",
+      "GCCS302"
+    ],
+    "verified": true,
+    "coordinateStatus": "room-known-building-coordinate-needed",
+    "details": {
+      "recordType": "Toilet",
+      "areaSqM": 5.87,
+      "locationPrecision": "Building/room ID documented; map point not verified"
+    },
+    "sourceUrl": "https://webfiles.amrita.edu/2026/03/infrastructure-cbr.pdf",
+    "buildingKey": "CONVENTION-CENTRE"
+  },
+  {
+    "id": "aerospace-hangar",
+    "name": "Aerospace Hangar",
+    "shortName": "Aerospace Hangar",
+    "category": "Labs",
+    "coordinates": [
+      10.90291,
+      76.904212
+    ],
+    "zoom": 18,
+    "description": "Aerospace hangar location supplied in the latest student list.",
+    "keywords": [
+      "aerospace",
+      "hangar",
+      "hanger",
+      "lab",
+      "engineering"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(1).txt)",
+    "sourceUrl": null
+  },
+  {
+    "id": "basketball-court",
+    "name": "Basketball Court",
+    "shortName": "Basketball Court",
+    "category": "Sports",
+    "coordinates": [
+      10.900952,
+      76.904054
+    ],
+    "zoom": 18,
+    "description": "Basketball court location supplied by a campus student.",
+    "keywords": [
+      "basketball",
+      "court",
+      "sports"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long.txt)",
+    "sourceUrl": null
+  },
+  {
+    "id": "indoor-badminton-court-2",
+    "name": "Indoor Badminton Court 2 / Men's Gym",
+    "shortName": "Badminton Court 2 / Men's Gym",
+    "category": "Sports",
+    "coordinates": [
+      10.90141,
+      76.89487
+    ],
+    "zoom": 18,
+    "description": "Indoor badminton court 2 and men's gym. Location details are retained from the existing record.",
+    "keywords": [
+      "badminton",
+      "indoor badminton",
+      "court",
+      "sports",
+      "men's gym",
+      "mens gym",
+      "gym",
+      "fitness",
+      "workout",
+      "exercise"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long.txt)",
+    "sourceUrl": null
+  },
+  {
+    "id": "amrita-swimming-pool",
+    "name": "Amrita Swimming Pool",
+    "shortName": "Swimming Pool",
+    "category": "Sports",
+    "coordinates": [
+      10.906181,
+      76.898945
+    ],
+    "zoom": 18,
+    "description": "Swimming pool location supplied in the latest student list.",
+    "keywords": [
+      "swimming",
+      "pool",
+      "sports"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(1).txt)",
+    "sourceUrl": null
+  },
+  {
+    "id": "nachiketas-bhavanam",
+    "name": "Nachiketas Bhavanam",
+    "shortName": "Nachiketas Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90051,
+      76.90478
+    ],
+    "zoom": 18,
+    "description": "Nachiketas Bhavanam — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "nachiketas",
+      "bhavanam",
+      "hostel",
+      "residence",
+      "nachiketas bhavanam"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380925368, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380925368"
+  },
+  {
+    "id": "yagnavalkya-bhavanam",
+    "name": "Yagnavalkya Bhavanam",
+    "shortName": "Yagnavalkya Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90142,
+      76.9048
+    ],
+    "zoom": 18,
+    "description": "Yagnavalkya Bhavanam — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "yagnavalkya",
+      "bhavanam",
+      "hostel",
+      "residence",
+      "yagnavalkya bhavanam"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380925366, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380925366"
+  },
+  {
+    "id": "vyasa-maharshi-bhavanam",
+    "name": "Sri Vyasa Maharshi Bhavanam",
+    "shortName": "Vyasa Maharshi Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90165,
+      76.90577
+    ],
+    "zoom": 18,
+    "description": "Sri Vyasa Maharshi Bhavanam — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "vyasa",
+      "maharshi",
+      "bhavanam",
+      "hostel",
+      "residence",
+      "sri vyasa maharshi bhavanam",
+      "vyasa maharshi bhavanam"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380925375, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380925375"
+  },
+  {
+    "id": "sewage-treatment-plant",
+    "name": "Amrita Sewage Treatment Plant",
+    "shortName": "Sewage Treatment Plant",
+    "category": "Facilities",
+    "coordinates": null,
+    "zoom": 18,
+    "description": "Coordinates supplied in Lat_Long.txt are outside the current Ettimadai campus map extent; verify campus/location before adding to the map.",
+    "keywords": [
+      "sewage",
+      "treatment plant",
+      "utilities",
+      "infrastructure"
+    ],
+    "verified": false,
+    "coordinateStatus": "coordinate-needs-campus-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long.txt)",
+    "sourceUrl": null,
+    "submittedCoordinates": [
+      11.01594,
+      76.95544
+    ],
+    "details": {
+      "submittedCoordinatesNote": "Coordinates from Lat_Long.txt are roughly 14 km from the current Ettimadai campus map center. Kept as a candidate but not plotted until confirmed."
+    }
+  },
+  {
+    "id": "yagnavalkya-bhavanam-annexe",
+    "name": "Kashyapa Annexe",
+    "shortName": "Kashyapa Annexe",
+    "category": "Hostels",
+    "coordinates": [
+      10.90285,
+      76.90504
+    ],
+    "zoom": 18,
+    "description": "Kashyapa Annexe — hostel annexe building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "kashyapa annexe",
+      "kashyapa annex",
+      "hostel",
+      "annexe",
+      "annex",
+      "yagnavalkya bhavanam annexe"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380925377, via Mapcarta (previously labelled Yagnavalkya Bhavanam Annexe)",
+    "sourceUrl": "https://mapcarta.com/W380925377"
+  },
+  {
+    "id": "adithi-bhavanam",
+    "name": "Adithi Bhavanam",
+    "shortName": "Adithi Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90739,
+      76.89884
+    ],
+    "zoom": 18,
+    "description": "Adithi Bhavanam — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "adithi bhavanam",
+      "hostel",
+      "bhavanam",
+      "adithi",
+      "adithi girls hostel"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 1256941484, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W1256941484"
+  },
+  {
+    "id": "gauthama-bhavanam",
+    "name": "Gauthama Bhavanam (Boys)",
+    "shortName": "Gauthama Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.9028,
+      76.89717
+    ],
+    "zoom": 18,
+    "description": "Gauthama Bhavanam (Boys) — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "gauthama bhavanam (boys)",
+      "gauthama bhavanam",
+      "hostel",
+      "bhavanam",
+      "gauthama",
+      "boys hostel"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380829420, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380829420"
+  },
+  {
+    "id": "vasishta-bhavanam",
+    "name": "Vasishta Bhavanam",
+    "shortName": "Vasishta Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90167,
+      76.89604
+    ],
+    "zoom": 18,
+    "description": "Vasishta Bhavanam — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "vasishta bhavanam",
+      "hostel",
+      "bhavanam",
+      "vasishta"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380829425, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380829425"
+  },
+  {
+    "id": "agasthya-bhavanam",
+    "name": "Agasthya Bhavanam",
+    "shortName": "Agasthya Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90252,
+      76.89621
+    ],
+    "zoom": 18,
+    "description": "Agasthya Bhavanam — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "agasthya bhavanam",
+      "hostel",
+      "bhavanam",
+      "agasthya"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380829421, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380829421"
+  },
+  {
+    "id": "gargi-bhavanam",
+    "name": "Gargi Bhavanam",
+    "shortName": "Gargi Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90302,
+      76.8998
+    ],
+    "zoom": 18,
+    "description": "Gargi Bhavanam — hostel building reference point from OpenStreetMap-derived data. The point represents the mapped building, not an indoor entrance; please confirm on campus.",
+    "keywords": [
+      "gargi bhavanam",
+      "hostel",
+      "bhavanam",
+      "gargi",
+      "girls hostel"
+    ],
+    "verified": false,
+    "coordinateStatus": "osm-building-point-needs-on-site-confirmation",
+    "coordinateSource": "OpenStreetMap building feature way 380702791, via Mapcarta",
+    "sourceUrl": "https://mapcarta.com/W380702791"
+  },
+  {
+    "id": "kashyapa-bhavanam",
+    "name": "Kashyapa Bhavanam",
+    "shortName": "Kashyapa Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.90301,
+      76.904998
+    ],
+    "zoom": 18,
+    "description": "Hostel location supplied by a campus student. Please confirm the precise building point on campus.",
+    "keywords": [
+      "kashyapa",
+      "bhavanam",
+      "hostel",
+      "residence"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(1).txt)",
+    "sourceUrl": null
+  },
+  {
+    "id": "agasthya-vasishta-mess-hall",
+    "name": "Agasthya / Vasishta Mess Hall",
+    "shortName": "Agasthya / Vasishta Mess Hall",
+    "category": "Food",
+    "coordinates": null,
+    "building": "Agasthya Bhavanam / Vasishta Bhavanam",
+    "description": "Mess hall serving the Agasthya / Vasishta hostel area. Exact map point has not been provided, so this entry is searchable but is not plotted.",
+    "keywords": [
+      "agasthya",
+      "vasishta",
+      "mess",
+      "mess hall",
+      "hostel food",
+      "dining",
+      "food",
+      "canteen"
+    ],
+    "verified": false,
+    "coordinateStatus": "location-not-provided",
+    "details": {
+      "recordType": "Mess hall",
+      "locationPrecision": "Exact map point not provided; not plotted"
+    }
+  },
+  {
+    "id": "academic-block-4",
+    "name": "Academic Block 4",
+    "shortName": "Academic Block 4",
+    "category": "Buildings",
+    "coordinates": [
+      10.904545,
+      76.904023
+    ],
+    "description": "Academic Block 4. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "academic block 4",
+      "AB4",
+      "AB-4",
+      "academic building",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18,
+    "building": "Academic Block 4 (AB-4)",
+    "buildingKey": "AB-4"
+  },
+  {
+    "id": "sports-ground",
+    "name": "Sports Ground",
+    "shortName": "Sports Ground",
+    "category": "Sports",
+    "coordinates": [
+      10.902729,
+      76.902985
+    ],
+    "description": "Campus sports ground. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "sports ground",
+      "ground",
+      "athletics",
+      "sports field",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "physical-education-badminton-1",
+    "name": "Physical Education Department / Power Lifting Gym / Indoor Badminton Court 1",
+    "shortName": "Physical Education / Badminton 1",
+    "category": "Sports",
+    "coordinates": [
+      10.901751,
+      76.902107
+    ],
+    "description": "Physical Education Department, power lifting gym and Indoor Badminton Court 1. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "physical education",
+      "power lifting gym",
+      "powerlifting",
+      "gym",
+      "indoor badminton court 1",
+      "badminton 1",
+      "court 1",
+      "sports",
+      "fitness",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "anokha-hub",
+    "name": "Anokha Hub",
+    "shortName": "Anokha Hub",
+    "category": "Events",
+    "coordinates": [
+      10.901319,
+      76.901793
+    ],
+    "description": "Anokha Hub. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "anokha",
+      "hub",
+      "event",
+      "hackathon",
+      "venue",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "central-kitchen",
+    "name": "Central Kitchen",
+    "shortName": "Central Kitchen",
+    "category": "Food",
+    "coordinates": [
+      10.901451,
+      76.901259
+    ],
+    "description": "Central kitchen. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "central kitchen",
+      "kitchen",
+      "food",
+      "meal preparation",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "staff-quarters",
+    "name": "Staff Quarters",
+    "shortName": "Staff Quarters",
+    "category": "Buildings",
+    "coordinates": [
+      10.901404,
+      76.900406
+    ],
+    "description": "Staff quarters. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "staff quarters",
+      "staff residence",
+      "quarters",
+      "residential",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18,
+    "building": "Staff Quarters",
+    "buildingKey": "STAFF-QUARTERS"
+  },
+  {
+    "id": "butterfly-garden",
+    "name": "Butterfly Garden",
+    "shortName": "Butterfly Garden",
+    "category": "Campus",
+    "coordinates": [
+      10.901902,
+      76.900068
+    ],
+    "description": "Campus butterfly garden. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "butterfly garden",
+      "garden",
+      "nature",
+      "outdoors",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "nataraja-statue",
+    "name": "Nataraja Statue",
+    "shortName": "Nataraja Statue",
+    "category": "Campus",
+    "coordinates": [
+      10.903379,
+      76.898413
+    ],
+    "description": "Nataraja statue. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "nataraja",
+      "statue",
+      "sculpture",
+      "landmark",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "prasada-canteen",
+    "name": "Prasada Canteen 🟢",
+    "shortName": "Prasada Canteen 🟢",
+    "category": "Food",
+    "coordinates": [
+      10.904564,
+      76.902241
+    ],
+    "description": "Prasada Canteen. The green dot marks the vegetarian canteen. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "prasada canteen",
+      "canteen",
+      "vegetarian",
+      "pure veg",
+      "veg food",
+      "food",
+      "cafeteria",
+      "green dot",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18,
+    "details": {
+      "recordType": "Cafeteria",
+      "foodMarker": "🟢"
+    }
+  },
+  {
+    "id": "amrita-school-of-business",
+    "name": "Amrita School of Business",
+    "shortName": "School of Business",
+    "category": "Administration",
+    "coordinates": [
+      10.904369,
+      76.901823
+    ],
+    "description": "Amrita School of Business. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "amrita school of business",
+      "ASB",
+      "business school",
+      "management",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18,
+    "building": "Amrita School of Business",
+    "buildingKey": "ASB-BUILDING"
+  },
+  {
+    "id": "campus-industry-relations",
+    "name": "Campus Industry Relations (CIR)",
+    "shortName": "Campus Industry Relations",
+    "category": "Administration",
+    "coordinates": [
+      10.905347,
+      76.901898
+    ],
+    "description": "Campus Industry Relations (CIR). Coordinate updated from the latest student-provided location.",
+    "keywords": [
+      "campus industry relations",
+      "CIR",
+      "industry relations",
+      "career",
+      "placement",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Latest student-provided coordinate in chat (10.905347, 76.901898)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "kapila-bhavanam",
+    "name": "Kapila Bhavanam",
+    "shortName": "Kapila Bhavanam",
+    "category": "Hostels",
+    "coordinates": [
+      10.904359,
+      76.90053
+    ],
+    "description": "Kapila Bhavanam. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "kapila",
+      "bhavanam",
+      "hostel",
+      "residence",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18,
+    "building": "Kapila Bhavanam",
+    "buildingKey": "KAPILA-BHAVANAM"
+  },
+  {
+    "id": "arjun-statue",
+    "name": "Arjun Statue",
+    "shortName": "Arjun Statue",
+    "category": "Campus",
+    "coordinates": [
+      10.903885,
+      76.899811
+    ],
+    "description": "Arjun statue. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "arjun",
+      "statue",
+      "sculpture",
+      "landmark",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "central-library",
+    "name": "Central Library",
+    "shortName": "Central Library",
+    "category": "Library",
+    "coordinates": [
+      10.904024,
+      76.899148
+    ],
+    "description": "Central Library. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "central library",
+      "library",
+      "books",
+      "study",
+      "reading",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18,
+    "building": "Central Library",
+    "buildingKey": "CENTRAL-LIBRARY"
+  },
+  {
+    "id": "printing-photocopy-centre",
+    "name": "Printing & Photocopy Centre",
+    "shortName": "Printing & Photocopy Centre",
+    "category": "Facilities",
+    "coordinates": [
+      10.904319,
+      76.899288
+    ],
+    "description": "Printing and photocopy/Xerox service point. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "printing",
+      "photocopy",
+      "xerox",
+      "print shop",
+      "printing centre",
+      "printing center",
+      "copies",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "restroom-2",
+    "name": "Restroom 2",
+    "shortName": "Restroom 2",
+    "category": "Restrooms",
+    "coordinates": [
+      10.904712,
+      76.90216
+    ],
+    "description": "Restroom 2. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "restroom 2",
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "bathroom",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "restroom-1",
+    "name": "Restroom 1",
+    "shortName": "Restroom 1",
+    "category": "Restrooms",
+    "coordinates": [
+      10.901575,
+      76.902576
+    ],
+    "description": "Restroom 1. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "restroom 1",
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "bathroom",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "restroom-3",
+    "name": "Restroom 3",
+    "shortName": "Restroom 3",
+    "category": "Restrooms",
+    "coordinates": [
+      10.900142,
+      76.904282
+    ],
+    "description": "Restroom 3. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "restroom 3",
+      "restroom",
+      "toilet",
+      "washroom",
+      "WC",
+      "bathroom",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "amriteshwari-sudamani-hall",
+    "name": "Amriteshwari / Sudamani Hall",
+    "shortName": "Amriteshwari / Sudamani Hall",
+    "category": "Events",
+    "coordinates": [
+      10.900438,
+      76.903634
+    ],
+    "description": "Amriteshwari / Sudamani Hall. Coordinates are student-provided and should be confirmed on site.",
+    "keywords": [
+      "amriteshwari",
+      "sudamani",
+      "hall",
+      "event hall",
+      "function hall",
+      "venue",
+      "stage",
+      "campus",
+      "Amrita Vishwa Vidyapeetham",
+      "Amritanagar",
+      "Coimbatore"
+    ],
+    "verified": false,
+    "coordinateStatus": "student-provided-coordinate-needs-on-site-confirmation",
+    "coordinateSource": "Student-provided coordinate list (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "zoom": 18
+  },
+  {
+    "id": "ab1-acharya-hall",
+    "name": "Acharya — AB-1",
+    "shortName": "Acharya · AB-1",
+    "category": "Events",
+    "coordinates": null,
+    "description": "Acharya is listed as a hall/venue under Academic Block 1 (AB-1). Its exact indoor position is not separately mapped; use the AB-1 building marker as the map reference and confirm the room with campus staff.",
+    "keywords": [
+      "acharya",
+      "AB1",
+      "AB-1",
+      "academic block 1",
+      "hall",
+      "event hall",
+      "events hall",
+      "venue",
+      "function hall",
+      "seminar hall",
+      "event venue",
+      "auditorium",
+      "meeting hall"
+    ],
+    "verified": false,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "coordinateSource": "Student-provided building/venue directory (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "building": "Academic Block 1 (AB-1)",
+    "buildingKey": "AB-1",
+    "mapAnchorId": "academic-block-1",
+    "details": {
+      "recordType": "Named hall / event venue",
+      "locationPrecision": "Building anchor only (AB-1); exact indoor coordinates not provided."
+    }
+  },
+  {
+    "id": "ab1-viveka-hall",
+    "name": "Viveka — AB-1",
+    "shortName": "Viveka · AB-1",
+    "category": "Events",
+    "coordinates": null,
+    "description": "Viveka is listed as a hall/venue under Academic Block 1 (AB-1). Its exact indoor position is not separately mapped; use the AB-1 building marker as the map reference and confirm the room with campus staff.",
+    "keywords": [
+      "viveka",
+      "AB1",
+      "AB-1",
+      "academic block 1",
+      "hall",
+      "event hall",
+      "events hall",
+      "venue",
+      "function hall",
+      "seminar hall",
+      "event venue",
+      "auditorium",
+      "meeting hall"
+    ],
+    "verified": false,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "coordinateSource": "Student-provided building/venue directory (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "building": "Academic Block 1 (AB-1)",
+    "buildingKey": "AB-1",
+    "mapAnchorId": "academic-block-1",
+    "details": {
+      "recordType": "Named hall / event venue",
+      "locationPrecision": "Building anchor only (AB-1); exact indoor coordinates not provided."
+    }
+  },
+  {
+    "id": "ab2-sandeepani-hall",
+    "name": "Sandeepani — AB-2",
+    "shortName": "Sandeepani · AB-2",
+    "category": "Events",
+    "coordinates": null,
+    "description": "Sandeepani is listed as a hall/venue under Academic Block 2 (AB-2). Its exact indoor position is not separately mapped; use the AB-2 building marker as the map reference and confirm the room with campus staff.",
+    "keywords": [
+      "sandeepani",
+      "AB2",
+      "AB-2",
+      "academic block 2",
+      "hall",
+      "event hall",
+      "events hall",
+      "venue",
+      "function hall",
+      "seminar hall",
+      "event venue",
+      "auditorium",
+      "meeting hall"
+    ],
+    "verified": false,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "coordinateSource": "Student-provided building/venue directory (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "building": "Academic Block 2 (AB-2)",
+    "buildingKey": "AB-2",
+    "mapAnchorId": "academic-block-2",
+    "details": {
+      "recordType": "Named hall / event venue",
+      "locationPrecision": "Building anchor only (AB-2); exact indoor coordinates not provided."
+    }
+  },
+  {
+    "id": "ab3-anugraha-hall",
+    "name": "Anugraha Hall — AB-3",
+    "shortName": "Anugraha Hall · AB-3",
+    "category": "Events",
+    "coordinates": null,
+    "description": "Anugraha Hall is listed as a hall/venue under Academic Block 3 (AB-3). Its exact indoor position is not separately mapped; use the AB-3 building marker as the map reference and confirm the room with campus staff.",
+    "keywords": [
+      "anugraha",
+      "AB3",
+      "AB-3",
+      "academic block 3",
+      "hall",
+      "event hall",
+      "events hall",
+      "venue",
+      "function hall",
+      "seminar hall",
+      "event venue",
+      "auditorium",
+      "meeting hall"
+    ],
+    "verified": false,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "coordinateSource": "Student-provided building/venue directory (Lat_Long(5).txt)",
+    "sourceUrl": null,
+    "building": "Academic Block 3 (AB-3)",
+    "buildingKey": "AB-3",
+    "mapAnchorId": "academic-block-3",
+    "details": {
+      "recordType": "Named hall / event venue",
+      "locationPrecision": "Building anchor only (AB-3); exact indoor coordinates not provided."
+    }
+  },
+  {
+    "id": "gokul-krishna-hall",
+    "name": "Gokul Krishna Hall — CIR",
+    "shortName": "Gokul Krishna Hall",
+    "category": "Events",
+    "coordinates": null,
+    "description": "Gokul Krishna Hall is located in the Campus Industry Relations (CIR) building. Search this hall to highlight the CIR building marker; exact indoor coordinates are not provided.",
+    "keywords": [
+      "Gokul Krishna Hall",
+      "Gokul",
+      "Krishna Hall",
+      "hall",
+      "event hall",
+      "events hall",
+      "venue",
+      "function hall",
+      "seminar hall",
+      "meeting hall",
+      "CIR",
+      "Campus Industry Relations"
+    ],
+    "verified": false,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "coordinateSource": "Student-provided location reference in chat; CIR building coordinates supplied as 10.905347, 76.901898",
+    "sourceUrl": null,
+    "building": "Campus Industry Relations (CIR)",
+    "buildingKey": "CIR",
+    "mapAnchorId": "campus-industry-relations",
+    "details": {
+      "recordType": "Named hall / event venue",
+      "locationPrecision": "Building anchor only (CIR); exact indoor coordinates not provided."
+    }
+  },
+  {
+    "id": "radha-krishna-hall",
+    "name": "Radha Krishna Hall — CIR",
+    "shortName": "Radha Krishna Hall",
+    "category": "Events",
+    "coordinates": null,
+    "description": "Radha Krishna Hall is located in the Campus Industry Relations (CIR) building. Search this hall to highlight the CIR building marker; exact indoor coordinates are not provided.",
+    "keywords": [
+      "Radha Krishna Hall",
+      "Radha",
+      "Krishna Hall",
+      "hall",
+      "event hall",
+      "events hall",
+      "venue",
+      "function hall",
+      "seminar hall",
+      "meeting hall",
+      "CIR",
+      "Campus Industry Relations"
+    ],
+    "verified": false,
+    "coordinateStatus": "room-known-building-anchor-only",
+    "coordinateSource": "Student-provided location reference in chat; CIR building coordinates supplied as 10.905347, 76.901898",
+    "sourceUrl": null,
+    "building": "Campus Industry Relations (CIR)",
+    "buildingKey": "CIR",
+    "mapAnchorId": "campus-industry-relations",
+    "details": {
+      "recordType": "Named hall / event venue",
+      "locationPrecision": "Building anchor only (CIR); exact indoor coordinates not provided."
+    }
+  }
+]
